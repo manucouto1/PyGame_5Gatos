@@ -1,9 +1,9 @@
 import pygame as pg
-import platforms
 import json
 import os
 
 from  layers import Layer
+from platforms import Platform
 
 class Level():
 
@@ -11,20 +11,18 @@ class Level():
         with open('assets'+os.sep+level_name+os.sep+level_name+'.txt') as f:
             config = json.load(f)
             if config is not None:
+                self.level_name=level_name
                 self.tile_size = config["tile_size"]
                 self.map_width = config["map_width"]
                 self.map_height = config["map_height"]
+                self.layers_config = config["layers"]
                 self.layers = []
-                for layer in config["layers"]:
-                    self.layers.append(Layer(layer["name"], level_name, layer["positions"], self.tile_size))
+                
             else:
                 raise ValueError("Problems with lavel config file")
     
-    def update(self):
-        for layer in self.layers:
-            layer.update()
-    
-    def draw(self, screen):
-        for layer in self.layers:
-            layer.draw(screen)
+    def load_platforms(self, *groups):
+       for layer in self.layers_config:
+            for position in layer["positions"]:
+                Platform(self.level_name, self.tile_size, position["x"], position["y"], position["id"], *groups)
     

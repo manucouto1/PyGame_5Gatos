@@ -6,15 +6,9 @@ import os
 
 class Layer():
 
-    def __init__(self, name, level_name, positions, tile_size):
+    def __init__(self, name, level_name, positions, tile_size, *groups):
         self.name = name
-        self.plataforms_group = pg.sprite.Group()
+        self.plataforms_list = []
 
         for position in positions:
-            self.plataforms_group.add(Platform(level_name, tile_size, position["x"], position["y"], position["id"]))
-
-    def update(self):
-        self.plataforms_group.update()
-
-    def draw(self, screen):
-        self.plataforms_group.draw(screen)
+            self.plataforms_list.append()

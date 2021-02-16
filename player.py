@@ -2,57 +2,71 @@ import pygame as pg
 import os
 from spritesheet import Spritesheet
 
+GRAVITY = pg.Vector2((0, 0.3))
+
 class Player(pg.sprite.Sprite):
 
     def __init__(self, width, height, frames, level):
         super().__init__()
-        self.idle_sheet = Spritesheet("assets"+os.sep+"Hero_idle-export.png")
-        self.walk_sheet = Spritesheet("assets"+os.sep+"Hero_walk-Sheet.png")
-        self.rect = pg.Rect(0, 0, width, height)
+        self.idle_L = Spritesheet("assets"+os.sep+"player"+os.sep+"idle"+os.sep+"Hero_idle_L_32x32_200.png")
+        self.idle_R = Spritesheet("assets"+os.sep+"player"+os.sep+"idle"+os.sep+"Hero_idle_R_32x32_200.png")
+        self.walk_L = Spritesheet("assets"+os.sep+"player"+os.sep+"walk"+os.sep+"Hero_walk_L_32x32_200.png")
+        self.walk_R = Spritesheet("assets"+os.sep+"player"+os.sep+"walk"+os.sep+"Hero_walk_R_32x32_200.png")
         self.level = level
         self.frames = frames
+        self.width = width
+        self.height = height
         self.idle_id = 0
         self.walk_id = 0
-        self.idle_images = []
-        self.walk_images = []
-        self.movement = False
         self.move_x = 0
         self.move_y = 0
-        self.is_jumping = True
-        self.is_falling = True
+        self.idle_images = []
+        self.walk_images = []
+        self.movement = None
+        self.direction = None
+        self.onGround = False
+        self.vel = pg.Vector2((0, 0))
+        self.speed = 8
+        self.jump_strength = 10
+        self.image = self.idle_R.image_at((0,0,width, height))
         
-        for i in range(frames):
-            self.idle_images.append(self.idle_sheet.image_at((i*width, 0, width, height)))
-            self.walk_images.append(self.walk_sheet.image_at((i*width, 0, width, height)))
-
-        self.image = self.idle_sheet.image_at((0,0, width, height))
         self.rect = self.image.get_rect()
-    
-    def state(self, state):
-        if not state:
-            self.walk_id = 0
-        self.movement = state
 
     def idle_loop(self):
         self.idle_id = ( (self.idle_id + 1) % self.frames)
-        self.image = self.idle_images[self.idle_id]
-    
+        if(self.direction == pg.K_LEFT):
+            self.image = self.idle_L.image_at((self.idle_id*self.width, 0, self.width, self.height))
+        elif(self.direction == pg.K_RIGHT):
+            self.image = self.idle_R.image_at((self.idle_id*self.width, 0, self.width, self.height))
+
     def walk_loop(self):
         self.walk_id = ( (self.walk_id + 1) % self.frames)
-        #Hay una funcion transform.flip que no se aun que hace y que algunos la usan para caminar
-        self.image = self.walk_images[self.walk_id]
+        if(self.direction == pg.K_LEFT):
+            self.image = (self.walk_L.image_at((self.walk_id*self.width, 0, self.width, self.height)))
+        elif(self.direction == pg.K_RIGHT):
+            self.image = (self.walk_R.image_at((self.walk_id*self.width, 0, self.width, self.height)))
 
     def gravity(self):
-        if self.is_jumping:
-            self.move_y += 3.2
+        if not self.onGround:
+            self.vel += GRAVITY
+            if self.vel.y > 100: self.vel.y = 100
     
     def jump(self):
-        if self.is_jumping is False:
-            self.is_falling = False
-            self.is_jumping = True
+        if self.onGround: self.vel.y = -self.jump_strength
 
-    def control(self, x, y):
-        self.move_x = x
+    def moveLeft(self):
+        self.vel.x = -self.speed
+        self.direction = pg.K_LEFT
+        self.movement = True
+
+    def moveRight(self):
+        self.vel.x = self.speed
+        self.direction = pg.K_RIGHT
+        self.movement = True
+
+    def resetMovement(self):
+        self.movement = False
+        self.vel.x = 0
 
     def update(self):
         if self.movement:
@@ -60,22 +74,26 @@ class Player(pg.sprite.Sprite):
         else:
             self.idle_loop()
 
-        ground_hit_list = pg.sprite.spritecollide(self, self.level, False)
+        self.gravity()
+        self.rect.x += self.vel.x
+        self.collide(self.vel.x,0,self.level)
+        self.rect.y += self.vel.y
+        self.onGround = False
+        self.collide(0, self.vel.y, self.level)
+        self.resetMovement()
 
-        #Esto hay que depurarlo
-        for g in ground_hit_list:
-            self.move_y = 0
-            self.rect.bottom = g.rect.top
-            self.is_jumping = False  # stop jumping
 
-        if self.is_jumping and self.is_falling is False:
-            self.is_falling = True
-            self.move_y -= 9.8  # how high to jump
+    def collide(self, xvel, yvel, platforms):
+        for p in self.level:
+            if pg.sprite.collide_rect(self, p):
+                if xvel > 0:
+                    self.rect.right = p.rect.left
+                if xvel < 0:
+                    self.rect.left = p.rect.right
+                if yvel > 0:
+                    self.rect.bottom = p.rect.top
+                    self.onGround = True
+                    self.yvel = 0
+                if yvel < 0:
+                    self.rect.top = p.rect.bottom
 
-        self.rect.x += self.move_x
-        self.rect.y += self.move_y 
-
-        super().update()
-
-    
-        
