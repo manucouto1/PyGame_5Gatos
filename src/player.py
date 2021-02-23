@@ -1,8 +1,9 @@
 import pygame as pg
 import os
-from spritesheet import Spritesheet
+from src.spritesheet import Spritesheet
 
 GRAVITY = pg.Vector2((0, 0.3))
+
 
 class Player(pg.sprite.Sprite):
 
@@ -28,43 +29,45 @@ class Player(pg.sprite.Sprite):
         self.vel = pg.Vector2((0, 0))
         self.speed = 8
         self.jump_strength = 10
-        self.image = self.idle_R.image_at((0,0,width, height))
+        self.image = self.idle_R.image_at((0, 0, width, height))
         
         self.rect = self.image.get_rect()
 
     def idle_loop(self):
-        self.idle_id = ( (self.idle_id + 1) % self.frames)
-        if(self.direction == pg.K_LEFT):
+        self.idle_id = (self.idle_id + 1) % self.frames
+        if self.direction == pg.K_LEFT:
             self.image = self.idle_L.image_at((self.idle_id*self.width, 0, self.width, self.height))
-        elif(self.direction == pg.K_RIGHT):
+        elif self.direction == pg.K_RIGHT:
             self.image = self.idle_R.image_at((self.idle_id*self.width, 0, self.width, self.height))
 
     def walk_loop(self):
         self.walk_id = ( (self.walk_id + 1) % self.frames)
-        if(self.direction == pg.K_LEFT):
+        if self.direction == pg.K_LEFT:
             self.image = (self.walk_L.image_at((self.walk_id*self.width, 0, self.width, self.height)))
-        elif(self.direction == pg.K_RIGHT):
+        elif self.direction == pg.K_RIGHT:
             self.image = (self.walk_R.image_at((self.walk_id*self.width, 0, self.width, self.height)))
 
     def gravity(self):
         if not self.onGround:
             self.vel += GRAVITY
-            if self.vel.y > 100: self.vel.y = 100
+            if self.vel.y > 100:
+                self.vel.y = 100
     
     def jump(self):
-        if self.onGround: self.vel.y = -self.jump_strength
+        if self.onGround:
+            self.vel.y = -self.jump_strength
 
-    def moveLeft(self):
+    def move_left(self):
         self.vel.x = -self.speed
         self.direction = pg.K_LEFT
         self.movement = True
 
-    def moveRight(self):
+    def move_right(self):
         self.vel.x = self.speed
         self.direction = pg.K_RIGHT
         self.movement = True
 
-    def resetMovement(self):
+    def reset_movement(self):
         self.movement = False
         self.vel.x = 0
 
@@ -76,12 +79,11 @@ class Player(pg.sprite.Sprite):
 
         self.gravity()
         self.rect.x += self.vel.x
-        self.collide(self.vel.x,0,self.level)
+        self.collide(self.vel.x, 0, self.level)
         self.rect.y += self.vel.y
         self.onGround = False
         self.collide(0, self.vel.y, self.level)
-        self.resetMovement()
-
+        self.reset_movement()
 
     def collide(self, xvel, yvel, platforms):
         for p in self.level:
