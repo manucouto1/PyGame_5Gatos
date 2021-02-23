@@ -19,7 +19,7 @@ FPS = 20
 def main():
     pg.init()
 
-    bg = pg.image.load(("assets"+os.sep+"background.png"))
+    bg = pg.image.load("assets" + os.sep + "background.png")
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pg.display.set_caption("tutorial pygame parte 2")
    

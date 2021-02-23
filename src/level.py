@@ -6,7 +6,7 @@ from src.platforms import Platform
 
 class Level:
     def __init__(self, level_name):
-        with open('assets'+os.sep+level_name+os.sep+level_name+'.txt') as f:
+        with open('assets' + os.sep + level_name + os.sep + level_name + '.txt') as f:
             config = json.load(f)
             if config is not None:
                 self.level_name = level_name
@@ -16,7 +16,7 @@ class Level:
                 self.layers_config = config["layers"]
                 self.layers = []
             else:
-                raise ValueError("Problems with lavel config file")
+                raise ValueError("Problems with level config file")
     
     def load_platforms(self, *groups):
         for layer in self.layers_config:
