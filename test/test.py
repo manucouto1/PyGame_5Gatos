@@ -7,6 +7,7 @@ SCREEN_SIZE = pygame.Rect((0, 0, 800, 640))
 TILE_SIZE = 32 
 GRAVITY = pygame.Vector2((0, 0.3))
 
+
 class CameraAwareLayeredUpdates(pygame.sprite.LayeredUpdates):
     def __init__(self, target, world_size):
         super().__init__()
@@ -45,7 +46,8 @@ class CameraAwareLayeredUpdates(pygame.sprite.LayeredUpdates):
                     dirty_append(rec)
             spritedict[spr] = newrect
         return dirty            
-            
+
+
 def main():
     pygame.init()
     screen = pygame.display.set_mode(SCREEN_SIZE.size)
@@ -113,12 +115,14 @@ def main():
         pygame.display.update()
         timer.tick(60)
 
+
 class Entity(pygame.sprite.Sprite):
     def __init__(self, color, pos, *groups):
         super().__init__(*groups)
         self.image = Surface((TILE_SIZE, TILE_SIZE))
         self.image.fill(color)
         self.rect = self.image.get_rect(topleft=pos)
+
 
 class Player(Entity):
     def __init__(self, platforms, pos, *groups):
@@ -180,13 +184,16 @@ class Player(Entity):
                 if yvel < 0:
                     self.rect.top = p.rect.bottom
 
+
 class Platform(Entity):
     def __init__(self, pos, *groups):
         super().__init__(Color("#DDDDDD"), pos, *groups)
 
+
 class ExitBlock(Entity):
     def __init__(self, pos, *groups):
         super().__init__(Color("#0033FF"), pos, *groups)
+
 
 if __name__ == "__main__":
     main()

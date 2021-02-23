@@ -1,9 +1,9 @@
 import pygame as pg
-from  spritesheet import Spritesheet
+from src.spritesheet import Spritesheet
 import os
 
-class Platform(pg.sprite.Sprite):
 
+class Platform(pg.sprite.Sprite):
     def __init__(self, level_name, tile_size, x, y, id, *groups):
         super().__init__(*groups)
 
@@ -14,5 +14,5 @@ class Platform(pg.sprite.Sprite):
 
         self.rect = pg.Rect(column*tile_size, row*tile_size, tile_size, tile_size)
         self.image = self.sheet.image_at(self.rect)
-        self.rect.x = x*tile_size
-        self.rect.y = y*tile_size
+        self.rect.x = x * tile_size
+        self.rect.y = y * tile_size

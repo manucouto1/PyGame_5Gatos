@@ -1,6 +1,8 @@
 import pygame as pg
 
+
 class Camera(pg.sprite.LayeredUpdates):
+
     def __init__(self, target, world_size, screen_size):
         super().__init__()
         self.target = target
@@ -16,8 +18,8 @@ class Camera(pg.sprite.LayeredUpdates):
             x = -self.target.rect.center[0] + self.screen_size.width/2
             y = -self.target.rect.center[1] + self.screen_size.height/2
             self.cam += (pg.Vector2((x, y)) - self.cam) * 0.05
-            self.cam.x = max(-(self.world_size.width-self.screen_size.width), min(0, self.cam.x))
-            self.cam.y = max(-(self.world_size.height-self.screen_size.height), min(0, self.cam.y))
+            self.cam.x = max(-(self.world_size.width - self.screen_size.width), min(0, self.cam.x))
+            self.cam.y = max(-(self.world_size.height - self.screen_size.height), min(0, self.cam.y))
 
     def draw(self, surface):
         spritedict = self.spritedict
@@ -38,4 +40,4 @@ class Camera(pg.sprite.LayeredUpdates):
                     dirty_append(newrect)
                     dirty_append(rec)
             spritedict[spr] = newrect
-        return dirty            
+        return dirty
