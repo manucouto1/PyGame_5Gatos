@@ -5,9 +5,9 @@ import pygame as pg
 import sys
 import os
 
-from src.level import Level
-from src.player import Player
-from src.camera import Camera
+from level import Level
+from player import Player
+from camera import Camera
 
 white = (255, 255, 255) 
 SCREEN_WIDTH = 1000
@@ -19,7 +19,7 @@ FPS = 20
 def main():
     pg.init()
 
-    bg = pg.image.load("assets" + os.sep + "background.png")
+    bg = pg.image.load(".."+os.sep+"assets" + os.sep + "background.png")
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pg.display.set_caption("tutorial pygame parte 2")
    
@@ -48,7 +48,6 @@ def main():
         
         if pressed[pg.K_UP]: 
             player.jump() 
-            print("Jumped")
         if pressed[pg.K_LEFT]: 
             player.move_left()
         if pressed[pg.K_RIGHT]: 
