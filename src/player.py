@@ -7,7 +7,7 @@ GRAVITY = pg.Vector2((0, 0.3))
 
 class Player(pg.sprite.Sprite):
 
-    def __init__(self, width, height, frames, level):
+    def __init__(self, width, height, offset, frames, level):
         super().__init__()
         self.idle_L = Spritesheet(".."+os.sep+"assets"+os.sep+"player"+os.sep+"idle"+os.sep+"Hero_idle_L_32x32_200.png")
         self.idle_R = Spritesheet(".."+os.sep+"assets"+os.sep+"player"+os.sep+"idle"+os.sep+"Hero_idle_R_32x32_200.png")
@@ -29,7 +29,7 @@ class Player(pg.sprite.Sprite):
         self.vel = pg.Vector2((0, 0))
         self.speed = 8
         self.jump_strength = 10
-        self.offset = 16
+        self.offset = offset
         self.image = self.idle_R.image_at((self.offset, 0, width, height))
         
         self.rect = self.image.get_rect()

@@ -25,7 +25,7 @@ def main():
    
     level = Level("tiles_32x32")
     platforms = pg.sprite.Group()
-    player = Player(32, 64, 8, platforms)
+    player = Player(32, 64, 16, 8, platforms)
     camera = Camera(player, pg.Rect(0, 0, level.map_width * 32, level.map_height * 32), SCREEN_SIZE)
     level.load_platforms(platforms, camera)
 
