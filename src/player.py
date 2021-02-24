@@ -14,7 +14,7 @@ class Player(pg.sprite.Sprite):
         self.walk_L = Spritesheet(".."+os.sep+"assets"+os.sep+"player"+os.sep+"walk"+os.sep+"Hero_walk_L_32x32_200.png")
         self.walk_R = Spritesheet(".."+os.sep+"assets"+os.sep+"player"+os.sep+"walk"+os.sep+"Hero_walk_R_32x32_200.png")
         self.level = level
-        self.frames = frames
+        self.frames = frames 
         self.width = width
         self.height = height
         self.idle_id = 0
@@ -29,23 +29,24 @@ class Player(pg.sprite.Sprite):
         self.vel = pg.Vector2((0, 0))
         self.speed = 8
         self.jump_strength = 10
-        self.image = self.idle_R.image_at((0, 0, width, height))
+        self.offset = 16
+        self.image = self.idle_R.image_at((self.offset, 0, width, height))
         
         self.rect = self.image.get_rect()
 
     def idle_loop(self):
         self.idle_id = (self.idle_id + 1) % self.frames
         if self.direction == pg.K_LEFT:
-            self.image = self.idle_L.image_at((self.idle_id*self.width, 0, self.width, self.height))
+            self.image = self.idle_L.image_at((self.idle_id*(self.width+self.offset*2) + self.offset, 0, self.width, self.height))
         elif self.direction == pg.K_RIGHT:
-            self.image = self.idle_R.image_at((self.idle_id*self.width, 0, self.width, self.height))
+            self.image = self.idle_R.image_at((self.idle_id*(self.width+self.offset*2) + self.offset, 0, self.width, self.height))
 
     def walk_loop(self):
-        self.walk_id = ( (self.walk_id + 1) % self.frames)
+        self.walk_id = (self.walk_id + 1) % self.frames
         if self.direction == pg.K_LEFT:
-            self.image = (self.walk_L.image_at((self.walk_id*self.width, 0, self.width, self.height)))
+            self.image = (self.walk_L.image_at((self.walk_id*(self.width+self.offset*2) + self.offset, 0, self.width, self.height)))
         elif self.direction == pg.K_RIGHT:
-            self.image = (self.walk_R.image_at((self.walk_id*self.width, 0, self.width, self.height)))
+            self.image = (self.walk_R.image_at((self.walk_id*(self.width+self.offset*2) + self.offset, 0, self.width, self.height)))
 
     def gravity(self):
         if not self.onGround:
