@@ -1,6 +1,6 @@
 import pygame as pg
 import os
-from src.spritesheet import Spritesheet
+from spritesheet import Spritesheet
 
 GRAVITY = pg.Vector2((0, 0.3))
 
@@ -9,10 +9,10 @@ class Player(pg.sprite.Sprite):
 
     def __init__(self, width, height, frames, level):
         super().__init__()
-        self.idle_L = Spritesheet("assets"+os.sep+"player"+os.sep+"idle"+os.sep+"Hero_idle_L_32x32_200.png")
-        self.idle_R = Spritesheet("assets"+os.sep+"player"+os.sep+"idle"+os.sep+"Hero_idle_R_32x32_200.png")
-        self.walk_L = Spritesheet("assets"+os.sep+"player"+os.sep+"walk"+os.sep+"Hero_walk_L_32x32_200.png")
-        self.walk_R = Spritesheet("assets"+os.sep+"player"+os.sep+"walk"+os.sep+"Hero_walk_R_32x32_200.png")
+        self.idle_L = Spritesheet(".."+os.sep+"assets"+os.sep+"player"+os.sep+"idle"+os.sep+"Hero_idle_L_32x32_200.png")
+        self.idle_R = Spritesheet(".."+os.sep+"assets"+os.sep+"player"+os.sep+"idle"+os.sep+"Hero_idle_R_32x32_200.png")
+        self.walk_L = Spritesheet(".."+os.sep+"assets"+os.sep+"player"+os.sep+"walk"+os.sep+"Hero_walk_L_32x32_200.png")
+        self.walk_R = Spritesheet(".."+os.sep+"assets"+os.sep+"player"+os.sep+"walk"+os.sep+"Hero_walk_R_32x32_200.png")
         self.level = level
         self.frames = frames
         self.width = width

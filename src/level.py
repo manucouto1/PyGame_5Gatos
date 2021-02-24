@@ -1,12 +1,12 @@
 import json
 import os
 
-from src.platforms import Platform
+from platforms import Platform
 
 
 class Level:
     def __init__(self, level_name):
-        with open('assets' + os.sep + level_name + os.sep + level_name + '.txt') as f:
+        with open('..'+os.sep+'assets' + os.sep + level_name + os.sep + level_name + '.txt') as f:
             config = json.load(f)
             if config is not None:
                 self.level_name = level_name
