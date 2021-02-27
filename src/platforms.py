@@ -1,4 +1,6 @@
 import pygame as pg
+
+import assets
 from spritesheet import Spritesheet
 import os
 
@@ -7,7 +9,7 @@ class Platform(pg.sprite.Sprite):
     def __init__(self, level_name, tile_size, x, y, pos_id, *groups):
         super().__init__(*groups)
 
-        self.sheet = Spritesheet(".." + os.sep + "assets" + os.sep + level_name + os.sep + level_name + ".png")
+        self.sheet = Spritesheet(assets.path_to(level_name, f"{level_name}.png"))
 
         column = pos_id % 8
         row = pos_id // 8

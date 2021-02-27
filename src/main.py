@@ -4,6 +4,7 @@ import pygame as pg
 
 import sys
 import os
+import assets
 
 from level import Level
 from player import Player
@@ -19,7 +20,7 @@ FPS = 20
 def main():
     pg.init()
 
-    bg = pg.image.load(".."+os.sep+"assets" + os.sep + "background.png")
+    bg = pg.image.load(assets.path_to("background.png"))
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pg.display.set_caption("tutorial pygame parte 2")
    
