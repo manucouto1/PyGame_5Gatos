@@ -11,7 +11,7 @@ from player import Player
 from camera import Camera
 
 white = (255, 255, 255) 
-SCREEN_WIDTH = 1000
+SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
 SCREEN_SIZE = pg.Rect((0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
 FPS = 20
@@ -53,6 +53,10 @@ def main():
             player.move_left()
         if pressed[pg.K_RIGHT]: 
             player.move_right()
+
+        screen_rect = screen.get_rect()
+        screen_rect[2] += level.map_width * level.tile_size - SCREEN_WIDTH
+        player.rect.clamp_ip(screen_rect)
 
         camera.draw(screen)
         pg.display.update()
