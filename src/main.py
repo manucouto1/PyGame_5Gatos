@@ -30,6 +30,9 @@ def main():
     camera = Camera(player, pg.Rect(0, 0, level.map_width * 32, level.map_height * 32), SCREEN_SIZE)
     level.load_platforms(platforms, camera)
 
+    can_double = False
+    num_jumps = 0
+
     # Main loop
     clock = pg.time.Clock()
 
@@ -46,9 +49,17 @@ def main():
         camera.update()
 
         pressed = pg.key.get_pressed()  
+
+        # conditions for double jumping
+        if not pressed[pg.K_UP] and num_jumps == 1:
+            can_double = True
+        elif num_jumps == 2:
+            can_double = False
+            num_jumps = 0
         
         if pressed[pg.K_UP]: 
-            player.jump() 
+            player.jump(can_double) 
+            num_jumps += 1
         if pressed[pg.K_LEFT]: 
             player.move_left()
         if pressed[pg.K_RIGHT]: 
