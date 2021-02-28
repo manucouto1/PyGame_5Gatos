@@ -31,6 +31,7 @@ class Player(pg.sprite.Sprite):
         self.speed = 8
         self.jump_strength = 10
         self.num_jumps = 0
+        self.can_double = False
         self.offset = offset
         self.image = self.idle_R.image_at((self.offset, 0, width, height))
         
@@ -56,12 +57,12 @@ class Player(pg.sprite.Sprite):
             if self.vel.y > 100:
                 self.vel.y = 100
     
-    def jump(self, double):
+    def jump(self):
         if self.onGround: 
             self.vel.y = -self.jump_strength
             self.num_jumps += 1
             print("jump num:", self.num_jumps)
-        elif double and self.num_jumps < 2:
+        elif self.can_double and self.num_jumps < 2:
             self.vel.y = -self.jump_strength
             self.num_jumps += 1
             print("double num:", self.num_jumps)
