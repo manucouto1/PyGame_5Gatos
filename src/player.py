@@ -108,4 +108,5 @@ class Player(pg.sprite.Sprite):
                     self.yvel = 0
                 if yvel < 0:
                     self.rect.top = p.rect.bottom
+                    self.vel.y = 0
 
