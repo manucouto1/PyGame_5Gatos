@@ -18,9 +18,9 @@ SCREEN_SIZE = pg.Rect((0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
 FPS = 20
 
 
-def update_cursor(mousepos, screen, cursor):
+def update_cursor(mouse_pos, screen, cursor):
     cursor_rect = cursor.get_rect()
-    mx, my = mousepos
+    mx, my = mouse_pos
     cursor_rect.center = (mx, my)
     screen.blit(cursor, cursor_rect)
 
@@ -43,7 +43,7 @@ def main():
 
     # Main loop
     clock = pg.time.Clock()
-    bullets = []
+    bullets = pg.sprite.Group()
 
     while True:
         screen.blit(bg, (0, 0))
@@ -60,23 +60,16 @@ def main():
             if event.type == pg.MOUSEBUTTONDOWN:
                 # mouse shutting
                 if len(bullets) < 5:
-                    if player.direction == pg.K_LEFT:
-                        offset = -player.offset
-                    else:
-                        offset = player.offset
+                    # look to shoot direction
+                    bullets.add(player.shoot(camera))
 
-                    bullet = Projectile(round(player.rect.x + player.rect.width // 2 + offset + camera.cam.x),
-                                        round(player.rect.y + player.rect.height // 2 + camera.cam.y), 6)
-                    bullet.trajectory(pg.mouse.get_pos())
-                    bullets.append(bullet)
+        to_remove = list(filter(lambda bll: SCREEN_HEIGHT < bll.x or bll.x < 0 or SCREEN_WIDTH < bll.y or bll.y < 0,
+                                bullets.sprites()))
+        bullets.remove(to_remove)
 
-        for bullet in bullets:
-            if SCREEN_HEIGHT > bullet.x > 0:
-                bullet.update()
-            else:
-                bullets.pop(bullets.index(bullet))
-
+        bullets.update()
         camera.update()
+
         pressed = pg.key.get_pressed()
 
         if pressed[pg.K_LEFT] or pressed[pg.K_a]:
@@ -84,16 +77,13 @@ def main():
         if pressed[pg.K_RIGHT] or pressed[pg.K_d]:
             player.move_right()
 
-        update_cursor(pg.mouse.get_pos(), screen, cursor)
-
-        for bullet in bullets:
-            bullet.draw(screen)
-
         screen_rect = screen.get_rect()
         screen_rect[2] += level.map_width * level.tile_size - SCREEN_WIDTH
         player.rect.clamp_ip(screen_rect)
 
+        bullets.draw(screen)
         camera.draw(screen)
+        update_cursor(pg.mouse.get_pos(), screen, cursor)
         pg.display.update()
         clock.tick(FPS)
 
