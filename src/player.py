@@ -1,7 +1,8 @@
 import pygame as pg
 import os
-from spritesheet import Spritesheet
 import assets
+from spritesheet import Spritesheet
+from projectile import Projectile
 
 GRAVITY = pg.Vector2((0, 4.8))
 
@@ -75,6 +76,27 @@ class Player(pg.sprite.Sprite):
         self.vel.x = self.speed
         self.direction = pg.K_RIGHT
         self.movement = True
+
+    def shoot(self, camera):
+        # look to shoot direction
+        m_pos = (m_x, _) = pg.mouse.get_pos()
+
+        if m_x > self.rect.x + camera.cam.x:
+            self.direction = pg.K_RIGHT
+        elif m_x < self.rect.x + camera.cam.x:
+            self.direction = pg.K_LEFT
+
+        if self.direction == pg.K_LEFT:
+            offset = -self.offset
+        else:
+            offset = self.offset
+
+        bullet = Projectile(round(self.rect.x + self.rect.width // 2 + offset + camera.cam.x),
+                            round(self.rect.y + self.rect.height // 2 + camera.cam.y), 6)
+
+        bullet.trajectory(m_pos)
+
+        return bullet
 
     def reset_movement(self):
         self.movement = False
