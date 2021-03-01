@@ -89,6 +89,10 @@ def main():
         for bullet in bullets:
             bullet.draw(screen)
 
+        screen_rect = screen.get_rect()
+        screen_rect[2] += level.map_width * level.tile_size - SCREEN_WIDTH
+        player.rect.clamp_ip(screen_rect)
+
         camera.draw(screen)
         pg.display.update()
         clock.tick(FPS)
