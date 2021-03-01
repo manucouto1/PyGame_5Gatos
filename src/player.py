@@ -3,7 +3,7 @@ import os
 from spritesheet import Spritesheet
 import assets
 
-GRAVITY = pg.Vector2((0, 0.3))
+GRAVITY = pg.Vector2((0, 4.8))
 
 
 class Player(pg.sprite.Sprite):
@@ -29,9 +29,8 @@ class Player(pg.sprite.Sprite):
         self.onGround = False
         self.vel = pg.Vector2((0, 0))
         self.speed = 8
-        self.jump_strength = 10
+        self.jump_strength = 30
         self.num_jumps = 0
-        self.can_double = False
         self.offset = offset
         self.image = self.idle_R.image_at((self.offset, 0, width, height))
         
@@ -62,7 +61,7 @@ class Player(pg.sprite.Sprite):
             self.vel.y = -self.jump_strength
             self.num_jumps += 1
             print("jump num:", self.num_jumps)
-        elif self.can_double and self.num_jumps < 2:
+        elif self.num_jumps < 2:
             self.vel.y = -self.jump_strength
             self.num_jumps += 1
             print("double num:", self.num_jumps)
@@ -89,13 +88,13 @@ class Player(pg.sprite.Sprite):
 
         self.gravity()
         self.rect.x += self.vel.x
-        self.collide(self.vel.x, 0, self.level)
+        self.collide(self.vel.x, 0)
         self.rect.y += self.vel.y
         self.onGround = False
-        self.collide(0, self.vel.y, self.level)
+        self.collide(0, self.vel.y)
         self.reset_movement()
 
-    def collide(self, xvel, yvel, platforms):
+    def collide(self, xvel, yvel):
         for p in self.level:
             if pg.sprite.collide_rect(self, p):
                 if xvel > 0:
@@ -106,7 +105,6 @@ class Player(pg.sprite.Sprite):
                     self.rect.bottom = p.rect.top
                     self.onGround = True
                     self.num_jumps = 0
-                    self.yvel = 0
                 if yvel < 0:
                     self.rect.top = p.rect.bottom
                     self.vel.y = 0

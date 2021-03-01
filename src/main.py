@@ -2,28 +2,39 @@
 # -*- coding: utf-8 -*- 
 import pygame as pg
 
-import sys
-import os
 import assets
+import os
+import sys
 
+from camera import Camera
 from level import Level
 from player import Player
-from camera import Camera
+from projectile import Projectile
 
-white = (255, 255, 255) 
+white = (255, 255, 255)
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
 SCREEN_SIZE = pg.Rect((0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
 FPS = 20
 
 
+def update_cursor(mousepos, screen, cursor):
+    cursor_rect = cursor.get_rect()
+    mx, my = mousepos
+    cursor_rect.center = (mx, my)
+    screen.blit(cursor, cursor_rect)
+
+
 def main():
     pg.init()
+    pg.mouse.set_visible(False)
 
+    cursor = pg.transform.scale(
+        pg.image.load(".." + os.sep + "assets" + os.sep + "cursor" + os.sep + "single-cursor.png"), (32, 32))
     bg = pg.image.load(assets.path_to("background.png"))
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pg.display.set_caption("tutorial pygame parte 2")
-   
+
     level = Level("tiles_32x32")
     platforms = pg.sprite.Group()
     player = Player(32, 64, 16, 8, platforms)
@@ -32,6 +43,7 @@ def main():
 
     # Main loop
     clock = pg.time.Clock()
+    bullets = []
 
     while True:
         screen.blit(bg, (0, 0))
@@ -40,31 +52,42 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
-                sys.exit()     
+                sys.exit()
+            if event.type == pg.KEYDOWN:
+                # conditions for double jumping
+                if event.key in [pg.K_UP, pg.K_w, pg.K_SPACE]:
+                    player.jump()
+            if event.type == pg.MOUSEBUTTONDOWN:
+                # mouse shutting
+                if len(bullets) < 5:
+                    if player.direction == pg.K_LEFT:
+                        offset = -player.offset
+                    else:
+                        offset = player.offset
 
-        # all_sprites_list.update()
+                    bullet = Projectile(round(player.rect.x + player.rect.width // 2 + offset + camera.cam.x),
+                                        round(player.rect.y + player.rect.height // 2 + camera.cam.y), 6)
+                    bullet.trajectory(pg.mouse.get_pos())
+                    bullets.append(bullet)
+
+        for bullet in bullets:
+            if SCREEN_HEIGHT > bullet.x > 0:
+                bullet.update()
+            else:
+                bullets.pop(bullets.index(bullet))
+
         camera.update()
+        pressed = pg.key.get_pressed()
 
-        pressed = pg.key.get_pressed()  
-
-        # conditions for double jumping
-        if not pressed[pg.K_UP] and player.num_jumps == 1:
-            player.can_double = True
-        elif player.num_jumps == 2:
-            player.can_double = False
-            player.num_jumps = 0
-        
-        if pressed[pg.K_UP]: 
-            player.jump()
-            player.num_jumps += 1
-        if pressed[pg.K_LEFT]: 
+        if pressed[pg.K_LEFT] or pressed[pg.K_a]:
             player.move_left()
-        if pressed[pg.K_RIGHT]: 
+        if pressed[pg.K_RIGHT] or pressed[pg.K_d]:
             player.move_right()
 
-        screen_rect = screen.get_rect()
-        screen_rect[2] += level.map_width * level.tile_size - SCREEN_WIDTH
-        player.rect.clamp_ip(screen_rect)
+        update_cursor(pg.mouse.get_pos(), screen, cursor)
+
+        for bullet in bullets:
+            bullet.draw(screen)
 
         camera.draw(screen)
         pg.display.update()
