@@ -28,9 +28,7 @@ def update_cursor(mouse_pos, screen, cursor):
 def main():
     pg.init()
     pg.mouse.set_visible(False)
-
-    cursor = pg.transform.scale(
-        pg.image.load(".." + os.sep + "assets" + os.sep + "cursor" + os.sep + "single-cursor.png"), (32, 32))
+    cursor = pg.transform.scale(assets.load_image("cursor", "single-cursor.png"), (32, 32))
     bg = pg.image.load(assets.path_to("background.png"))
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pg.display.set_caption("tutorial pygame parte 2")
