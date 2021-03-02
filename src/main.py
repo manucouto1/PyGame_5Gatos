@@ -7,6 +7,7 @@ import os
 import sys
 
 from camera import Camera
+from enemy import Enemy
 from level import Level
 from player import Player
 from projectile import Projectile
@@ -42,6 +43,9 @@ def main():
     # Main loop
     clock = pg.time.Clock()
     bullets = pg.sprite.Group()
+    enemies = pg.sprite.Group()
+    enemy = Enemy(32, 64, 16, 8, platforms)
+    enemies.add(enemy)
 
     while True:
         screen.blit(bg, (0, 0))
@@ -67,6 +71,7 @@ def main():
 
         bullets.update()
         camera.update()
+        enemies.update()
 
         pressed = pg.key.get_pressed()
 
@@ -81,6 +86,7 @@ def main():
 
         bullets.draw(screen)
         camera.draw(screen)
+        enemies.draw(screen)
         update_cursor(pg.mouse.get_pos(), screen, cursor)
         pg.display.update()
         clock.tick(FPS)
