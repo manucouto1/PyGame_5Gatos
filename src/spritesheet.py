@@ -13,7 +13,6 @@ class Spritesheet(object):
     def image_at(self, rectangle, colorkey=None, offset=0):
         x, y, width, height = rectangle
 
-        
         rectangle2 = (x, y, width, height)
         rect = pygame.Rect(rectangle2)
 
