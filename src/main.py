@@ -41,6 +41,7 @@ def main():
     player = Player(32, 64, 16, 8, platforms)
     camera = Camera(player, pg.Rect(0, 0, level.map_width * 32, level.map_height * 32), SCREEN_SIZE)
     Enemy(32, 64, 16, 8, platforms, enemies, camera)
+    # crear grupo custom independiente de la camara para los enemigos
     cursor = Cursor(pg.mouse.get_pos())
     level.load_platforms(platforms, camera)
 
@@ -80,7 +81,7 @@ def main():
 
         cursor.update()
         camera.update()
-
+        # enemies.update()
         pressed = pg.key.get_pressed()
 
         if pressed[pg.K_LEFT] or pressed[pg.K_a]:
@@ -94,6 +95,7 @@ def main():
 
         camera.draw(screen)
         cursor.draw(screen)
+        # enemies.draw()
         cursor.update_pos(pg.mouse.get_pos())
         #update_cursor(pg.mouse.get_pos(), screen, cursor)
         pg.display.update()
