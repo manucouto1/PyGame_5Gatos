@@ -12,7 +12,8 @@ class Player(ActiveEntity):
 
     def shoot(self, camera):
         # look to shoot direction
-        m_pos = (m_x, _) = pg.mouse.get_pos()
+        (m_x, m_y) = pg.mouse.get_pos()
+        m_pos = (m_x - camera.cam.x, m_y - camera.cam.y)
 
         if m_x > self.rect.x + camera.cam.x:
             self.direction = pg.K_RIGHT

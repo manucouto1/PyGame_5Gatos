@@ -6,8 +6,8 @@ GRAVITY = pg.Vector2((0, 4.8))
 
 class Enemy(ActiveEntity):
 
-    def __init__(self, width, height, offset, frames, level):
-        super().__init__(width, height, offset, frames, level)
+    def __init__(self, width, height, offset, frames, level, *groups):
+        super().__init__(width, height, offset, frames, level, *groups)
         self.path = [0, 100]
         self.walk_count = 0
         self.jump()
