@@ -6,9 +6,9 @@ import assets
 import sys
 
 from camera import Camera
-from src.active_entities.enemy import Enemy
+from src.active.enemy import Enemy
 from level import Level
-from src.active_entities.player import Player
+from src.active.player import Player
 
 white = (255, 255, 255)
 SCREEN_WIDTH = 800
@@ -32,18 +32,22 @@ def main():
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pg.display.set_caption("tutorial pygame parte 2")
 
-    level = Level("tiles_32x32")
     platforms = pg.sprite.Group()
+    bullets = pg.sprite.Group()
+    enemies = pg.sprite.Group()
+
+    level = Level("tiles_32x32")
     player = Player(32, 64, 16, 8, platforms)
     camera = Camera(player, pg.Rect(0, 0, level.map_width * 32, level.map_height * 32), SCREEN_SIZE)
+
     level.load_platforms(platforms, camera)
 
     # Main loop
     clock = pg.time.Clock()
-    bullets = pg.sprite.Group()
-    enemies = pg.sprite.Group()
+
     enemy = Enemy(32, 64, 16, 8, platforms)
     enemies.add(enemy)
+    camera.add(enemy)
 
     while True:
         screen.blit(bg, (0, 0))
@@ -61,15 +65,20 @@ def main():
                 # mouse shutting
                 if len(bullets) < 5:
                     # look to shoot direction
-                    bullets.add(player.shoot(camera))
+                    projectile = player.shoot(camera)
+                    bullets.add(projectile)
+                    camera.add(projectile)
 
         to_remove = list(filter(lambda bll: SCREEN_HEIGHT < bll.x or bll.x < 0 or SCREEN_WIDTH < bll.y or bll.y < 0,
                                 bullets.sprites()))
+
+        to_remove2 = pg.sprite.groupcollide(bullets, platforms, False, False)
+
+        print(to_remove2)
+
         bullets.remove(to_remove)
 
-        bullets.update()
         camera.update()
-        enemies.update(camera)
 
         pressed = pg.key.get_pressed()
 
@@ -82,8 +91,6 @@ def main():
         screen_rect[2] += level.map_width * level.tile_size - SCREEN_WIDTH
         player.rect.clamp_ip(screen_rect)
 
-        bullets.draw(screen)
-        enemies.draw(screen)
         camera.draw(screen)
         update_cursor(pg.mouse.get_pos(), screen, cursor)
         pg.display.update()
