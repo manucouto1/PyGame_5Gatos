@@ -72,7 +72,7 @@ def main():
         to_remove = list(filter(lambda bll: SCREEN_HEIGHT < bll.x or bll.x < 0 or SCREEN_WIDTH < bll.y or bll.y < 0,
                                 bullets.sprites()))
 
-        to_remove2 = pg.sprite.groupcollide(bullets, platforms, False, False)
+        to_remove2 = pg.sprite.groupcollide(bullets, platforms, True, False)
 
         print(to_remove2)
 
