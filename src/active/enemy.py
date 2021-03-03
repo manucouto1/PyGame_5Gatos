@@ -1,5 +1,5 @@
 import pygame as pg
-from src.active_entities.activeEntity import ActiveEntity
+from src.active.active_entity import ActiveEntity
 
 GRAVITY = pg.Vector2((0, 4.8))
 
@@ -10,6 +10,7 @@ class Enemy(ActiveEntity):
         super().__init__(width, height, offset, frames, level)
         self.path = [0, 100]
         self.walk_count = 0
+        self.jump()
 
     def move(self):
         if self.vel.x > 0:
@@ -23,7 +24,7 @@ class Enemy(ActiveEntity):
             else:  # Change direction
                 self.move_right()
 
-    def update(self, camera):
+    def update(self):
         self.move()
         self.walk_loop()
 

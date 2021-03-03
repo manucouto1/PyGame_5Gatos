@@ -1,6 +1,6 @@
 import pygame as pg
 from src.projectile import Projectile
-from src.active_entities.activeEntity import ActiveEntity
+from src.active.active_entity import ActiveEntity
 
 GRAVITY = pg.Vector2((0, 4.8))
 
@@ -24,8 +24,8 @@ class Player(ActiveEntity):
         else:
             offset = self.offset
 
-        bullet = Projectile(round(self.rect.x + self.rect.width // 2 + offset + camera.cam.x),
-                            round(self.rect.y + self.rect.height // 2 + camera.cam.y), 6)
+        bullet = Projectile(round(self.rect.x + self.rect.width // 2 + offset),
+                            round(self.rect.y + self.rect.height // 2), 6)
 
         bullet.trajectory(m_pos)
 

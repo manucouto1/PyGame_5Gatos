@@ -1,8 +1,6 @@
 import pygame as pg
-import os
 import assets
 from src.spritesheet import Spritesheet
-from src.projectile import Projectile
 
 GRAVITY = pg.Vector2((0, 4.8))
 
