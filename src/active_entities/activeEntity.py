@@ -1,13 +1,13 @@
 import pygame as pg
 import os
 import assets
-from spritesheet import Spritesheet
-from projectile import Projectile
+from src.spritesheet import Spritesheet
+from src.projectile import Projectile
 
 GRAVITY = pg.Vector2((0, 4.8))
 
 
-class Enemy(pg.sprite.Sprite):
+class ActiveEntity(pg.sprite.Sprite):
 
     def __init__(self, width, height, offset, frames, level):
         super().__init__()
@@ -25,6 +25,7 @@ class Enemy(pg.sprite.Sprite):
         self.move_y = 0
         self.idle_images = []
         self.walk_images = []
+        self.movement = None
         self.direction = None
         self.onGround = False
         self.vel = pg.Vector2((0, 0))
@@ -35,8 +36,6 @@ class Enemy(pg.sprite.Sprite):
         self.image = self.idle_R.image_at((self.offset, 0, width, height))
 
         self.rect = self.image.get_rect()
-        self.path = [0, 100]
-        self.walk_count = 0
 
     def idle_loop(self):
         self.idle_id = (self.idle_id + 1) % self.frames
@@ -49,18 +48,27 @@ class Enemy(pg.sprite.Sprite):
 
     def walk_loop(self):
         self.walk_id = (self.walk_id + 1) % self.frames
+        top_x = self.walk_id * (self.width + self.offset * 2) + self.offset
         if self.direction == pg.K_LEFT:
-            self.image = (self.walk_L.image_at(
-                (self.walk_id * (self.width + self.offset * 2) + self.offset, 0, self.width, self.height)))
+            self.image = self.walk_L.image_at((top_x, 0, self.width, self.height))
         elif self.direction == pg.K_RIGHT:
-            self.image = (self.walk_R.image_at(
-                (self.walk_id * (self.width + self.offset * 2) + self.offset, 0, self.width, self.height)))
+            self.image = self.walk_R.image_at((top_x, 0, self.width, self.height))
 
     def gravity(self):
         if not self.onGround:
             self.vel += GRAVITY
             if self.vel.y > 100:
                 self.vel.y = 100
+
+    def jump(self):
+        if self.onGround:
+            self.vel.y = -self.jump_strength
+            self.num_jumps += 1
+            print("jump num:", self.num_jumps)
+        elif self.num_jumps < 2:
+            self.vel.y = -self.jump_strength
+            self.num_jumps += 1
+            print("double num:", self.num_jumps)
 
     def move_left(self):
         self.vel.x = -self.speed
@@ -76,43 +84,18 @@ class Enemy(pg.sprite.Sprite):
         self.movement = False
         self.vel.x = 0
 
-    def move(self):
-        if self.vel.x > 0:
-            if self.rect[0] < self.path[1] + self.vel.x:
-                self.move_right()
-            else:
-                self.move_left()
-                self.walkCount = 0
-        else:
-            if self.rect[0] > self.path[0] - self.vel.x:
-                self.move_left()
-            else:  # Change direction
-                self.move_right()
-                self.walkCount = 0
-
-    def update(self):
-        self.move()
-        self.walk_loop()
-
-        self.gravity()
-        self.rect.x += self.vel.x
-        self.collide(self.vel.x, 0)
-        self.rect.y += self.vel.y
-        self.onGround = False
-        self.collide(0, self.vel.y)
-
-    def collide(self, xvel, yvel):
-        for p in self.level:
-            if pg.sprite.collide_rect(self, p):
-                if xvel > 0:
-                    self.rect.right = p.rect.left
-                if xvel < 0:
-                    self.rect.left = p.rect.right
-                if yvel > 0:
-                    self.rect.bottom = p.rect.top
-                    self.onGround = True
-                    self.num_jumps = 0
-                if yvel < 0:
-                    self.rect.top = p.rect.bottom
-                    self.vel.y = 0
+    def collide_ground(self, xvel, yvel):
+        level_c = pg.sprite.spritecollideany(self, self.level)
+        if level_c:
+            if xvel > 0:
+                self.rect.right = level_c.rect.left
+            if xvel < 0:
+                self.rect.left = level_c.rect.right
+            if yvel > 0:
+                self.rect.bottom = level_c.rect.top
+                self.onGround = True
+                self.num_jumps = 0
+            if yvel < 0:
+                self.rect.top = level_c.rect.bottom
+                self.vel.y = 0
 

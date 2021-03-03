@@ -3,14 +3,12 @@
 import pygame as pg
 
 import assets
-import os
 import sys
 
 from camera import Camera
-from enemy import Enemy
+from src.active_entities.enemy import Enemy
 from level import Level
-from player import Player
-from projectile import Projectile
+from src.active_entities.player import Player
 
 white = (255, 255, 255)
 SCREEN_WIDTH = 800
@@ -71,7 +69,7 @@ def main():
 
         bullets.update()
         camera.update()
-        enemies.update()
+        enemies.update(camera)
 
         pressed = pg.key.get_pressed()
 
@@ -85,8 +83,8 @@ def main():
         player.rect.clamp_ip(screen_rect)
 
         bullets.draw(screen)
-        camera.draw(screen)
         enemies.draw(screen)
+        camera.draw(screen)
         update_cursor(pg.mouse.get_pos(), screen, cursor)
         pg.display.update()
         clock.tick(FPS)
