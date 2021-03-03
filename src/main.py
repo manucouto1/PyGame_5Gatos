@@ -9,6 +9,7 @@ from camera import Camera
 from src.active.enemy import Enemy
 from level import Level
 from src.active.player import Player
+from src.pasive.cursor import Cursor
 
 white = (255, 255, 255)
 SCREEN_WIDTH = 800
@@ -27,7 +28,7 @@ def update_cursor(mouse_pos, screen, cursor):
 def main():
     pg.init()
     pg.mouse.set_visible(False)
-    cursor = pg.transform.scale(assets.load_image("cursor", "single-cursor.png"), (32, 32))
+
     bg = pg.image.load(assets.path_to("background.png"))
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pg.display.set_caption("tutorial pygame parte 2")
@@ -39,15 +40,14 @@ def main():
     level = Level("tiles_32x32")
     player = Player(32, 64, 16, 8, platforms)
     camera = Camera(player, pg.Rect(0, 0, level.map_width * 32, level.map_height * 32), SCREEN_SIZE)
-
+    Enemy(32, 64, 16, 8, platforms, enemies, camera)
+    cursor = Cursor(pg.mouse.get_pos())
     level.load_platforms(platforms, camera)
 
     # Main loop
     clock = pg.time.Clock()
 
-    enemy = Enemy(32, 64, 16, 8, platforms)
-    enemies.add(enemy)
-    camera.add(enemy)
+
 
     while True:
         screen.blit(bg, (0, 0))
@@ -78,6 +78,7 @@ def main():
 
         bullets.remove(to_remove)
 
+        cursor.update()
         camera.update()
 
         pressed = pg.key.get_pressed()
@@ -92,7 +93,9 @@ def main():
         player.rect.clamp_ip(screen_rect)
 
         camera.draw(screen)
-        update_cursor(pg.mouse.get_pos(), screen, cursor)
+        cursor.draw(screen)
+        cursor.update_pos(pg.mouse.get_pos())
+        #update_cursor(pg.mouse.get_pos(), screen, cursor)
         pg.display.update()
         clock.tick(FPS)
 
