@@ -1,8 +1,8 @@
 import sys
 import pygame as pg
-import assets
+import src.utils.assets as assets
 
-from src.pasive.level import Level
+from src.game.level import Level
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800

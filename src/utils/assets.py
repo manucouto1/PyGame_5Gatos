@@ -3,7 +3,7 @@ from pathlib import Path
 import pygame as pg
 
 
-ROOT = Path(os.path.dirname(os.path.abspath(__file__))).parent.joinpath('assets').__str__()
+ROOT = Path(os.path.dirname(os.path.abspath(__file__))).parent.parent.joinpath('assets').__str__()
 
 cached = {}
 

@@ -1,14 +1,14 @@
 import json
 import os
-import assets
+import src.utils.assets as assets
 import pygame as pg
 
-from src.pasive.platforms import Platform
-from src.active.enemy import Enemy
-from src.active.player import Player
-from src.custom_groups import CustomGroup
-from src.camera import Camera
-from src.pasive.cursor import Cursor
+from src.sprites.pasive.platforms import Platform
+from src.sprites.active.enemy import Enemy
+from src.sprites.active.hero import Player
+from src.sprites.custom_groups import CustomGroup
+from src.sprites.camera import Camera
+from src.sprites.pasive.cursor import Cursor
 
 
 class Level:

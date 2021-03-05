@@ -1,5 +1,5 @@
 import pygame as pg
-from src.active.active_entity import ActiveEntity
+from src.sprites.active.active_entity import ActiveEntity
 
 GRAVITY = pg.Vector2((0, 4.8))
 

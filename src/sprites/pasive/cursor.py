@@ -1,5 +1,5 @@
 import pygame as pg
-import assets
+import src.utils.assets as assets
 
 
 class Cursor(pg.sprite.Sprite):

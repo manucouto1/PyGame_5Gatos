@@ -1,6 +1,6 @@
 import pygame as pg
-import assets
-from src.spritesheet import Spritesheet
+import src.utils.assets as assets
+from src.sprites.spritesheet import Spritesheet
 
 GRAVITY = pg.Vector2((0, 4.8))
 

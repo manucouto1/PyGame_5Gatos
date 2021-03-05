@@ -1,7 +1,6 @@
 import pygame as pg
-from src.projectile import Projectile
-from src.active.active_entity import ActiveEntity
-from src.custom_groups import CustomGroup
+from src.sprites.pasive.projectile import Projectile
+from src.sprites.active.active_entity import ActiveEntity
 
 GRAVITY = pg.Vector2((0, 4.8))
 
