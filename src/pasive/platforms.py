@@ -1,7 +1,7 @@
 import pygame as pg
 
 import assets
-from spritesheet import Spritesheet
+from src.spritesheet import Spritesheet
 import os
 
 

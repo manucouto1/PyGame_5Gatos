@@ -6,8 +6,8 @@ GRAVITY = pg.Vector2((0, 4.8))
 
 class Enemy(ActiveEntity):
 
-    def __init__(self, width, height, offset, frames, level, *groups):
-        super().__init__(width, height, offset, frames, level, *groups)
+    def __init__(self, width, height, offset, frames, *groups):
+        super().__init__(width, height, offset, frames, *groups)
         self.path = [0, 100]
         self.walk_count = 0
         self.jump()
@@ -21,16 +21,10 @@ class Enemy(ActiveEntity):
         else:
             if self.rect[0] > self.path[0] - self.vel.x:
                 self.move_left()
-            else:  # Change direction
+            else:
                 self.move_right()
 
-    def update(self):
+    def update(self, platforms):
         self.move()
         self.walk_loop()
-
-        self.gravity()
-        self.rect.x += self.vel.x
-        self.collide_ground(self.vel.x, 0)
-        self.rect.y += self.vel.y
-        self.onGround = False
-        self.collide_ground(0, self.vel.y)
+        self.apply(platforms)
