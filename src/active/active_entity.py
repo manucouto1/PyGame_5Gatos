@@ -7,13 +7,12 @@ GRAVITY = pg.Vector2((0, 4.8))
 
 class ActiveEntity(pg.sprite.Sprite):
 
-    def __init__(self, width, height, offset, frames, level, *groups):
+    def __init__(self, width, height, offset, frames, *groups):
         super().__init__(*groups)
         self.idle_L = Spritesheet(assets.path_to("player", "idle", "Hero_idle_L_32x32_200.png"))
         self.idle_R = Spritesheet(assets.path_to("player", "idle", "Hero_idle_R_32x32_200.png"))
         self.walk_L = Spritesheet(assets.path_to("player", "walk", "Hero_walk_L_32x32_200.png"))
         self.walk_R = Spritesheet(assets.path_to("player", "walk", "Hero_walk_R_32x32_200.png"))
-        self.level = level
         self.frames = frames
         self.width = width
         self.height = height
@@ -82,18 +81,27 @@ class ActiveEntity(pg.sprite.Sprite):
         self.movement = False
         self.vel.x = 0
 
-    def collide_ground(self, xvel, yvel):
-        level_c = pg.sprite.spritecollideany(self, self.level)
-        if level_c:
-            if xvel > 0:
-                self.rect.right = level_c.rect.left
-            if xvel < 0:
-                self.rect.left = level_c.rect.right
-            if yvel > 0:
-                self.rect.bottom = level_c.rect.top
-                self.onGround = True
-                self.num_jumps = 0
-            if yvel < 0:
-                self.rect.top = level_c.rect.bottom
-                self.vel.y = 0
+    def collide_ground(self, xvel, yvel, platforms):
+        collide_l = pg.sprite.spritecollide(self, platforms, False)
+        for p in collide_l:
+            if pg.sprite.collide_rect(self, p):
+                if xvel > 0:
+                    self.rect.right = p.rect.left
+                if xvel < 0:
+                    self.rect.left = p.rect.right
+                if yvel > 0:
+                    self.rect.bottom = p.rect.top
+                    self.onGround = True
+                    self.num_jumps = 0
+                if yvel < 0:
+                    self.rect.top = p.rect.bottom
+                    self.vel.y = 0
+
+    def apply(self, platforms):
+        self.gravity()
+        self.rect.x += self.vel.x
+        self.collide_ground(self.vel.x, 0, platforms)
+        self.rect.y += self.vel.y
+        self.onGround = False
+        self.collide_ground(0, self.vel.y, platforms)
 
