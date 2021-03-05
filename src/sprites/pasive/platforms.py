@@ -1,8 +1,7 @@
 import pygame as pg
 
-import assets
-from src.spritesheet import Spritesheet
-import os
+import src.utils.assets as assets
+from src.sprites.spritesheet import Spritesheet
 
 
 class Platform(pg.sprite.Sprite):

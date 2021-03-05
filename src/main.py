@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
 import pygame as pg
-from game_control import GameControl
+from src.game.game_control import GameControl
 
 FPS = 20
 
