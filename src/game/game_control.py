@@ -1,6 +1,7 @@
 import sys
 import pygame as pg
 import src.utils.assets as assets
+from levels.testLevel import TestLevel
 
 from src.game.level import Level
 
@@ -19,18 +20,17 @@ class GameControl:
         pg.mouse.set_visible(False)
         pg.display.set_caption("tutorial pygame parte 2")
 
-        self.bg = pg.image.load(assets.path_to("background.png"))
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.actual_level = 0
-        # TODO cargar niveles desde json
-        self.levels = [Level("tiles_32x32")]
+        self.current_level = 0
+        # TODO cargar levels desde json
+        self.levels = [TestLevel(), TestLevel()]
 
     def control(self):
-        level = self.levels[self.actual_level]
+        level = self.levels[self.current_level]
         player = level.player
         camera = level.camera
 
-        self.screen.blit(self.bg, (0, 0))
+        self.screen.blit(self.levels[self.current_level].bg, (0, 0))
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -59,12 +59,12 @@ class GameControl:
         player.rect.clamp_ip(screen_rect)
 
     def init_level(self):
-        self.levels[self.actual_level].load_platforms()
-        self.levels[self.actual_level].load_player(SCREEN_SIZE)
-        self.levels[self.actual_level].load_enemies()
+        self.levels[self.current_level].load_player(SCREEN_SIZE)
+        self.levels[self.current_level].load_platforms()
+        self.levels[self.current_level].load_enemies()
 
     def update(self):
-        self.levels[self.actual_level].update()
+        self.levels[self.current_level].update()
 
     def draw(self):
-        self.levels[self.actual_level].draw(self.screen)
+        self.levels[self.current_level].draw(self.screen)
