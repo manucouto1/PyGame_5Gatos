@@ -13,7 +13,8 @@ from src.sprites.pasive.cursor import Cursor
 
 class Level:
     def __init__(self, level_name):
-        with open(assets.path_to(level_name + os.sep + level_name + '.txt')) as f:
+        config_path = assets.path_to('levels', level_name, f'{level_name}.txt')
+        with open(config_path) as f:
             config = json.load(f)
             if config is not None:
                 self.level_name = level_name
@@ -25,27 +26,31 @@ class Level:
                 self.player = None
                 self.camera = None
                 self.cursor = Cursor(pg.mouse.get_pos())
-                self.enemies = CustomGroup()
-                self.platforms = CustomGroup()
-                self.bullets = CustomGroup()
+                self.enemies = None
+                self.platforms = None
+                self.bullets = None
             else:
                 raise ValueError("Problems with level config file")
 
     def load_player(self, screen_size):
         self.player = Player(32, 64, 16, 8)
         self.camera = Camera(self.player, pg.Rect(0, 0, self.map_width * 32, self.map_height * 32), screen_size)
+        self.bullets = CustomGroup(self.camera.cam)
 
     def load_platforms(self):
+        self.platforms = CustomGroup(self.camera.cam)
         for layer in self.layers_config:
             for position in layer["positions"]:
                 Platform(self.level_name, self.tile_size, position["x"], position["y"], position["id"], self.platforms)
 
     def load_enemies(self):
         # todo Cargar enemigos desde json
+        self.enemies = CustomGroup(self.camera.cam)
         Enemy(32, 64, 16, 8, self.enemies)
 
     def update(self):
         pg.sprite.groupcollide(self.bullets, self.platforms, True, False)
+        pg.sprite.groupcollide(self.bullets, self.enemies, True, True)
 
         list_remove = list(filter(lambda bll: not self.map_width * 32 > bll.x > 0 or not self.map_height * 32 > bll.y > 0,
                                   self.bullets.sprites()))
@@ -61,6 +66,6 @@ class Level:
     def draw(self, screen):
         self.camera.draw(screen)
         self.cursor.draw(screen)
-        self.platforms.draw(screen, self.camera.cam)
-        self.bullets.draw(screen, self.camera.cam)
-        self.enemies.draw(screen, self.camera.cam)
+        self.platforms.draw(screen)
+        self.bullets.draw(screen)
+        self.enemies.draw(screen)

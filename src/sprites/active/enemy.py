@@ -24,6 +24,9 @@ class Enemy(ActiveEntity):
             else:
                 self.move_right()
 
+    def kill(self):
+        self.path[1] = 4000
+
     def update(self, platforms):
         self.move()
         self.walk_loop()
