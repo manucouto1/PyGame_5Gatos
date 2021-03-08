@@ -5,7 +5,7 @@ import pygame as pg
 
 from src.sprites.pasive.platforms import Platform
 from src.sprites.active.enemy import Enemy
-from src.sprites.active.hero import Player
+from src.sprites.active.hero import Hero
 from src.sprites.custom_groups import CustomGroup
 from src.sprites.camera import Camera
 from src.sprites.pasive.cursor import Cursor
@@ -32,7 +32,7 @@ class Level:
                 raise ValueError("Problems with level config file")
 
     def load_player(self, screen_size):
-        self.player = Player(32, 64, 16, 8)
+        self.player = Hero(32, 64, 16, 8)
         self.camera = Camera(self.player, pg.Rect(0, 0, self.map_width * 32, self.map_height * 32), screen_size)
 
     def load_platforms(self):
