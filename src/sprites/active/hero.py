@@ -5,10 +5,11 @@ from src.sprites.active.active_entity import ActiveEntity
 GRAVITY = pg.Vector2((0, 4.8))
 
 
-class Player(ActiveEntity):
+class Hero(ActiveEntity):
 
     def __init__(self, width, height, offset, frames):
         super().__init__(width, height, offset, frames)
+
 
     def shoot(self, camera):
         # look to shoot direction
