@@ -19,11 +19,13 @@ class GameControl:
         pg.mouse.set_visible(False)
         pg.display.set_caption("tutorial pygame parte 2")
 
+        self.clock = pg.time.Clock()
         self.bg = pg.image.load(assets.path_to("background.png"))
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.actual_level = 0
         # TODO cargar niveles desde json
-        self.levels = [Level("tiles_32x32")]
+        # Level("nivel1_65x30")
+        self.levels = [Level("nivel1_65x30_test4")]
 
     def control(self):
         level = self.levels[self.actual_level]
@@ -57,6 +59,8 @@ class GameControl:
         screen_rect = self.screen.get_rect()
         screen_rect[2] += level.map_width * level.tile_size - SCREEN_WIDTH
         hero.rect.clamp_ip(screen_rect)
+
+        self.clock.tick(FPS)
 
     def init_level(self):
         self.levels[self.actual_level].load_platforms()

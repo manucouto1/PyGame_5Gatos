@@ -35,6 +35,7 @@ class ActiveEntity(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def idle_loop(self):
+
         self.idle_id = (self.idle_id + 1) % self.frames
         if self.direction == pg.K_LEFT:
             self.image = self.idle_L.image_at(
