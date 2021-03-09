@@ -25,7 +25,7 @@ class GameControl:
         self.actual_level = 0
         # TODO cargar niveles desde json
         # Level("nivel1_65x30")
-        self.levels = [Level("nivel1_65x30_test4")]
+        self.levels = [Level("level1")]
 
     def control(self):
         level = self.levels[self.actual_level]
