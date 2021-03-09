@@ -1,5 +1,6 @@
 import json
-import os
+import sys
+
 import src.utils.assets as assets
 import pygame as pg
 
@@ -17,6 +18,10 @@ class Level:
         with open(config_path) as f:
             config = json.load(f)
             if config is not None:
+                self.bg = None
+                self.screen_size = (800, 800)
+                self.screen_rect = pg.Rect((0, 0, 800, 800))
+                self.screen = pg.display.set_mode(self.screen_size)
                 self.level_name = level_name
                 self.tile_size = config["tile_size"]
                 self.map_width = config["map_width"]
@@ -31,10 +36,13 @@ class Level:
                 self.bullets = None
             else:
                 raise ValueError("Problems with level config file")
+        self.load_player()
+        self.load_enemies()
+        self.load_platforms()
 
-    def load_player(self, screen_size):
+    def load_player(self):
         self.player = Player(32, 64, 16, 8)
-        self.camera = Camera(self.player, pg.Rect(0, 0, self.map_width * 32, self.map_height * 32), screen_size)
+        self.camera = Camera(self.player, pg.Rect(0, 0, self.map_width * 32, self.map_height * 32), self.screen_rect)
         self.bullets = CustomGroup(self.camera.cam)
 
     def load_platforms(self):
@@ -47,6 +55,29 @@ class Level:
         # todo Cargar enemigos desde json
         self.enemies = CustomGroup(self.camera.cam)
         Enemy(32, 64, 16, 8, self.enemies)
+
+    def events(self, events):
+        for event in events:
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+            if event.type == pg.KEYDOWN:
+                # conditions for double jumping
+                if event.key in [pg.K_UP, pg.K_w, pg.K_SPACE]:
+                    self.player.jump()
+            if event.type == pg.MOUSEBUTTONDOWN:
+                # mouse shutting
+                if len(self.bullets) < 5:
+                    # look to shoot direction
+                    bullet = self.player.shoot(self.camera)
+                    self.bullets.add(bullet)
+
+        pressed = pg.key.get_pressed()
+
+        if pressed[pg.K_LEFT] or pressed[pg.K_a]:
+            self.player.move_left()
+        if pressed[pg.K_RIGHT] or pressed[pg.K_d]:
+            self.player.move_right()
 
     def update(self):
         pg.sprite.groupcollide(self.bullets, self.platforms, True, False)
@@ -63,9 +94,13 @@ class Level:
         self.camera.update(self.platforms)
         self.cursor.update(pg.mouse.get_pos())
 
-    def draw(self, screen):
-        self.camera.draw(screen)
-        self.cursor.draw(screen)
-        self.platforms.draw(screen)
-        self.bullets.draw(screen)
-        self.enemies.draw(screen)
+    def draw(self):
+        self.screen.blit(self.bg, (0, 0))
+        screen_rect = self.screen.get_rect()
+        screen_rect[2] += self.map_width * self.tile_size - self.screen_size[0]
+        self.player.rect.clamp_ip(screen_rect)
+        self.camera.draw(self.screen)
+        self.cursor.draw(self.screen)
+        self.platforms.draw(self.screen)
+        self.bullets.draw(self.screen)
+        self.enemies.draw(self.screen)
