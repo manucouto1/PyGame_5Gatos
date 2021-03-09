@@ -11,6 +11,9 @@ class Life(pg.sprite.Group):
         self.player = player
         pos = ceil(self.player.life / 2) - 1
         
+        self.decreasing = False
+        self.animation = 0
+
         # Full hearts
         for _ in range(pos):
             hearts.append(Heart(sheet, 0))
@@ -26,10 +29,20 @@ class Life(pg.sprite.Group):
         self.n_hearts = n_hearts
 
     def update(self):
-        self.sprites()[ceil(self.player.life / 2) - 1].update()
+        if self.decreasing:
+            pos = ceil((self.player.life + 1) / 2) - 1
+            self.animation = self.animation - 1
+            if self.animation == 0:
+                self.decreasing = False
+        else:
+            pos = ceil(self.player.life / 2) - 1
+        self.sprites()[pos].update()
+        
 
     def decrease(self):
         self.sprites()[ceil(self.player.life / 2) - 1].decrease()
+        self.decreasing = True
+        self.animation = self.sprites()[ceil(self.player.life / 2) - 1].animation
     
     def draw(self, win):
         x = 54
@@ -42,3 +55,8 @@ class Life(pg.sprite.Group):
 # get_damage()
 # life.decrease()
 # life = life - 1
+
+# To check if it works right, add in game_control.py:
+# if event.key == pg.K_k:
+#     level.life.decrease()
+#     level.hero.life = level.hero.life - 1
