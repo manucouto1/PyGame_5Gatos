@@ -4,7 +4,7 @@
 	"map_height": 25,
 	"layers": [
 		{
-			"name": "Unnamed Layer", 
+			"name": "0",
 			"positions": [
 				{ "x":9, "y":17, "id":0 },
 				{ "x":49, "y":18, "id":0 },
@@ -212,7 +212,7 @@
 			]
 		},
 		{
-			"name": "Nivel base", 
+			"name": "1",
 			"positions": [
 				{ "x":0, "y":16, "id":1 },
 				{ "x":0, "y":17, "id":2 },
