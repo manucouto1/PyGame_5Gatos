@@ -22,7 +22,7 @@ class Level:
                 self.map_height = config["map_height"]
                 self.layers_config = config["layers"]
                 self.layers = []
-                self.player = None
+                self.hero = None
                 self.camera = None
                 self.cursor = Cursor(pg.mouse.get_pos())
                 self.enemies = CustomGroup()
@@ -31,9 +31,9 @@ class Level:
             else:
                 raise ValueError("Problems with level config file")
 
-    def load_player(self, screen_size):
-        self.player = Hero(32, 64, 16, 8)
-        self.camera = Camera(self.player, pg.Rect(0, 0, self.map_width * 32, self.map_height * 32), screen_size)
+    def load_hero(self, screen_size):
+        self.hero = Hero(32, 64, 16, 8)
+        self.camera = Camera(self.hero, pg.Rect(0, 0, self.map_width * 32, self.map_height * 32), screen_size)
 
     def load_platforms(self):
         for layer in self.layers_config:

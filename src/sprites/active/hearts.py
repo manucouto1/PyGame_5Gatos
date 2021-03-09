@@ -1,5 +1,5 @@
 import pygame as pg
-from src.sprites.pasive.hero import Player
+from src.sprites.pasive.hero import Hero
 
 class Heart(pg.sprite.Sprite):
     # state represents init frame of the heart:
@@ -15,7 +15,7 @@ class Heart(pg.sprite.Sprite):
         self.animation = 10
         self.down_healing = False
 
-    def update(self, player):
+    def update(self):
         if(self.down_healing):
             self.heart_id = self.heart_id + 1
             if(self.heart_id % self.animation == 0):
@@ -24,3 +24,5 @@ class Heart(pg.sprite.Sprite):
 
     def decrease(self):
         self.down_healing = True
+
+    def draw(self):

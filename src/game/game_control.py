@@ -27,7 +27,7 @@ class GameControl:
 
     def control(self):
         level = self.levels[self.actual_level]
-        player = level.player
+        hero = level.hero
         camera = level.camera
 
         self.screen.blit(self.bg, (0, 0))
@@ -39,28 +39,28 @@ class GameControl:
             if event.type == pg.KEYDOWN:
                 # conditions for double jumping
                 if event.key in [pg.K_UP, pg.K_w, pg.K_SPACE]:
-                    player.jump()
+                    hero.jump()
             if event.type == pg.MOUSEBUTTONDOWN:
                 # mouse shutting
                 if len(level.bullets) < 5:
                     # look to shoot direction
-                    bullet = player.shoot(camera)
+                    bullet = hero.shoot(camera)
                     level.bullets.add(bullet)
 
         pressed = pg.key.get_pressed()
 
         if pressed[pg.K_LEFT] or pressed[pg.K_a]:
-            player.move_left()
+            hero.move_left()
         if pressed[pg.K_RIGHT] or pressed[pg.K_d]:
-            player.move_right()
+            hero.move_right()
 
         screen_rect = self.screen.get_rect()
         screen_rect[2] += level.map_width * level.tile_size - SCREEN_WIDTH
-        player.rect.clamp_ip(screen_rect)
+        hero.rect.clamp_ip(screen_rect)
 
     def init_level(self):
         self.levels[self.actual_level].load_platforms()
-        self.levels[self.actual_level].load_player(SCREEN_SIZE)
+        self.levels[self.actual_level].load_hero(SCREEN_SIZE)
         self.levels[self.actual_level].load_enemies()
 
     def update(self):
