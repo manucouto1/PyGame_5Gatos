@@ -1,24 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
 import pygame as pg
-from src.game.game_control import GameControl
+
+from levels.testLevel import TestLevel
+from src.game.game_control import Director
 
 FPS = 20
 
 
 def main():
-    # Main loop
-    clock = pg.time.Clock()
 
-    game = GameControl()
-    game.init_level()
-
-    while True:
-        game.control()
-        game.update()
-        game.draw()
-        pg.display.update()
-        clock.tick(FPS)
+    game = Director()
+    game.stack_scene(TestLevel())
+    game.run()
 
 
 if __name__ == "__main__":
