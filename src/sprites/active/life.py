@@ -11,6 +11,7 @@ class Life(pg.sprite.Group):
         self.player = player
         pos = ceil(self.player.life / 2) - 1
         
+        # Necessary when updating a decreasing heart
         self.decreasing = False
         self.animation = 0
 
@@ -29,6 +30,8 @@ class Life(pg.sprite.Group):
         self.n_hearts = n_hearts
 
     def update(self):
+        # When decreasing, it's necessary to increase player.life by 1
+        # to update the correct heart. This lasts for 'animation' frames.
         if self.decreasing:
             pos = ceil((self.player.life + 1) / 2) - 1
             self.animation = self.animation - 1
