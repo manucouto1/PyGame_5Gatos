@@ -9,6 +9,7 @@ from src.sprites.active.hero import Hero
 from src.sprites.custom_groups import CustomGroup
 from src.sprites.camera import Camera
 from src.sprites.pasive.cursor import Cursor
+from src.sprites.active.life import Life
 
 
 class Level:
@@ -33,6 +34,7 @@ class Level:
 
     def load_hero(self, screen_size):
         self.hero = Hero(32, 64, 16, 8)
+        self.life = Life(3, self.hero)
         self.camera = Camera(self.hero, pg.Rect(0, 0, self.map_width * 32, self.map_height * 32), screen_size)
 
     def load_platforms(self):
@@ -57,9 +59,11 @@ class Level:
         self.enemies.update(self.platforms)
         self.camera.update(self.platforms)
         self.cursor.update(pg.mouse.get_pos())
+        self.life.update()
 
     def draw(self, screen):
         self.camera.draw(screen)
+        self.life.draw(screen)
         self.cursor.draw(screen)
         self.platforms.draw(screen, self.camera.cam)
         self.bullets.draw(screen, self.camera.cam)

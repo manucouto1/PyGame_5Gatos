@@ -9,6 +9,7 @@ class Hero(ActiveEntity):
 
     def __init__(self, width, height, offset, frames):
         super().__init__(width, height, offset, frames)
+        self.life = 6
 
 
     def shoot(self, camera):
