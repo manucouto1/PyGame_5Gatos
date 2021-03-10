@@ -1,5 +1,5 @@
 import pygame as pg
-from src.sprites.active.hero import Hero
+
 
 class Heart(pg.sprite.Sprite):
     # state represents init frame of the heart:
@@ -18,14 +18,15 @@ class Heart(pg.sprite.Sprite):
         self.decreasing = False
 
     def update(self):
-        if(self.decreasing):
+        if self.decreasing:
             self.heart_id = self.heart_id + 1
-            if(self.heart_id % self.animation == 0):
+            if self.heart_id % self.animation == 0:
                 self.decreasing = False
         self.image = self.sheet.image_at((self.heart_id * self.size, 0, self.size, self.size))
         self.image = pg.transform.scale(self.image, (50, 50))
 
     def decrease(self):
+        print("Hit decrease")
         self.decreasing = True
 
     def draw(self, win, x, y):

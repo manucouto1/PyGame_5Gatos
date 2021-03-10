@@ -1,12 +1,11 @@
-import pygame as pg
-from pygame import Surface
 from src.sprites.pasive.platforms import Platform
+from src.sprites.groups.custom_layered_group import CustomLayeredGroup
 
 
-class Layers(pg.sprite.LayeredUpdates):
+class Layers(CustomLayeredGroup):
 
-    def __init__(self, layers, sheet, tile_size):
-        super().__init__()
+    def __init__(self, layers, sheet, tile_size, camera_rect):
+        super().__init__(camera_rect)
 
         for lyr in layers:
             layer_id = int(lyr["name"])
@@ -18,17 +17,3 @@ class Layers(pg.sprite.LayeredUpdates):
 
     def get_dangerous(self):
         return self.get_sprites_from_layer(layer=2)
-
-    def draw(self, surface: Surface, camera_rect) -> None:
-        sprites = self.sprites()
-        if hasattr(surface, "blits"):
-            self.spritedict.update(
-                zip(
-                    sprites,
-                    surface.blits((spr.image, spr.rect.move(camera_rect)) for spr in sprites)
-                )
-            )
-        else:
-            for spr in sprites:
-                self.spritedict[spr] = surface.blit(spr.image, spr.rect)
-        self.lostsprites = []

@@ -1,8 +1,8 @@
 import sys
 import pygame as pg
 import src.utils.assets as assets
-
-from src.game.level import Level
+from src.game.player import Player
+from src.levels.level import Level
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
@@ -23,8 +23,7 @@ class GameControl:
         self.bg = pg.image.load(assets.path_to("background.png"))
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.actual_level = 0
-        # TODO cargar niveles desde json
-        # Level("nivel1_65x30")
+        self.player = Player()
         self.levels = [Level("level1")]
 
     def control(self):
@@ -64,8 +63,9 @@ class GameControl:
 
     def init_level(self):
         self.levels[self.actual_level].load_platforms()
-        self.levels[self.actual_level].load_hero(SCREEN_SIZE)
+        self.levels[self.actual_level].load_dangerous()
         self.levels[self.actual_level].load_enemies()
+        self.levels[self.actual_level].load_hero(SCREEN_SIZE, self.player)
 
     def update(self):
         self.levels[self.actual_level].update()

@@ -1,19 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
-import pygame as pg
-from src.game.game_control import GameControl
+from src.game.director import Director
+from src.levels.level_2d_scroller import Scroller2D
 
 
 def main():
     # Main loop
-    game = GameControl()
-    game.init_level()
-
-    while True:
-        game.control()
-        game.update()
-        game.draw()
-        pg.display.update()
+    game = Director()
+    game.stack_scene(Scroller2D("level1"))
+    game.run()
 
 
 if __name__ == "__main__":
