@@ -1,7 +1,7 @@
 import pygame as pg
 from src.sprites.active.active_entity import ActiveEntity
 import src.utils.assets as assets
-GRAVITY = pg.Vector2((0, 4.8))
+GRAVITY = pg.Vector2((0, 2.8))
 
 
 class Enemy(ActiveEntity):
@@ -9,10 +9,12 @@ class Enemy(ActiveEntity):
     def __init__(self, file, width, height, offset, frames, *groups):
         path = assets.path_to("characters", "enemy", file)
         super().__init__(path, width, height, offset, frames, *groups)
-        self.path = [0, 100]
+        self.path = [20*32, 20*32 + 100]
         self.walk_count = 0
         self.life = 2
         self.dead_id = 0
+        self.rect.x = 20*32
+        self.rect.y = 10*32
 
     def move(self):
         if self.vel.x > 0:
