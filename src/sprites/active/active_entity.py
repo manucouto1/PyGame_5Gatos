@@ -37,14 +37,6 @@ class ActiveEntity(pg.sprite.Sprite):
         self.idle_id = (self.idle_id + 1) % self.frames
         offset_x = self.idle_id * (self.width + self.offset * 2) + self.offset
         self.image = self.sheet.image_at((offset_x, 0, self.width, self.height))
-        """
-        if self.direction == pg.K_LEFT:
-            self.image = self.idle_L.image_at(
-                (self.idle_id * (self.width + self.offset * 2) + self.offset, 0, self.width, self.height))
-        elif self.direction == pg.K_RIGHT:
-            self.image = self.idle_R.image_at(
-                (self.idle_id * (self.width + self.offset * 2) + self.offset, 0, self.width, self.height))
-        """
 
     def walk_loop(self):
         self.walk_id = (self.walk_id + 1) % self.frames
