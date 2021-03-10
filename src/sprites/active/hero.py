@@ -1,15 +1,18 @@
 import pygame as pg
 from src.sprites.pasive.projectile import Projectile
 from src.sprites.active.active_entity import ActiveEntity
+import src.utils.assets as assets
 import time
+
 
 GRAVITY = pg.Vector2((0, 4.8))
 
 
 class Hero(ActiveEntity):
 
-    def __init__(self, width, height, offset, frames, life):
-        super().__init__(width, height, offset, frames)
+    def __init__(self, file, width, height, offset, frames, life):
+        path = assets.path_to("characters", "tofe", file)
+        super().__init__(path, width, height, offset, frames)
         self.last_hit = time.time()
         self.life = life
 

@@ -1,13 +1,14 @@
 import pygame as pg
 from src.sprites.active.active_entity import ActiveEntity
-
+import src.utils.assets as assets
 GRAVITY = pg.Vector2((0, 4.8))
 
 
 class Enemy(ActiveEntity):
 
-    def __init__(self, width, height, offset, frames, *groups):
-        super().__init__(width, height, offset, frames, *groups)
+    def __init__(self, file, width, height, offset, frames, *groups):
+        path = assets.path_to("characters", "enemy", file)
+        super().__init__(path, width, height, offset, frames, *groups)
         self.path = [0, 100]
         self.walk_count = 0
         self.life = 2
@@ -29,7 +30,6 @@ class Enemy(ActiveEntity):
             self.move()
             self.walk_loop()
             self.apply(platforms)
-
 
     def is_hit(self):
         # TODO ver como implementar daño en enemigo

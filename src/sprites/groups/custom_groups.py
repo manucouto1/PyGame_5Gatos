@@ -8,3 +8,4 @@ class CustomGroup(Custom, Group):
         Custom.__init__(self, camera_rect)
         Group.__init__(self, *sprites)
 
+
