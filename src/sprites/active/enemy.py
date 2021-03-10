@@ -10,7 +10,7 @@ class Enemy(ActiveEntity):
         super().__init__(width, height, offset, frames, *groups)
         self.path = [0, 100]
         self.walk_count = 0
-        self.jump()
+        self.life = 2
 
     def move(self):
         if self.vel.x > 0:
@@ -25,6 +25,12 @@ class Enemy(ActiveEntity):
                 self.move_right()
 
     def update(self, platforms):
-        self.move()
-        self.walk_loop()
-        self.apply(platforms)
+        if self.life > 0:
+            self.move()
+            self.walk_loop()
+            self.apply(platforms)
+
+
+    def is_hit(self):
+        # TODO ver como implementar daño en enemigo
+        self.life -= 1
