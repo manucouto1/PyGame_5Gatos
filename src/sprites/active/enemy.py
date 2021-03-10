@@ -12,6 +12,7 @@ class Enemy(ActiveEntity):
         self.path = [0, 100]
         self.walk_count = 0
         self.life = 2
+        self.dead_id = 0
 
     def move(self):
         if self.vel.x > 0:
@@ -25,10 +26,19 @@ class Enemy(ActiveEntity):
             else:
                 self.move_right()
 
+    def dead_loop(self):
+        self.idle_id = (self.idle_id + 1) % self.frames
+        offset_x = self.idle_id * (self.width + self.offset * 2) + self.offset
+        self.image = self.sheet.image_at((offset_x, 96, self.width, self.height))
+
     def update(self, platforms):
         if self.life > 0:
             self.move()
             self.walk_loop()
+            self.apply(platforms)
+        else:
+            self.vel.x = 0
+            self.dead_loop()
             self.apply(platforms)
 
     def is_hit(self):
