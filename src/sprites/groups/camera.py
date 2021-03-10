@@ -21,6 +21,6 @@ class Camera(Custom, LayeredUpdates):
         if self.target:
             x = -self.target.rect.center[0] + self.screen_size.width / 2
             y = -self.target.rect.center[1] + self.screen_size.height / 2
-            self.cam += ((pg.Vector2((x, y)) - self.cam) * 0.05)
+            self.cam += ((pg.Vector2((x, y)) - self.cam) * 0.5)
             self.cam.x = max(-(self.world_size.width - self.screen_size.width), min(0, round(self.cam.x)))
             self.cam.y = max(-(self.world_size.height - self.screen_size.height), min(0, round(self.cam.y)))

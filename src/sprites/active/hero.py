@@ -5,7 +5,7 @@ import src.utils.assets as assets
 import time
 
 
-GRAVITY = pg.Vector2((0, 4.8))
+GRAVITY = pg.Vector2((0, 2.8))
 
 
 class Hero(ActiveEntity):
