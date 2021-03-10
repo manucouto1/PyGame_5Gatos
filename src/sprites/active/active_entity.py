@@ -88,6 +88,10 @@ class ActiveEntity(pg.sprite.Sprite):
                     self.rect.bottom = p.rect.top
                     self.onGround = True
                     self.num_jumps = 0
+                    d = pg.sprite.spritecollide(self, platforms, False)
+                    if len(d) > 0:
+                        s = sorted(d, key=lambda e: e.rect.top, reverse=True)
+                        self.rect.bottom = s[0].rect.top
                 if yvel < 0:
                     self.rect.top = p.rect.bottom
                     self.vel.y = 0
