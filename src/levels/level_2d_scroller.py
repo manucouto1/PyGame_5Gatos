@@ -8,7 +8,7 @@ class Scroller2D(Level):
 
     def __init__(self, level_name):
         super().__init__(level_name)
-        self.bg = pg.image.load(assets.path_to("background.png"))
+        self.bg = assets.load_image("background.png")
 
     def events(self, events):
         for event in events:

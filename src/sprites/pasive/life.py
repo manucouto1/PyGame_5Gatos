@@ -5,40 +5,46 @@ from src.sprites.pasive.hearts import Heart
 from math import ceil
 
 
+LIFE_X = Heart.SIZE + 4
+LIFE_Y = 50
+
+
 class Life(pg.sprite.Group):
     def __init__(self, n_hearts, player):
         sheet = Spritesheet(assets.path_to("player", "Corazon-Sheet.png"))
-        hearts = []
+        self.hearts = []
         self.player = player
         pos = ceil(self.player.life / 2) - 1
 
-        # Necessary when updating a decreasing heart
-        self.decreasing = False
-        self.animation = 0
-
         # Full hearts
-        for _ in range(pos):
-            hearts.append(Heart(sheet, 0))
+        for i in range(pos):
+            heart = Heart(sheet, 0)
+            self.heart_pos(heart, i)
+            self.hearts.append(heart)
 
         # Check actual player life
-        hearts.append(Heart(sheet, self.player.life % 2))
+        heart = Heart(sheet, self.player.life % 2)
+        self.heart_pos(heart, pos)
+        self.hearts.append(heart)
 
         # Empty hearts
-        for _ in range(pos + 1, n_hearts):
-            hearts.append(Heart(sheet, 2))
+        for i in range(pos + 1, n_hearts):
+            heart = Heart(sheet, 2)
+            self.heart_pos(heart, i)
+            self.hearts.append(heart)
 
-        super().__init__(hearts)
-        self.n_hearts = n_hearts
+        super().__init__(self.hearts)
+
+    @staticmethod
+    def heart_pos(heart, pos):
+        heart.rect[0] = 4 + LIFE_X * pos
+        heart.rect[1] = LIFE_Y
 
     def decrease(self):
-        self.sprites()[ceil(self.player.life / 2) - 1].decrease()
+        self.hearts[ceil(self.player.life / 2) - 1].decrease()
+        # TODO esto no deberia estar aqui
         self.player.life -= 1
 
-    def draw(self, win):
-        x = 54
-        y = 50
-        for i in range(self.n_hearts):
-            self.sprites()[i].draw(win, 4 + x * i, y)
 
 # Player:
 # get_damage()

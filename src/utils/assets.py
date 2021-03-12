@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 import pygame as pg
 
-
 ROOT = Path(os.path.dirname(os.path.abspath(__file__))).parent.parent.joinpath('assets').__str__()
 
 cached = {}
@@ -14,8 +13,12 @@ def load_image(*parts: str):
     if key in cached:
         return cached[key]
     else:
-        f = pg.image.load(path)
-        cached[key] = f
+        try:
+            f = pg.image.load(path)
+            cached[key] = f
+        except Exception:
+            print('Unable to load spritesheet image:', path)
+            raise SystemExit
 
         return cached[key]
 
