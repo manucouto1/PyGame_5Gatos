@@ -59,5 +59,3 @@ class Director:
 
             pg.display.update()
             self.clock.tick(FPS)
-
-            # pg.display.flip()

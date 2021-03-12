@@ -1,13 +1,11 @@
 import pygame
 
+from utils import assets
+
 
 class Spritesheet(object):
     def __init__(self, filename):
-        try:
-            self.sheet = pygame.image.load(filename)
-        except Exception:
-            print('Unable to load spritesheet image:', filename)
-            raise SystemExit
+        self.sheet = assets.load_image(filename)
 
     # Load a specific image from a specific rectangle
     def image_at(self, rectangle, colorkey=None, offset=0):
