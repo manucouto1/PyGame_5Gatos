@@ -1,6 +1,8 @@
 import json
 import src.utils.assets as assets
 import pygame as pg
+
+from sprites.pasive.event import Item
 from src.sprites.pasive.life import Life
 from src.sprites.active.enemy import Enemy
 from src.sprites.active.hero import Hero
@@ -35,6 +37,7 @@ class Level:
                 self.map_height = config["map_height"]
                 self.layers_config = config["layers"]
                 self.cursor = Cursor(pg.mouse.get_pos())
+                self.zone_events = None
                 self.hero = None
                 self.camera = None
                 self.life = None
@@ -51,6 +54,7 @@ class Level:
         self.load_platforms()
         self.load_enemies()
         self.load_dangerous()
+        self.load_events()
 
     def load_hero(self, player):
         self.life = Life(3, player)
@@ -70,6 +74,10 @@ class Level:
         self.enemies = CustomGroup(self.camera.cam)
         Enemy("enemy_full.png", 32, 32, 0, 8, self.enemies)
 
+    def load_events(self):
+        self.zone_events = CustomGroup(self.camera.cam)
+        self.zone_events.add(Item(self))
+
     def check_bullets_hits(self):
         pg.sprite.groupcollide(self.bullets, self.platforms, True, False)
         enemies_damaged = list(pg.sprite.groupcollide(self.bullets, self.enemies, True, False).values())
@@ -82,9 +90,15 @@ class Level:
                    self.bullets.sprites()))
         self.bullets.remove(list_remove)
 
+    def notify(self, event):
+        print(event)
+
+    def check_event_reached(self):
+        pg.sprite.spritecollide(self.hero, self.zone_events, dokill=True)
+
     def update(self):
         self.check_bullets_hits()
-
+        self.check_event_reached()
         # Para los enemigos algo parecido
         self.hero.is_hit(self.dangerous)
         self.hero.is_hit(self.enemies)
@@ -111,3 +125,4 @@ class Level:
         self.life.draw(self.screen)
         self.bullets.draw(self.screen)
         self.enemies.draw(self.screen)
+        self.zone_events.draw(self.screen)
