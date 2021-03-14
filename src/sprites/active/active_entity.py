@@ -1,6 +1,6 @@
 import pygame as pg
 import src.utils.assets as assets
-from src.sprites.spritesheet import Spritesheet
+from src.sprites.spritesheet import Spritesheet, SpriteStripAnim
 
 GRAVITY = pg.Vector2((0, 3.8))
 
@@ -10,7 +10,7 @@ class ActiveEntity(pg.sprite.Sprite):
     def __init__(self, path, width, height, offset, frames, *groups):
         super().__init__(*groups)
         # assets.path_to("player", "idle", "Hero_idle_L_32x32_200.png")
-        self.sheet = Spritesheet(path)
+        self.sheet = SpriteStripAnim(path, (0, 0, width, height), frames, rows=4)
         self.frames = frames
         self.width = width
         self.height = height
@@ -33,18 +33,13 @@ class ActiveEntity(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def idle_loop(self):
-
-        self.idle_id = (self.idle_id + 1) % self.frames
-        offset_x = self.idle_id * (self.width + self.offset * 2) + self.offset
-        self.image = self.sheet.image_at((offset_x, 0, self.width, self.height))
+        self.image = self.sheet[0].next()
 
     def walk_loop(self):
-        self.walk_id = (self.walk_id + 1) % self.frames
-        offset_x = self.walk_id * (self.width + self.offset * 2) + self.offset
         if self.direction == pg.K_LEFT:
-            self.image = self.sheet.image_at((offset_x, self.height * 1, self.width, self.height))
+            self.image = self.sheet[1].next()
         elif self.direction == pg.K_RIGHT:
-            self.image = self.sheet.image_at((offset_x, self.height * 2, self.width, self.height))
+            self.image = self.sheet[2].next()
 
     def gravity(self):
         if not self.onGround:
