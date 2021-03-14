@@ -58,7 +58,7 @@ class Level:
 
     def load_hero(self, player):
         self.life = Life(3, player)
-        self.hero = Hero("Hero_full.png", 32, 32, 0, (8, 6), self.life)
+        self.hero = Hero((0, 0), self.life)
         self.camera = Camera(self.hero, pg.Rect(0, 0, self.map_width * 32, self.map_height * 32), SCREEN_SIZE)
         self.bullets = CustomGroup(self.camera.cam)
 
@@ -72,7 +72,7 @@ class Level:
     def load_enemies(self):
         # todo Cargar enemigos desde json
         self.enemies = CustomGroup(self.camera.cam)
-        Enemy("enemy_full.png", 32, 32, 0, (8, 4), self.enemies)
+        Enemy((640, 320), self.enemies)
 
     def load_events(self):
         self.zone_events = CustomGroup(self.camera.cam)

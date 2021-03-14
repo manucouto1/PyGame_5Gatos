@@ -7,7 +7,6 @@ class Spritesheet(object):
     def __init__(self, filename):
         self.sheet = assets.load_image(filename)
 
-    # Load a specific image from a specific rectangle
     def image_at(self, rectangle, color_key=None):
         rect = pygame.Rect(rectangle)
 
@@ -21,11 +20,9 @@ class Spritesheet(object):
 
         return image
 
-    # Load a whole bunch of images and return them as a list
     def images_at(self, rects, colorkey=None):
         return [self.image_at(rect, colorkey) for rect in rects]
 
-    # Load a whole strip of images
     def load_strip(self, rect, image_count, colorkey=None):
         tups = [(rect[0] + rect[2] * x, rect[1], rect[2], rect[3]) for x in range(image_count)]
 
@@ -39,21 +36,31 @@ class SpriteStripAnim(Spritesheet):
             Spritesheet.load_strip(self, pygame.Rect(rect[0], rect[1] + rect[3] * y, rect[2], rect[3]), count, colorkey)
             for y in range(rows)
         ]
-
-        self.idx = [0] * rows
-        self.frame = [count] * rows
         self.row = 0
+        self.idx = 0
+        self.frames_skip = [1] * rows
+        self.frame = 1
 
     def __getitem__(self, item):
         self.row = item
 
         return self
 
+    def set_frames_skip(self, i):
+        self.frames_skip[self.row] = i
+
+    def reset(self):
+        self.idx = 0
+
     def next(self):
-        if self.idx[self.row] >= len(self.images[0]):
-            self.idx[self.row] = 0
-        image = self.images[self.row][self.idx[self.row]]
-        self.idx[self.row] += 1
+        if self.idx >= len(self.images[0]):
+            self.idx = 0
+        image = self.images[self.row][self.idx]
+
+        self.frame -= 1
+        if self.frame == 0:
+            self.idx += 1
+            self.frame = self.frames_skip[self.row]
 
         return image
 

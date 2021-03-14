@@ -1,4 +1,6 @@
 import pygame as pg
+
+from sprites.spritesheet import SpriteStripAnim
 from src.sprites.active.active_entity import ActiveEntity
 import src.utils.assets as assets
 GRAVITY = pg.Vector2((0, 2.8))
@@ -6,32 +8,38 @@ GRAVITY = pg.Vector2((0, 2.8))
 
 class Enemy(ActiveEntity):
 
-    def __init__(self, file, width, height, offset, spritesheet_size, *groups):
-        path = assets.path_to("characters", "enemy", file)
-        super().__init__(path, width, height, offset, spritesheet_size, *groups)
-        self.path = [20*32, 20*32 + 100]
+    def __init__(self, initial_pos, *groups):
+        sheet_path = assets.path_to("characters", "enemy", "enemy_full.png")
+        sheet = SpriteStripAnim(sheet_path, (0, 0, 32, 32), 8, rows=4)
+
+        super().__init__(initial_pos, sheet, *groups)
+
+        self.path = [20 * 32, 20 * 32 + 100]
         self.walk_count = 0
         self.life = 2
         self.dead_id = 0
-        self.rect.x = 20*32
-        self.rect.y = 10*32
+
+        self.sheet[0].set_frames_skip(2)
+        self.sheet[1].set_frames_skip(2)
+        self.sheet[2].set_frames_skip(2)
+        self.sheet[3].set_frames_skip(2)
 
     def move(self):
         if self.vel.x > 0:
             if self.rect[0] < self.path[1] + self.vel.x:
                 self.move_right()
             else:
+                self.sheet.reset()
                 self.move_left()
         else:
             if self.rect[0] > self.path[0] - self.vel.x:
                 self.move_left()
             else:
+                self.sheet.reset()
                 self.move_right()
 
     def dead_loop(self):
-        self.idle_id = (self.idle_id + 1) % self.frames
-        offset_x = self.idle_id * (self.width + self.offset * 2) + self.offset
-        self.image = self.sheet.image_at((offset_x, 96, self.width, self.height))
+        self.image = self.sheet[3].next()
 
     def update(self, platforms):
         if self.life > 0:
