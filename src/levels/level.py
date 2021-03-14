@@ -72,7 +72,7 @@ class Level:
     def load_enemies(self):
         # todo Cargar enemigos desde json
         self.enemies = CustomGroup(self.camera.cam)
-        Enemy((640, 320), self.enemies)
+        Enemy((700, 320), 50, self.enemies)
 
     def load_events(self):
         self.zone_events = CustomGroup(self.camera.cam)

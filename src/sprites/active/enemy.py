@@ -8,13 +8,13 @@ GRAVITY = pg.Vector2((0, 2.8))
 
 class Enemy(ActiveEntity):
 
-    def __init__(self, initial_pos, *groups):
+    def __init__(self, initial_pos, motion_range, *groups):
         sheet_path = assets.path_to("characters", "enemy", "enemy_full.png")
         sheet = SpriteStripAnim(sheet_path, (0, 0, 32, 32), 8, rows=4)
 
         super().__init__(initial_pos, sheet, *groups)
 
-        self.path = [20 * 32, 20 * 32 + 100]
+        self.path = [initial_pos[0] - motion_range, initial_pos[0] + motion_range]
         self.walk_count = 0
         self.life = 2
         self.dead_id = 0
