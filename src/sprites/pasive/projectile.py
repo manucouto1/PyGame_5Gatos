@@ -9,7 +9,6 @@ class Projectile(pg.sprite.Sprite):
         super().__init__()
         self.x = x
         self.y = y
-        self.h = 0
         self.image = pg.Surface((int(radius * 2), int(radius * 2)))
         self.radius = radius
         self.color = color

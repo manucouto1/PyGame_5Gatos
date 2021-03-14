@@ -1,7 +1,5 @@
 import pygame
 import pygame as pg
-import src.utils.assets as assets
-from src.sprites.spritesheet import Spritesheet, SpriteStripAnim
 
 GRAVITY = pg.Vector2((0, 3.8))
 

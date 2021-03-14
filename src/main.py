@@ -5,7 +5,6 @@ from src.levels.level_2d_scroller import Scroller2D
 
 
 def main():
-    # Main loop
     game = Director()
     game.stack_scene(Scroller2D("level1"))
     game.run()
