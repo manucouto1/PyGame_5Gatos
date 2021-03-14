@@ -10,7 +10,7 @@ class Projectile(pg.sprite.Sprite):
         self.x = x
         self.y = y
         self.h = 0
-        self.image = pg.Surface((int(radius*2), int(radius*2)))
+        self.image = pg.Surface((int(radius * 2), int(radius * 2)))
         self.radius = radius
         self.color = color
         self.vel = pg.Vector2((18, 18))
@@ -18,7 +18,7 @@ class Projectile(pg.sprite.Sprite):
         self.rect = pg.Rect(self.x - self.radius, self.y - self.radius, self.radius * 2, self.radius * 2)
 
     def trajectory(self, pos):
-        (mx, my) = pos
+        mx, my = pos
         slope_x = mx - self.x
         slope_y = my - self.y
         self.angle = math.atan2(slope_y, slope_x)
@@ -28,6 +28,3 @@ class Projectile(pg.sprite.Sprite):
         self.y += math.sin(self.angle) * self.vel.y
         self.rect.x = self.x
         self.rect.y = self.y
-
-    def draw(self, win):
-        win.blit(self.image, (int(self.x - self.radius), int(self.y - self.radius)))

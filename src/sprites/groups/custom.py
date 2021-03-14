@@ -1,10 +1,8 @@
 from pygame import Surface
-from pygame.sprite import Group
 
 
-class CustomGroup(Group):
-    def __init__(self, camera_rect, *sprites):
-        super().__init__(*sprites)
+class Custom:
+    def __init__(self, camera_rect):
         self.camera_rect = camera_rect
 
     def draw(self, surface: Surface) -> None:
