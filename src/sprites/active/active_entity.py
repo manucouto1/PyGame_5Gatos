@@ -1,27 +1,22 @@
+import pygame
 import pygame as pg
 import src.utils.assets as assets
-from src.sprites.spritesheet import Spritesheet
+from src.sprites.spritesheet import Spritesheet, SpriteStripAnim
 
-GRAVITY = pg.Vector2((0, 4.8))
+GRAVITY = pg.Vector2((0, 3.8))
 
 
 class ActiveEntity(pg.sprite.Sprite):
 
-    def __init__(self, width, height, offset, frames, *groups):
+    def __init__(self, initial_pos, sheet, *groups):
         super().__init__(*groups)
-        self.idle_L = Spritesheet(assets.path_to("player", "idle", "Hero_idle_L_32x32_200.png"))
-        self.idle_R = Spritesheet(assets.path_to("player", "idle", "Hero_idle_R_32x32_200.png"))
-        self.walk_L = Spritesheet(assets.path_to("player", "walk", "Hero_walk_L_32x32_200.png"))
-        self.walk_R = Spritesheet(assets.path_to("player", "walk", "Hero_walk_R_32x32_200.png"))
-        self.frames = frames
-        self.width = width
-        self.height = height
-        self.idle_id = 0
-        self.walk_id = 0
-        self.move_x = 0
-        self.move_y = 0
-        self.idle_images = []
-        self.walk_images = []
+
+        self.sheet = sheet
+        self.image = self.sheet.images[0][0]
+        self.rect = pygame.Rect(0, 0, 0, 0)
+        self.rect.bottomleft = initial_pos
+        self.rect.size = self.image.get_size()
+
         self.movement = None
         self.direction = None
         self.onGround = False
@@ -29,27 +24,15 @@ class ActiveEntity(pg.sprite.Sprite):
         self.speed = 8
         self.jump_strength = 30
         self.num_jumps = 0
-        self.offset = offset
-        self.image = self.idle_R.image_at((self.offset, 0, width, height))
-
-        self.rect = self.image.get_rect()
 
     def idle_loop(self):
-        self.idle_id = (self.idle_id + 1) % self.frames
-        if self.direction == pg.K_LEFT:
-            self.image = self.idle_L.image_at(
-                (self.idle_id * (self.width + self.offset * 2) + self.offset, 0, self.width, self.height))
-        elif self.direction == pg.K_RIGHT:
-            self.image = self.idle_R.image_at(
-                (self.idle_id * (self.width + self.offset * 2) + self.offset, 0, self.width, self.height))
+        self.image = self.sheet[0].next()
 
     def walk_loop(self):
-        self.walk_id = (self.walk_id + 1) % self.frames
-        top_x = self.walk_id * (self.width + self.offset * 2) + self.offset
         if self.direction == pg.K_LEFT:
-            self.image = self.walk_L.image_at((top_x, 0, self.width, self.height))
+            self.image = self.sheet[2].next()
         elif self.direction == pg.K_RIGHT:
-            self.image = self.walk_R.image_at((top_x, 0, self.width, self.height))
+            self.image = self.sheet[1].next()
 
     def gravity(self):
         if not self.onGround:
@@ -93,6 +76,10 @@ class ActiveEntity(pg.sprite.Sprite):
                     self.rect.bottom = p.rect.top
                     self.onGround = True
                     self.num_jumps = 0
+                    d = pg.sprite.spritecollide(self, platforms, False)
+                    if len(d) > 0:
+                        s = sorted(d, key=lambda e: e.rect.top, reverse=True)
+                        self.rect.bottom = s[0].rect.top
                 if yvel < 0:
                     self.rect.top = p.rect.bottom
                     self.vel.y = 0

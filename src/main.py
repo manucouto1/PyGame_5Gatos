@@ -1,17 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
-import pygame as pg
-
-from levels.testLevel import TestLevel
-from src.game.game_control import Director
-
-FPS = 20
+from src.game.director import Director
+from src.levels.level_2d_scroller import Scroller2D
 
 
 def main():
-
+    # Main loop
     game = Director()
-    game.stack_scene(TestLevel())
+    game.stack_scene(Scroller2D("level1"))
     game.run()
 
 
