@@ -6,7 +6,7 @@ from sprites.pasive.event import Item
 from src.sprites.pasive.life import Life
 from src.sprites.active.enemy import Enemy
 from src.sprites.active.hero import Hero
-from src.sprites.groups.custom_groups import CustomGroup
+from src.sprites.groups.custom import CustomGroup
 from src.sprites.groups.camera import Camera
 from src.sprites.pasive.cursor import Cursor
 
@@ -119,10 +119,10 @@ class Level:
         self.map_limit()
 
         self.layers.draw(self.screen)
+        self.enemies.draw(self.screen)
         self.camera.draw(self.screen)
         self.cursor.draw(self.screen)
-        self.camera.draw(self.screen)
-        self.life.draw(self.screen)
         self.bullets.draw(self.screen)
-        self.enemies.draw(self.screen)
+        self.life.draw(self.screen)
+
         self.zone_events.draw(self.screen)

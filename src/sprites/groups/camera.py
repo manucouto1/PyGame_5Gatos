@@ -1,20 +1,15 @@
 import pygame as pg
-from pygame.sprite import LayeredUpdates
-from src.sprites.groups.custom import Custom
+from src.sprites.groups.custom import CustomGroup
 
 
-class Camera(Custom, LayeredUpdates):
-
+class Camera(CustomGroup):
     def __init__(self, target, world_size, screen_size):
         self.cam = pg.Vector2(0, 0)
-        Custom.__init__(self, self.cam)
-        LayeredUpdates.__init__(self)
+        CustomGroup.__init__(self, self.cam, target)
 
         self.target = target
         self.world_size = world_size
         self.screen_size = screen_size
-        if self.target:
-            self.add(target)
 
     def update(self, *args):
         super().update(*args)

@@ -1,4 +1,4 @@
-from game.level import Level
+from levels.level import Level
 from utils import assets
 
 
