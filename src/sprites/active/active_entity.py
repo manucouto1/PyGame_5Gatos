@@ -91,4 +91,3 @@ class ActiveEntity(pg.sprite.Sprite):
         self.rect.y += self.vel.y
         self.onGround = False
         self.collide_ground(0, self.vel.y, platforms)
-
