@@ -6,9 +6,9 @@ GRAVITY = pg.Vector2((0, 2.8))
 
 class Enemy(ActiveEntity):
 
-    def __init__(self, file, width, height, offset, frames, *groups):
+    def __init__(self, file, width, height, offset, spritesheet_size, *groups):
         path = assets.path_to("characters", "enemy", file)
-        super().__init__(path, width, height, offset, frames, *groups)
+        super().__init__(path, width, height, offset, spritesheet_size, *groups)
         self.path = [20*32, 20*32 + 100]
         self.walk_count = 0
         self.life = 2

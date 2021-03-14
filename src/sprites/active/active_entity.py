@@ -7,11 +7,10 @@ GRAVITY = pg.Vector2((0, 3.8))
 
 class ActiveEntity(pg.sprite.Sprite):
 
-    def __init__(self, path, width, height, offset, frames, *groups):
+    def __init__(self, path, width, height, offset, spritesheet_size, *groups):
         super().__init__(*groups)
         # assets.path_to("player", "idle", "Hero_idle_L_32x32_200.png")
-        self.sheet = SpriteStripAnim(path, (0, 0, width, height), frames, rows=4)
-        self.frames = frames
+        self.sheet = SpriteStripAnim(path, (0, 0, width, height), spritesheet_size[0], rows=spritesheet_size[1])
         self.width = width
         self.height = height
         self.idle_id = 0
