@@ -10,9 +10,9 @@ GRAVITY = pg.Vector2((0, 2.8))
 
 class Hero(ActiveEntity):
 
-    def __init__(self, file, width, height, offset, frames, life):
+    def __init__(self, file, width, height, offset, spritesheet_size, life):
         path = assets.path_to("characters", "tofe", file)
-        super().__init__(path, width, height, offset, frames)
+        super().__init__(path, width, height, offset, spritesheet_size)
         self.last_hit = time.time()
         self.life = life
 
