@@ -1,4 +1,6 @@
 import pygame as pg
+
+from sprites.spritesheet import SpriteStripAnim
 from src.sprites.pasive.projectile import Projectile
 from src.sprites.active.active_entity import ActiveEntity
 import src.utils.assets as assets
@@ -10,14 +12,16 @@ GRAVITY = pg.Vector2((0, 2.8))
 
 class Hero(ActiveEntity):
 
-    def __init__(self, file, width, height, offset, spritesheet_size, life):
-        path = assets.path_to("characters", "tofe", file)
-        super().__init__(path, width, height, offset, spritesheet_size)
+    def __init__(self, initial_pos, life):
+        sheet_path = assets.path_to("characters", "tofe", "Hero_full.png")
+        sheet = SpriteStripAnim(sheet_path, (0, 0, 32, 32), 8, rows=6)
+
+        super().__init__(initial_pos, sheet)
         self.last_hit = time.time()
         self.life = life
 
     def shoot(self, camera):
-        # look to shoot direction
+        # Look towards shoot direction
         (m_x, m_y) = pg.mouse.get_pos()
         m_pos = (m_x - camera.cam.x, m_y - camera.cam.y)
 
@@ -26,15 +30,11 @@ class Hero(ActiveEntity):
         elif m_x < self.rect.x + camera.cam.x:
             self.direction = pg.K_LEFT
 
-        if self.direction == pg.K_LEFT:
-            offset = -self.offset
-        else:
-            offset = self.offset
-
-        bullet = Projectile(round(self.rect.x + self.rect.width // 2 + offset),
+        bullet = Projectile(round(self.rect.x + self.rect.width // 2),
                             round(self.rect.y + self.rect.height // 2), 6)
 
         bullet.trajectory(m_pos)
+
         return bullet
 
     def is_hit(self, dangerous):
