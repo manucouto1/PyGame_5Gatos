@@ -23,7 +23,7 @@ class Scroller2D(Level):
                 # mouse shutting
                 if len(self.bullets) < 5:
                     # look to shoot direction
-                    bullet = self.hero.shoot(self.camera)
+                    bullet = self.hero.shoot()
                     self.bullets.add(bullet)
 
         pressed = pg.key.get_pressed()

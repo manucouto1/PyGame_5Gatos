@@ -1,11 +1,10 @@
+from sprites.groups.scroll_adjusted import ScrollAdjustedLayeredGroup
 from src.sprites.pasive.platforms import Platform
-from src.sprites.groups.custom_layered_group import CustomLayeredGroup
 
 
-class Layers(CustomLayeredGroup):
-
-    def __init__(self, layers, sheet, tile_size, camera_rect):
-        super().__init__(camera_rect)
+class Layers(ScrollAdjustedLayeredGroup):
+    def __init__(self, layers, sheet, tile_size, camera_scroll):
+        super().__init__(camera_scroll)
 
         for lyr in layers:
             layer_id = int(lyr["name"])
