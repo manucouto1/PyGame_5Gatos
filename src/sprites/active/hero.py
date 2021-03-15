@@ -20,14 +20,14 @@ class Hero(ActiveEntity):
         self.last_hit = time.time()
         self.life = life
 
-    def shoot(self, camera):
+    def shoot(self):
         # Look towards shoot direction
         (m_x, m_y) = pg.mouse.get_pos()
-        m_pos = (m_x - camera.cam.x, m_y - camera.cam.y)
+        m_pos = (m_x - self.scroll.x, m_y - self.scroll.y)
 
-        if m_x > self.rect.x + camera.cam.x:
+        if m_x > self.rect.x + self.scroll.x:
             self.direction = pg.K_RIGHT
-        elif m_x < self.rect.x + camera.cam.x:
+        elif m_x < self.rect.x + self.scroll.x:
             self.direction = pg.K_LEFT
 
         bullet = Projectile(round(self.rect.x + self.rect.width // 2),

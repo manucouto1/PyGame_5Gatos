@@ -6,7 +6,7 @@ from sprites.pasive.event import Item
 from src.sprites.pasive.life import Life
 from src.sprites.active.enemy import Enemy
 from src.sprites.active.hero import Hero
-from src.sprites.groups.custom import CustomGroup
+from src.sprites.groups.scroll_adjusted import ScrollAdjustedGroup
 from src.sprites.groups.camera import Camera
 from src.sprites.pasive.cursor import Cursor
 
@@ -60,10 +60,10 @@ class Level:
         self.life = Life(3, player)
         self.hero = Hero((0, 0), self.life)
         self.camera = Camera(self.hero, pg.Rect(0, 0, self.map_width * 32, self.map_height * 32), SCREEN_SIZE)
-        self.bullets = CustomGroup(self.camera.cam)
+        self.bullets = ScrollAdjustedGroup(self.camera.scroll)
 
     def load_platforms(self):
-        self.layers = Layers(self.layers_config, self.sheet, self.tile_size, self.camera.cam)
+        self.layers = Layers(self.layers_config, self.sheet, self.tile_size, self.camera.scroll)
         self.platforms.add(self.layers.get_ground())
 
     def load_dangerous(self):
@@ -71,11 +71,11 @@ class Level:
 
     def load_enemies(self):
         # todo Cargar enemigos desde json
-        self.enemies = CustomGroup(self.camera.cam)
+        self.enemies = ScrollAdjustedGroup(self.camera.scroll)
         Enemy((700, 320), 50, self.enemies)
 
     def load_events(self):
-        self.zone_events = CustomGroup(self.camera.cam)
+        self.zone_events = ScrollAdjustedGroup(self.camera.scroll)
         self.zone_events.add(Item(self))
 
     def check_bullets_hits(self):

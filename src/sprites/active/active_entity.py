@@ -9,6 +9,7 @@ class ActiveEntity(pg.sprite.Sprite):
     def __init__(self, initial_pos, sheet, *groups):
         super().__init__(*groups)
 
+        self.scroll = pg.Vector2(0, 0)
         self.sheet = sheet
         self.image = self.sheet.images[0][0]
         self.rect = pygame.Rect(0, 0, 0, 0)

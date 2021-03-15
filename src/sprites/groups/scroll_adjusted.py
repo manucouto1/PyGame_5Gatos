@@ -1,11 +1,13 @@
 from pygame import Surface
-from pygame.sprite import Group
+from pygame.sprite import Group, LayeredUpdates
 
 
-class CustomGroup(Group):
-    def __init__(self, camera_rect, *sprites):
+class ScrollAdjustedGroup(Group):
+    def __init__(self, camera_scroll, *sprites):
+        for sprite in sprites:
+            sprite.scroll = camera_scroll
         super().__init__(*sprites)
-        self.camera_rect = camera_rect
+        self.camera_rect = camera_scroll
 
     def draw(self, surface: Surface) -> None:
         sprites = self.sprites()
@@ -20,3 +22,9 @@ class CustomGroup(Group):
             for spr in sprites:
                 self.spritedict[spr] = surface.blit(spr.image, spr.rect)
         self.lostsprites = []
+
+
+class ScrollAdjustedLayeredGroup(ScrollAdjustedGroup, LayeredUpdates):
+    def __init__(self, camera_scroll, *sprites):
+        ScrollAdjustedGroup.__init__(self, camera_scroll)
+        LayeredUpdates.__init__(self, *sprites)
