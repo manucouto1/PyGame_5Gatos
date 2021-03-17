@@ -37,6 +37,12 @@ class Hero(ActiveEntity):
 
         return bullet
 
+    def walk_loop(self):
+        if self.direction == pg.K_LEFT:
+            self.image = self.sheet[1].next()
+        elif self.direction == pg.K_RIGHT:
+            self.image = self.sheet[2].next()
+
     def is_hit(self, dangerous):
         collide_l = pg.sprite.spritecollideany(self, dangerous)
         if collide_l:
