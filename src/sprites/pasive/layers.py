@@ -1,4 +1,4 @@
-from sprites.groups.scroll_adjusted import ScrollAdjustedLayeredGroup
+from src.sprites.groups.scroll_adjusted import ScrollAdjustedLayeredGroup
 from src.sprites.pasive.platforms import Platform
 
 

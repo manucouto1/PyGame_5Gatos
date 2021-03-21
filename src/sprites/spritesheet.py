@@ -1,6 +1,6 @@
 import pygame
 
-from utils import assets
+from src.utils import assets
 
 
 class Spritesheet(object):
