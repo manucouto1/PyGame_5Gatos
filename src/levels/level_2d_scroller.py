@@ -1,3 +1,4 @@
+from game.director import Director
 from src.levels.level import Level
 import pygame as pg
 import sys
@@ -32,3 +33,5 @@ class Scroller2D(Level):
             self.hero.move_left()
         if pressed[pg.K_RIGHT] or pressed[pg.K_d]:
             self.hero.move_right()
+        # if pressed[pg.K_RETURN]:
+        #     Director().stack_scene(Pause(self))
