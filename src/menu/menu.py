@@ -1,4 +1,6 @@
 import pygame as pg
+
+from game.director import Director
 from src.menu.screen import ScreenGUIInitial
 from src.sprites.pasive.cursor import Cursor
 from src.levels.level_2d_scroller import Scroller2D
@@ -38,10 +40,19 @@ class Menu:
         self.director.exit_program()
 
     def execute_game(self):
-        self.director.stack_scene(Scroller2D("level1"))
+        self.director.change_scene(Scroller2D("level1"))
 
     def show_initial_scene(self):
         self.initial_scene = 0
+
+
+class Pause(Menu):
+    def __init__(self, curr):
+        super().__init__(Director())
+        self.curr = curr
+
+    def execute_game(self):
+        self.director.stack_scene()(self.curr)
 
     # def show_configuration_scene(self):
     #    self.configuration_scene = 1

@@ -2,6 +2,7 @@ import json
 import src.utils.assets as assets
 import pygame as pg
 
+from sprites.pasive.arrows import Arrows
 from sprites.pasive.event import Item
 from src.sprites.pasive.life import Life
 from src.sprites.active.enemy import Enemy
@@ -25,6 +26,7 @@ SCREEN_SIZE = pg.Rect((0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
 
 class Level:
     def __init__(self, level_name):
+        self.arrows = Arrows()
         with open(assets.path_to('levels', level_name, level_name + '.txt')) as f:
             config = json.load(f)
             if config is not None:
@@ -108,6 +110,7 @@ class Level:
         self.enemies.update(self.platforms)
         self.camera.update(self.platforms, self.dangerous)
         self.cursor.update(pg.mouse.get_pos())
+        self.arrows.update()
 
     def map_limit(self):
         screen_rect = self.screen.get_rect()
@@ -124,5 +127,5 @@ class Level:
         self.cursor.draw(self.screen)
         self.bullets.draw(self.screen)
         self.life.draw(self.screen)
-
+        self.arrows.draw(self.screen)
         self.zone_events.draw(self.screen)
