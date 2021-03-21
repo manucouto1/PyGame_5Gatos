@@ -1,6 +1,6 @@
 import pygame as pg
 
-from sprites.spritesheet import SpriteStripAnim
+from src.sprites.spritesheet import SpriteStripAnim
 from src.sprites.pasive.projectile import Projectile
 from src.sprites.active.active_entity import ActiveEntity
 import src.utils.assets as assets

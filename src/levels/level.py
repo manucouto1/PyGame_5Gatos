@@ -2,7 +2,7 @@ import json
 import src.utils.assets as assets
 import pygame as pg
 
-from sprites.pasive.event import Item
+from src.sprites.pasive.event import Item
 from src.sprites.pasive.life import Life
 from src.sprites.active.enemy import Enemy
 from src.sprites.active.hero import Hero

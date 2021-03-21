@@ -14,6 +14,9 @@ class Menu:
         self.scenes_list.append(ScreenGUIInitial(self, "background2.png"))
         self.cursor = Cursor(pg.mouse.get_pos())
         self.show_initial_scene()
+        pg.mixer.music.load("sounds/menu.ogg")
+        self.init_sound = pg.mixer.Sound("sounds/init_game.wav")
+        pg.mixer.music.play(-1)
 
     # static menu
     def update(self, *args):
@@ -38,6 +41,10 @@ class Menu:
         self.director.exit_program()
 
     def execute_game(self):
+        pg.mixer.music.stop()
+        self.init_sound.play()
+        pg.mixer.music.load("sounds/game.ogg")
+        pg.mixer.music.play(-1)
         self.director.stack_scene(Scroller2D("level1"))
 
     def show_initial_scene(self):
