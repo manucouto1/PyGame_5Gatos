@@ -24,20 +24,20 @@ class ActiveEntity(pg.sprite.Sprite):
         self.jump_strength = 30
         self.num_jumps = 0
 
-    def idle_loop(self):
-        self.image = self.sheet[0].next()
+    def idle_loop(self, dt):
+        self.image = self.sheet[0].next(dt)
 
-    def walk_loop(self):
+    def walk_loop(self, dt):
         if self.direction == pg.K_LEFT:
-            self.image = self.sheet[2].next()
+            self.image = self.sheet[2].next(dt)
         elif self.direction == pg.K_RIGHT:
-            self.image = self.sheet[1].next()
+            self.image = self.sheet[1].next(dt)
 
-    def gravity(self):
+    def gravity(self, dt):
         if not self.onGround:
-            self.vel += GRAVITY
-            if self.vel.y > 100:
-                self.vel.y = 100
+            self.vel += (GRAVITY/50)*dt
+            if self.vel.y > 63:
+                self.vel.y = 63
 
     def jump(self):
         if self.onGround:
@@ -75,18 +75,14 @@ class ActiveEntity(pg.sprite.Sprite):
                     self.rect.bottom = p.rect.top
                     self.onGround = True
                     self.num_jumps = 0
-                    d = pg.sprite.spritecollide(self, platforms, False)
-                    if len(d) > 0:
-                        s = sorted(d, key=lambda e: e.rect.top, reverse=True)
-                        self.rect.bottom = s[0].rect.top
                 if yvel < 0:
                     self.rect.top = p.rect.bottom
                     self.vel.y = 0
 
-    def apply(self, platforms):
-        self.gravity()
-        self.rect.x += self.vel.x
+    def apply(self, platforms, dt):
+        self.gravity(dt)
+        self.rect.x += (self.vel.x/50 * dt)
         self.collide_ground(self.vel.x, 0, platforms)
-        self.rect.y += self.vel.y
+        self.rect.y += (self.vel.y/50 * dt)
         self.onGround = False
         self.collide_ground(0, self.vel.y, platforms)

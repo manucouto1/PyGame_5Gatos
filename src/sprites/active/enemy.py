@@ -39,18 +39,18 @@ class Enemy(ActiveEntity):
                 self.sheet.reset()
                 self.move_right()
 
-    def dead_loop(self):
-        self.image = self.sheet[3].next()
+    def dead_loop(self, dt):
+        self.image = self.sheet[3].next(dt)
 
-    def update(self, platforms):
+    def update(self, platforms, dt):
         if self.life > 0:
             self.move()
-            self.walk_loop()
-            self.apply(platforms)
+            self.walk_loop(dt)
+            self.apply(platforms, dt)
         else:
             self.vel.x = 0
-            self.dead_loop()
-            self.apply(platforms)
+            self.dead_loop(dt)
+            self.apply(platforms, dt)
 
     def is_hit(self):
         # TODO ver como implementar daño en enemigo

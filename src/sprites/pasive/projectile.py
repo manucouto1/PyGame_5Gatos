@@ -1,8 +1,6 @@
 import pygame as pg
 import math
 
-GRAVITY = pg.Vector2((0, 4.8))
-
 
 class Projectile(pg.sprite.Sprite):
     def __init__(self, x, y, radius, color=(0, 0, 0)):
@@ -22,8 +20,8 @@ class Projectile(pg.sprite.Sprite):
         slope_y = my - self.y
         self.angle = math.atan2(slope_y, slope_x)
 
-    def update(self):
-        self.x += math.cos(self.angle) * self.vel.x
-        self.y += math.sin(self.angle) * self.vel.y
+    def update(self, dt):
+        self.x += math.cos(self.angle) * self.vel.x / 50 * dt
+        self.y += math.sin(self.angle) * self.vel.y / 50 * dt
         self.rect.x = self.x
         self.rect.y = self.y
