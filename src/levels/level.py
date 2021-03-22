@@ -50,6 +50,7 @@ class Level:
                 raise ValueError("Problems with level config file")
 
     def init_level(self, player):
+        pg.mouse.set_visible(False)
         self.load_hero(player)
         self.load_platforms()
         self.load_enemies()
@@ -70,9 +71,8 @@ class Level:
         self.dangerous.add(self.layers.get_dangerous())
 
     def load_enemies(self):
-        # todo Cargar enemigos desde json
         self.enemies = ScrollAdjustedGroup(self.camera.scroll)
-        Enemy((700, 320), 50, self.enemies)
+        Enemy((700, 320), 100, self.enemies)
 
     def load_events(self):
         self.zone_events = ScrollAdjustedGroup(self.camera.scroll)
@@ -96,17 +96,17 @@ class Level:
     def check_event_reached(self):
         pg.sprite.spritecollide(self.hero, self.zone_events, dokill=True)
 
-    def update(self):
+    def update(self, dt):
         self.check_bullets_hits()
         self.check_event_reached()
-        # Para los enemigos algo parecido
+
         self.hero.is_hit(self.dangerous)
         self.hero.is_hit(self.enemies)
 
-        self.bullets.update()
         self.layers.update()
-        self.enemies.update(self.platforms)
-        self.camera.update(self.platforms, self.dangerous)
+        self.bullets.update(dt)
+        self.enemies.update(self.platforms, dt)
+        self.camera.update(self.platforms, self.dangerous, dt)
         self.cursor.update(pg.mouse.get_pos())
 
     def map_limit(self):

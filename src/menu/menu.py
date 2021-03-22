@@ -2,6 +2,7 @@ import pygame as pg
 from src.menu.screen import ScreenGUIInitial
 from src.sprites.pasive.cursor import Cursor
 from src.levels.level_2d_scroller import Scroller2D
+import src.utils.assets as assets
 
 
 class Menu:
@@ -14,8 +15,9 @@ class Menu:
         self.scenes_list.append(ScreenGUIInitial(self, "background2.png"))
         self.cursor = Cursor(pg.mouse.get_pos())
         self.show_initial_scene()
-        pg.mixer.music.load("sounds/menu.ogg")
-        self.init_sound = pg.mixer.Sound("sounds/init_game.wav")
+
+        pg.mixer.music.load(assets.path_to("sounds", "menu.ogg"))
+        self.init_sound = pg.mixer.Sound(assets.path_to("sounds", "init_game.wav"))
         pg.mixer.music.play(-1)
 
     # static menu
@@ -43,7 +45,7 @@ class Menu:
     def execute_game(self):
         pg.mixer.music.stop()
         self.init_sound.play()
-        pg.mixer.music.load("sounds/game.ogg")
+        pg.mixer.music.load(assets.path_to("sounds", "game.ogg"))
         pg.mixer.music.play(-1)
         self.director.stack_scene(Scroller2D("level1"))
 

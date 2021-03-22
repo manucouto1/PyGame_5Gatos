@@ -7,9 +7,6 @@ import src.utils.assets as assets
 import time
 
 
-GRAVITY = pg.Vector2((0, 2.8))
-
-
 class Hero(ActiveEntity):
 
     def __init__(self, initial_pos, life):
@@ -37,11 +34,11 @@ class Hero(ActiveEntity):
 
         return bullet
 
-    def walk_loop(self):
+    def walk_loop(self, dt):
         if self.direction == pg.K_LEFT:
-            self.image = self.sheet[1].next()
+            self.image = self.sheet[1].next(dt)
         elif self.direction == pg.K_RIGHT:
-            self.image = self.sheet[2].next()
+            self.image = self.sheet[2].next(dt)
 
     def is_hit(self, dangerous):
         collide_l = pg.sprite.spritecollideany(self, dangerous)
@@ -51,11 +48,11 @@ class Hero(ActiveEntity):
                 self.last_hit = new_hit
                 self.life.decrease()
 
-    def update(self, platforms, dangerous):
+    def update(self, platforms, _, dt):
         if self.movement:
-            self.walk_loop()
+            self.walk_loop(dt)
         else:
-            self.idle_loop()
+            self.idle_loop(dt)
         self.life.update()
-        self.apply(platforms)
+        self.apply(platforms, dt)
         self.reset_movement()

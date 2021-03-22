@@ -9,10 +9,9 @@ class Spritesheet(object):
 
     def image_at(self, rectangle, color_key=None):
         rect = pygame.Rect(rectangle)
-
         image = pygame.Surface(rect.size, pygame.SRCALPHA)
-
         image.blit(self.sheet, (0, 0), rect)
+
         if color_key is not None:
             if color_key == -1:
                 color_key = image.get_at((0, 0))
@@ -40,6 +39,7 @@ class SpriteStripAnim(Spritesheet):
         self.idx = 0
         self.frames_skip = [1] * rows
         self.frame = 1
+        self.dt_count = 0
 
     def __getitem__(self, item):
         self.row = item
@@ -52,15 +52,22 @@ class SpriteStripAnim(Spritesheet):
     def reset(self):
         self.idx = 0
 
-    def next(self):
+    def next(self, dt):
+        self.dt_count += dt
+
         if self.idx >= len(self.images[0]):
             self.idx = 0
-        image = self.images[self.row][self.idx]
 
-        self.frame -= 1
-        if self.frame == 0:
-            self.idx += 1
-            self.frame = self.frames_skip[self.row]
+        if self.dt_count < 450/8:
+            image = self.images[self.row][self.idx]
+        else:
+            self.dt_count = 0
+            image = self.images[self.row][self.idx]
+
+            self.frame -= 1
+            if self.frame == 0:
+                self.idx += 1
+                self.frame = self.frames_skip[self.row]
 
         return image
 
