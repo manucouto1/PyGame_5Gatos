@@ -1,11 +1,9 @@
 import pygame
 
-from src.utils import assets
 
-
-class Spritesheet(object):
-    def __init__(self, filename):
-        self.sheet = assets.load_image(filename)
+class SpriteSheet(object):
+    def __init__(self, container, path):
+        self.sheet = container.image_from_path(path)
 
     def image_at(self, rectangle, color_key=None):
         rect = pygame.Rect(rectangle)
@@ -28,11 +26,11 @@ class Spritesheet(object):
         return self.images_at(tups, colorkey)
 
 
-class SpriteStripAnim(Spritesheet):
-    def __init__(self, filename, rect, count, colorkey=None, rows=1):
-        super().__init__(filename)
+class SpriteStripAnim(SpriteSheet):
+    def __init__(self, container, filename, rect, count, colorkey=None, rows=1):
+        super().__init__(container, filename)
         self.images = [
-            Spritesheet.load_strip(self, pygame.Rect(rect[0], rect[1] + rect[3] * y, rect[2], rect[3]), count, colorkey)
+            SpriteSheet.load_strip(self, pygame.Rect(rect[0], rect[1] + rect[3] * y, rect[2], rect[3]), count, colorkey)
             for y in range(rows)
         ]
         self.row = 0
@@ -58,7 +56,7 @@ class SpriteStripAnim(Spritesheet):
         if self.idx >= len(self.images[0]):
             self.idx = 0
 
-        if self.dt_count < 450/8:
+        if self.dt_count < 450 / 8:
             image = self.images[self.row][self.idx]
         else:
             self.dt_count = 0

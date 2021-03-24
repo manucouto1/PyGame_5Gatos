@@ -23,6 +23,15 @@ def load_image(*parts: str):
         return cached[key]
 
 
+def get_class(path):
+    parts = path.split('.')
+    module = ".".join(parts[:-1])
+    m = __import__(module)
+    for pkg in parts[1:]:
+        m = getattr(m, pkg)
+    return m
+
+
 def path_to(*parts: str):
     orig = Path(ROOT)
     for part in parts:

@@ -1,14 +1,12 @@
 from src.levels.level import Level
 import pygame as pg
 import sys
-import src.utils.assets as assets
 
 
 class Scroller2D(Level):
 
     def __init__(self, level_name):
         super().__init__(level_name)
-        self.bg = assets.load_image("background.png")
 
     def events(self, events):
         for event in events:

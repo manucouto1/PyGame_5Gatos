@@ -1,0 +1,9 @@
+{
+  "path": "src.levels.level_2d_scroller.Scroller2D",
+  "background": "background.png",
+  "tiles": {
+    "image":  "level1.png",
+    "config": "level1.txt"
+  },
+  "entities": "level1_active_object.json"
+}
