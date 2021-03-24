@@ -54,7 +54,6 @@ class Director:
 
         dt = self.clock.tick(FPS)
         while not self.exit:
-            print(dt)
             scene.events(pg.event.get())
             scene.update(dt)
             scene.draw()

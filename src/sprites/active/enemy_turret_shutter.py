@@ -26,7 +26,7 @@ class EnemyTurretShutter(ShutterEntity):
 
         if distance < 300:
             #TODO esto es un parche
-            if len(self.e_bullets) < 5 and self.dt_count >= 450/8:
+            if len(self.e_bullets) < 5 and self.dt_count >= 7200/5:
                 self.dt_count = 0
                 bullet = self.shoot((self.hero.rect.x, self.hero.rect.y))
                 self.e_bullets.add(bullet)
