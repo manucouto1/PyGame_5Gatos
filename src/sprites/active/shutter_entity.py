@@ -11,10 +11,14 @@ class ShutterEntity(ActiveEntity):
 
         if m_x > self.rect.x + self.scroll.x:
             self.direction = pg.K_RIGHT
+            correct = self.rect.width
         elif m_x < self.rect.x + self.scroll.x:
             self.direction = pg.K_LEFT
+            correct = 0
+        else:
+            correct = 0
 
-        bullet = Projectile(round(self.rect.x + self.rect.width // 2),
+        bullet = Projectile(round(self.rect.x + correct),
                             round(self.rect.y + self.rect.height // 2), 6)
 
         bullet.trajectory(m_pos)

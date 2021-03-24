@@ -24,7 +24,7 @@ class EnemyTurretShutter(ShutterEntity):
         distance = np.sqrt(a + b)
         self.dt_count += dt
 
-        if distance < 200:
+        if distance < 300:
             #TODO esto es un parche
             if len(self.e_bullets) < 5 and self.dt_count >= 450/8:
                 self.dt_count = 0
@@ -33,9 +33,11 @@ class EnemyTurretShutter(ShutterEntity):
 
     def dead_loop(self, dt):
         self.image = self.sheet[3].next(dt)
+        self.mask = self.sheet.get_mask()
 
     def update(self, platforms, dt):
         if self.life > 0:
+            self.idle_loop(dt)
             self.move(dt)
             self.apply(platforms, dt)
         else:

@@ -27,8 +27,8 @@ class Hero(ShutterEntity):
             self.image = self.sheet[2].next(dt)
 
     def is_hit(self, dangerous):
-        collide_l = pg.sprite.spritecollideany(self, dangerous)
-        if collide_l:
+        possible = pg.sprite.spritecollideany(self, dangerous)
+        if possible and pg.sprite.collide_mask(self, possible):
             new_hit = time.time()
             if self.last_hit + 2 < new_hit:
                 self.last_hit = new_hit
