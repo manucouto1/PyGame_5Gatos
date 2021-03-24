@@ -8,6 +8,19 @@ class Container:
         self.DTOs = {}
         self.images = {}
         self.sound = {}
+        #TODO coidado con los objectos que deben ser eliminados
+        self.objects = {}
+
+    def set_object(self, name, obj):
+        key = name.__hash__()
+        self.objects[key] = obj
+
+    def get_object(self, name):
+        key = name.__hash__()
+        if key in self.objects:
+            return self.objects[key]
+        else:
+            return None
 
     def image_from_path(self, path):
         key = path.__hash__()
