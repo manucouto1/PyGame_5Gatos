@@ -19,22 +19,23 @@ SCREEN_SIZE = pg.Rect((0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
 
 class LevelBuilder:
     def __init__(self, container, level_name):
+
         self.container = container
         self.level_dto = LevelDTO(level_name)
-        self.layers = LayersBuilder(container, self.level_dto)
-        self.enemies = EnemiesBuilder(container, self.level_dto)
-        self.hero = HeroBuilder(container, self.level_dto)
-        self.camera = CameraBuilder(self.level_dto, SCREEN_SIZE)
+        self.layers_builder = LayersBuilder(container, self.level_dto)
+        self.enemies_builder = EnemiesBuilder(container, self.level_dto)
+        self.hero_builder = HeroBuilder(container, self.level_dto)
+        self.camera_builder = CameraBuilder(self.level_dto, SCREEN_SIZE)
         self.platforms = pg.sprite.Group()
         self.dangerous = pg.sprite.Group()
-        self.bullets = None
-        self.zone_events = None
+        self.bullets, self.enemies, self.zone_events = None, None, None
+        self.hero, self.camera, self.layers = None, None, None
 
     def build(self, player):
-        self.hero = self.hero.build(player)
-        self.camera = self.camera.build(self.hero)
-        self.enemies = self.enemies.build(self.container, self.camera.scroll)
-        self.layers = self.layers.build(self.camera.scroll)
+        self.hero = self.hero_builder.build(player)
+        self.camera = self.camera_builder.build(self.hero)
+        self.enemies = self.enemies_builder.build(self.container, self.camera.scroll)
+        self.layers = self.layers_builder.build(self.camera.scroll)
         self.platforms = self.layers.get_ground()
         self.dangerous = self.layers.get_dangerous()
         self.bullets = ScrollAdjustedGroup(self.camera.scroll)
