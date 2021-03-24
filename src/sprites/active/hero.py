@@ -1,10 +1,7 @@
 import pygame as pg
 
+from src.sprites.active.shutter_entity import ShutterEntity
 from src.sprites.pasive.life import Life
-from src.sprites.spritesheet import SpriteStripAnim
-from src.sprites.pasive.projectile import Projectile
-from src.sprites.active.active_entity import ActiveEntity
-import src.utils.assets as assets
 import time
 
 
@@ -17,32 +14,11 @@ class HeroBuilder:
         return Hero(player, self)
 
 
-class Hero(ActiveEntity):
+class Hero(ShutterEntity):
     def __init__(self, player, builder: HeroBuilder):
-        name = builder.entity_dto.name
-        sheet = builder.entity_dto.sheet
-        sheet_path = assets.path_to("characters", name, f"{sheet}.png")
-        sheet = SpriteStripAnim(builder.container, sheet_path, (0, 0, 32, 32), 8, rows=6)
-
-        super().__init__(builder.entity_dto.pos, sheet)
+        super().__init__(builder.container, builder.entity_dto)
         self.last_hit = time.time()
         self.life = Life(builder.container, 3, player)
-
-    def shoot(self):
-        (m_x, m_y) = pg.mouse.get_pos()
-        m_pos = (m_x - self.scroll.x, m_y - self.scroll.y)
-
-        if m_x > self.rect.x + self.scroll.x:
-            self.direction = pg.K_RIGHT
-        elif m_x < self.rect.x + self.scroll.x:
-            self.direction = pg.K_LEFT
-
-        bullet = Projectile(round(self.rect.x + self.rect.width // 2),
-                            round(self.rect.y + self.rect.height // 2), 6)
-
-        bullet.trajectory(m_pos)
-
-        return bullet
 
     def walk_loop(self, dt):
         if self.direction == pg.K_LEFT:

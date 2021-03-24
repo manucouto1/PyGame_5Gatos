@@ -28,17 +28,21 @@ class LevelBuilder:
         self.camera_builder = CameraBuilder(self.level_dto, SCREEN_SIZE)
         self.platforms = pg.sprite.Group()
         self.dangerous = pg.sprite.Group()
-        self.bullets, self.enemies, self.zone_events = None, None, None
-        self.hero, self.camera, self.layers = None, None, None
+        self.h_bullets, self.enemies, self.zone_events = None, None, None
+        self.hero, self.camera, self.layers, self.e_bullets = None, None, None, None
 
     def build(self, player):
         self.hero = self.hero_builder.build(player)
         self.camera = self.camera_builder.build(self.hero)
+        self.h_bullets = ScrollAdjustedGroup(self.camera.scroll)
+        self.e_bullets = ScrollAdjustedGroup(self.camera.scroll)
+        self.container.set_object('e_bullets', self.e_bullets)
+        self.container.set_object('hero', self.hero)
         self.enemies = self.enemies_builder.build(self.container, self.camera.scroll)
         self.layers = self.layers_builder.build(self.camera.scroll)
         self.platforms = self.layers.get_ground()
         self.dangerous = self.layers.get_dangerous()
-        self.bullets = ScrollAdjustedGroup(self.camera.scroll)
+
         return self.container.object_from_name(self.level_dto.path, self)
 
 
@@ -60,7 +64,8 @@ class Level:
             self.camera = builder.camera
             self.platforms = builder.platforms
             self.dangerous = builder.dangerous
-            self.bullets = builder.bullets
+            self.h_bullets = builder.h_bullets
+            self.e_bullets = builder.e_bullets
             self.zone_events = ScrollAdjustedGroup(self.camera.scroll)
             self.zone_events.add(Item(self))
 
@@ -68,16 +73,24 @@ class Level:
             print("Level Error")
 
     def check_bullets_hits(self):
-        pg.sprite.groupcollide(self.bullets, self.platforms, True, False)
-        enemies_damaged = list(pg.sprite.groupcollide(self.bullets, self.enemies, True, False).values())
+        pg.sprite.groupcollide(self.h_bullets, self.platforms, True, False)
+        enemies_damaged = list(pg.sprite.groupcollide(self.h_bullets, self.enemies, True, False).values())
         enemies_damaged = np.array(enemies_damaged).flatten()
+
         for enemy_hit in enemies_damaged:
             enemy_hit.is_hit()
 
         list_remove = list(
             filter(lambda bll: not self.dto.map_width * 32 > bll.x > 0 or not self.dto.map_height * 32 > bll.y > 0,
-                   self.bullets.sprites()))
-        self.bullets.remove(list_remove)
+                   self.h_bullets.sprites()))
+        self.h_bullets.remove(list_remove)
+
+        pg.sprite.groupcollide(self.e_bullets, self.platforms, True, False)
+        list_remove = list(
+            filter(lambda bll: not self.dto.map_width * 32 > bll.x > 0 or not self.dto.map_height * 32 > bll.y > 0,
+                   self.e_bullets.sprites()))
+
+        self.e_bullets.remove(list_remove)
 
     def notify(self, event):
         print(event)
@@ -91,9 +104,11 @@ class Level:
 
         self.hero.is_hit(self.dangerous)
         self.hero.is_hit(self.enemies)
+        self.hero.is_hit(self.e_bullets)
 
         self.layers.update()
-        self.bullets.update(dt)
+        self.h_bullets.update(dt)
+        self.e_bullets.update(dt)
         self.enemies.update(self.platforms, dt)
         self.camera.update(self.platforms, self.dangerous, dt)
         self.cursor.update(pg.mouse.get_pos())
@@ -111,6 +126,7 @@ class Level:
         self.enemies.draw(self.screen)
         self.camera.draw(self.screen)
         self.cursor.draw(self.screen)
-        self.bullets.draw(self.screen)
+        self.h_bullets.draw(self.screen)
+        self.e_bullets.draw(self.screen)
         self.hero.life.draw(self.screen)
         self.zone_events.draw(self.screen)

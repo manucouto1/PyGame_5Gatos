@@ -8,14 +8,8 @@ GRAVITY = pg.Vector2((0, 2.8))
 
 
 class Enemy(ActiveEntity):
-
-    def __init__(self, container, initial_pos, motion_range, *groups):
-        sheet_path = assets.path_to("characters", "enemy", "enemy_full.png")
-        sheet = SpriteStripAnim(container, sheet_path, (0, 0, 32, 32), 8, rows=4)
-
-        super().__init__(initial_pos, sheet, *groups)
-
-        self.path = [initial_pos[0] - motion_range, initial_pos[0] + motion_range]
+    def __init__(self, container, entity, *groups):
+        super().__init__(container, entity, *groups)
         self.walk_count = 0
         self.life = 2
         self.dead_id = 0
@@ -26,18 +20,7 @@ class Enemy(ActiveEntity):
         self.sheet[3].set_frames_skip(2)
 
     def move(self):
-        if self.vel.x > 0:
-            if self.rect[0] < self.path[1] + self.vel.x:
-                self.move_right()
-            else:
-                self.sheet.reset()
-                self.move_left()
-        else:
-            if self.rect[0] > self.path[0] - self.vel.x:
-                self.move_left()
-            else:
-                self.sheet.reset()
-                self.move_right()
+        raise NotImplementedError
 
     def dead_loop(self, dt):
         self.image = self.sheet[3].next(dt)
@@ -49,9 +32,8 @@ class Enemy(ActiveEntity):
             self.apply(platforms, dt)
         else:
             self.vel.x = 0
-            self.dead_loop(dt )
+            self.dead_loop(dt)
             self.apply(platforms, dt)
 
     def is_hit(self):
-        # TODO ver como implementar daño en enemigo
         self.life -= 1
