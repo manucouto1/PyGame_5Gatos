@@ -1,6 +1,6 @@
 import pygame as pg
 from src.game.player import Player
-
+from src.game.container import Container
 
 FPS = 30
 
@@ -17,6 +17,7 @@ class Director:
         self.exit = False
         self.clock = pg.time.Clock()
         self.player = Player()
+        self.container = Container()
 
     def __new__(cls):
         if Director._instance is None:
@@ -49,7 +50,7 @@ class Director:
     def loop(self, scene):
         self.exit = False
         pg.event.clear()
-        scene.init_level(self.player)
+        scene = scene.build(self.player)
 
         dt = self.clock.tick(FPS)
         while not self.exit:

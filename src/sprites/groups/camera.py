@@ -2,14 +2,23 @@ import pygame as pg
 from src.sprites.groups.scroll_adjusted import ScrollAdjustedGroup
 
 
+class CameraBuilder:
+    def __init__(self, level_dto, screen_size):
+        self.world_size = pg.Rect(0, 0, level_dto.map_width * 32, level_dto.map_height * 32)
+        self.screen_size = screen_size
+
+    def build(self, hero):
+        return Camera(hero, self)
+
+
 class Camera(ScrollAdjustedGroup):
-    def __init__(self, target, world_size, screen_size):
+    def __init__(self, target, builder: CameraBuilder):
         self.scroll = pg.Vector2(0, 0)
         ScrollAdjustedGroup.__init__(self, self.scroll, target)
 
         self.target = target
-        self.world_size = world_size
-        self.screen_size = screen_size
+        self.world_size = builder.world_size
+        self.screen_size = builder.screen_size
 
     def update(self, *args):
         super().update(*args)

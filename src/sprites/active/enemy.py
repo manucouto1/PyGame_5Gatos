@@ -9,9 +9,9 @@ GRAVITY = pg.Vector2((0, 2.8))
 
 class Enemy(ActiveEntity):
 
-    def __init__(self, initial_pos, motion_range, *groups):
+    def __init__(self, container, initial_pos, motion_range, *groups):
         sheet_path = assets.path_to("characters", "enemy", "enemy_full.png")
-        sheet = SpriteStripAnim(sheet_path, (0, 0, 32, 32), 8, rows=4)
+        sheet = SpriteStripAnim(container, sheet_path, (0, 0, 32, 32), 8, rows=4)
 
         super().__init__(initial_pos, sheet, *groups)
 
@@ -49,7 +49,7 @@ class Enemy(ActiveEntity):
             self.apply(platforms, dt)
         else:
             self.vel.x = 0
-            self.dead_loop(dt)
+            self.dead_loop(dt )
             self.apply(platforms, dt)
 
     def is_hit(self):

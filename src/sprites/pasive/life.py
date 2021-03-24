@@ -1,7 +1,7 @@
 import pygame as pg
-from src.sprites.spritesheet import Spritesheet
 import src.utils.assets as assets
 from src.sprites.pasive.hearts import Heart
+from src.sprites.spritesheet import SpriteSheet
 from math import ceil
 
 
@@ -10,8 +10,8 @@ LIFE_Y = 50
 
 
 class Life(pg.sprite.Group):
-    def __init__(self, n_hearts, player):
-        sheet = Spritesheet(assets.path_to("player", "Corazon-Sheet.png"))
+    def __init__(self, container, n_hearts, player):
+        sheet = SpriteSheet(container, assets.path_to("player", "Corazon-Sheet.png"))
         self.hearts = []
         self.player = player
         pos = ceil(self.player.life / 2) - 1
@@ -44,14 +44,3 @@ class Life(pg.sprite.Group):
         self.hearts[ceil(self.player.life / 2) - 1].decrease()
         # TODO esto no deberia estar aqui
         self.player.life -= 1
-
-
-# Player:
-# get_damage()
-# life.decrease()
-# life = life - 1
-
-# To check if it works right, add in game_control.py:
-# if event.key == pg.K_k:
-#     level.life.decrease()
-#     level.hero.life = level.hero.life - 1

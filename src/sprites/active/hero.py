@@ -1,5 +1,6 @@
 import pygame as pg
 
+from src.sprites.pasive.life import Life
 from src.sprites.spritesheet import SpriteStripAnim
 from src.sprites.pasive.projectile import Projectile
 from src.sprites.active.active_entity import ActiveEntity
@@ -7,15 +8,25 @@ import src.utils.assets as assets
 import time
 
 
+class HeroBuilder:
+    def __init__(self, container, level_dto):
+        self.container = container
+        self.entity_dto = level_dto.hero
+
+    def build(self, player):
+        return Hero(player, self)
+
+
 class Hero(ActiveEntity):
+    def __init__(self, player, builder: HeroBuilder):
+        name = builder.entity_dto.name
+        sheet = builder.entity_dto.sheet
+        sheet_path = assets.path_to("characters", name, f"{sheet}.png")
+        sheet = SpriteStripAnim(builder.container, sheet_path, (0, 0, 32, 32), 8, rows=6)
 
-    def __init__(self, initial_pos, life):
-        sheet_path = assets.path_to("characters", "tofe", "Hero_full.png")
-        sheet = SpriteStripAnim(sheet_path, (0, 0, 32, 32), 8, rows=6)
-
-        super().__init__(initial_pos, sheet)
+        super().__init__(builder.entity_dto.pos, sheet)
         self.last_hit = time.time()
-        self.life = life
+        self.life = Life(builder.container, 3, player)
 
     def shoot(self):
         # Look towards shoot direction
