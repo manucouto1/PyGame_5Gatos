@@ -1,19 +1,24 @@
 import pygame
 import pygame as pg
 
+from src.sprites.spritesheet import SpriteStripAnim
+from src.utils import assets
+
 GRAVITY = pg.Vector2((0, 3.8))
 
 
 class ActiveEntity(pg.sprite.Sprite):
-
-    def __init__(self, initial_pos, sheet, *groups):
+    def __init__(self, container, entity, *groups):
         super().__init__(*groups)
+
+        sheet_path = assets.path_to("characters", entity.name, entity.sheet)
+        sheet = SpriteStripAnim(container, sheet_path, (0, 0, 32, 32), entity.rows, rows=4)
 
         self.scroll = pg.Vector2(0, 0)
         self.sheet = sheet
         self.image = self.sheet.images[0][0]
         self.rect = pygame.Rect(0, 0, 0, 0)
-        self.rect.bottomleft = initial_pos
+        self.rect.bottomleft = entity.pos
         self.rect.size = self.image.get_size()
 
         self.movement = None

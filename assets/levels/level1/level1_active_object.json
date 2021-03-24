@@ -1,7 +1,8 @@
 {
   "hero":{
          "name": "tofe",
-         "sheet": "Hero_full",
+         "sheet": "Hero_full.png",
+         "rows": 6,
          "path": "",
          "x":48,
          "y":472
@@ -9,16 +10,27 @@
  "enemies":[
         {
          "name":"enemy",
-         "sheet": "enemy_full",
-         "path": "src.sprites.active.enemy.Enemy",
+         "sheet": "enemy_full.png",
+         "rows": 4,
+         "path": "src.sprites.active.enemy_dummy.EnemyDummy",
          "x":846,
          "y":696
         },
         {
          "name":"enemy",
-         "sheet": "enemy_full",
-         "path": "src.sprites.active.enemy.Enemy",
+         "sheet": "enemy_full.png",
+         "rows": 4,
+         "path": "src.sprites.active.enemy_dummy.EnemyDummy",
          "x":1840,
          "y":380
-        }]
+        },
+        {
+         "name":"enemy",
+         "sheet": "enemy_full.png",
+         "rows": 4,
+         "path": "src.sprites.active.enemy_turret_shutter.EnemyTurretShutter",
+         "x":1105,
+          "y":528
+        }
+ ]
 }
