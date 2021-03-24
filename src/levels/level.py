@@ -114,9 +114,11 @@ class Level:
         self.cursor.update(pg.mouse.get_pos())
 
     def map_limit(self):
-        screen_rect = self.screen.get_rect()
-        screen_rect[2] += self.dto.map_width * self.dto.tile_size - SCREEN_SIZE.x
-        self.hero.rect.clamp_ip(screen_rect)
+        (x, y, h, w) = self.screen.get_rect()
+        (cam_x, cam_y) = self.camera.camera_rect
+        y -= cam_y
+        x -= cam_x
+        self.hero.rect.clamp_ip((x, y, h, w))
 
     def draw(self):
         self.screen.blit(self.bg, (0, 0))

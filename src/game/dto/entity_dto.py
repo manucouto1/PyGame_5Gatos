@@ -5,4 +5,9 @@ class EntityDTO:
         self.sheet = entity['sheet']
         self.rows = entity['rows']
         self.path = entity['path']
-        self.pos = (entity['x'], entity['y'])
+        try:
+            scale = int(entity['scale'])
+            self.pos = (int(entity['x'])*scale, int(entity['y'])*scale)
+        except Exception:
+            self.pos = (entity['x'], entity['y'])
+

@@ -49,7 +49,7 @@ class Menu:
         self.init_sound.play()
         pg.mixer.music.load(assets.path_to("sounds", "game.ogg"))
         pg.mixer.music.play(-1)
-        self.director.stack_scene(LevelBuilder(self.director.container, "level1"))
+        self.director.stack_scene(LevelBuilder(self.director.container, "level2"))
 
     def show_initial_scene(self):
         self.initial_scene = 0

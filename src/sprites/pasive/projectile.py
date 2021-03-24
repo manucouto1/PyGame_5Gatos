@@ -10,7 +10,7 @@ class Projectile(pg.sprite.Sprite):
         self.image = pg.Surface((int(radius * 2), int(radius * 2)))
         self.radius = radius
         self.color = color
-        self.vel = pg.Vector2((18, 18))
+        self.vel = pg.Vector2((25, 25))
         self.angle = 0
         self.rect = pg.Rect(self.x - self.radius, self.y - self.radius, self.radius * 2, self.radius * 2)
 
