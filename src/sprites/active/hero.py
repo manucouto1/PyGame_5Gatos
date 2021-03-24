@@ -29,7 +29,6 @@ class Hero(ActiveEntity):
         self.life = Life(builder.container, 3, player)
 
     def shoot(self):
-        # Look towards shoot direction
         (m_x, m_y) = pg.mouse.get_pos()
         m_pos = (m_x - self.scroll.x, m_y - self.scroll.y)
 
