@@ -1,8 +1,11 @@
 import pygame as pg
+from pygame._sprite import collide_mask
 
 from src.sprites.active.shutter_entity import ShutterEntity
 from src.sprites.pasive.life import Life
 import time
+
+from src.sprites.spritesheet import SpriteSheet
 
 
 class HeroBuilder:
@@ -16,7 +19,8 @@ class HeroBuilder:
 
 class Hero(ShutterEntity):
     def __init__(self, player, builder: HeroBuilder):
-        super().__init__(builder.container, builder.entity_dto)
+        ShutterEntity.__init__(self, builder.container, builder.entity_dto)
+
         self.last_hit = time.time()
         self.life = Life(builder.container, 3, player)
 
@@ -27,8 +31,16 @@ class Hero(ShutterEntity):
             self.image = self.sheet[2].next(dt)
 
     def is_hit(self, dangerous):
-        possible = pg.sprite.spritecollideany(self, dangerous)
-        if possible and pg.sprite.collide_mask(self, possible):
+        its_hit = pg.sprite.spritecollideany(self, dangerous, collided=collide_mask)
+        if its_hit:
+            new_hit = time.time()
+            if self.last_hit + 2 < new_hit:
+                self.last_hit = new_hit
+                self.life.decrease()
+
+    def is_hit_destroy(self, dangerous):
+        list_e_bullets = pg.sprite.spritecollide(self, dangerous, True, collided=collide_mask)
+        if list_e_bullets:
             new_hit = time.time()
             if self.last_hit + 2 < new_hit:
                 self.last_hit = new_hit

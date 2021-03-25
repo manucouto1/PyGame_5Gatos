@@ -1,4 +1,6 @@
 import pygame as pg
+
+from src.game.dto.game_dto import GameDTO
 from src.game.player import Player
 from src.game.container import Container
 
@@ -18,6 +20,8 @@ class Director:
         self.clock = pg.time.Clock()
         self.player = Player()
         self.container = Container()
+        self.game = GameDTO("game_config.json")
+        self.container.set_object('game', self.game)
 
     def __new__(cls):
         if Director._instance is None:
@@ -52,11 +56,11 @@ class Director:
         pg.event.clear()
         scene = scene.build(self.player)
 
-        dt = self.clock.tick(FPS)
+        dt = self.clock.tick(self.game.fps)
         while not self.exit:
             scene.events(pg.event.get())
             scene.update(dt)
             scene.draw()
 
             pg.display.update()
-            dt = self.clock.tick(FPS)
+            dt = self.clock.tick(self.game.fps)
