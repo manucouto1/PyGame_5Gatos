@@ -5,6 +5,6 @@
     "image":  "level2.png",
     "config": "level2.txt"
   },
-
-  "entities": "level2_active_object.json"
+  "entities": "level2_active_object.json",
+  "events": "level2_events.json"
 }

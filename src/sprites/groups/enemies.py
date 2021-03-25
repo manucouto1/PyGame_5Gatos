@@ -6,13 +6,13 @@ class EnemiesBuilder:
         self.container = container
         self.level_dto = level_dto
 
-    def build(self, container, camera_scroll):
-        return Enemies(container, camera_scroll, self)
+    def build(self, camera_scroll):
+        return Enemies(camera_scroll, self)
 
 
 class Enemies(ScrollAdjustedLayeredGroup):
-    def __init__(self, container, camera_scroll, builder: EnemiesBuilder):
+    def __init__(self, camera_scroll, builder: EnemiesBuilder):
         super().__init__(camera_scroll)
 
         for entity in builder.level_dto.enemies:
-            self.add(container.object_from_name(entity.path, container, entity))
+            self.add(builder.container.object_from_name(entity.path, builder.container, entity))

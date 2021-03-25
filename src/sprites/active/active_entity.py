@@ -17,10 +17,8 @@ class ActiveEntity(pg.sprite.Sprite):
         self.sheet = sheet
         self.image = self.sheet.images[0][0]
         self.mask = self.sheet.masks[0][0]
-        self.rect = pygame.Rect(0, 0, 0, 0)
+        self.rect = self.image.get_rect()
         self.rect.bottomleft = entity.pos
-        self.rect.size = self.image.get_size()
-
         self.movement = None
         self.direction = None
         self.onGround = False
@@ -89,8 +87,10 @@ class ActiveEntity(pg.sprite.Sprite):
 
     def apply(self, platforms, dt):
         self.gravity(dt)
-        self.rect.x += (self.vel.x/50 * dt)
+        vel_x = (self.vel.x/50 * dt)
+        self.rect.x += vel_x if (vel_x <= 63) else 63
         self.collide_ground(self.vel.x, 0, platforms)
-        self.rect.y += (self.vel.y/50 * dt)
+        vel_y = (self.vel.y / 50 * dt)
+        self.rect.y += vel_y
         self.onGround = False
         self.collide_ground(0, self.vel.y, platforms)

@@ -22,6 +22,7 @@ class Director:
         self.container = Container()
         self.game = GameDTO("game_config.json")
         self.container.set_object('game', self.game)
+        self.container.set_object('director', self)
 
     def __new__(cls):
         if Director._instance is None:

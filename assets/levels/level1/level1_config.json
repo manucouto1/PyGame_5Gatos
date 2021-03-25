@@ -6,5 +6,6 @@
     "config": "level1.txt"
   },
 
-  "entities": "level1_active_object.json"
+  "entities": "level1_active_object.json",
+  "events": "level1_events.json"
 }

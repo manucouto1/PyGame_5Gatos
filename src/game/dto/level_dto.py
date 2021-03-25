@@ -1,4 +1,5 @@
 from src.game.dto.entity_dto import EntityDTO
+from src.game.dto.event_dto import EventDTO
 from src.game.dto.layer_dto import LayerDTO
 import src.utils.assets as assets
 import json
@@ -14,6 +15,8 @@ class LevelDTO:
                     self.path = level_config["path"]
                     self.bg = level_config["background"]
                     tiles = level_config["tiles"]
+                    entities = level_config["entities"]
+                    events = level_config['events']
 
                     self.tiles_image = tiles['image']
 
@@ -29,7 +32,7 @@ class LevelDTO:
                     for layer in layers:
                         self.layers.append(LayerDTO(layer))
 
-            with open(assets.path_to('levels', level_name, level_config["entities"])) as f:
+            with open(assets.path_to('levels', level_name, entities)) as f:
                 entities_config = json.load(f)
                 self.hero = EntityDTO(entities_config['hero'])
 
@@ -37,5 +40,11 @@ class LevelDTO:
                 for entity in entities_config["enemies"]:
                     self.enemies.append(EntityDTO(entity))
 
-        except IOError:
-            print("Level data loading error")
+            with open(assets.path_to('levels', level_name, events)) as f:
+                entities_config = json.load(f)
+                self.events = []
+                for event in entities_config['events']:
+                    self.events.append(EventDTO(event))
+
+        except IOError as e:
+            print("Level data loading error > ", e)

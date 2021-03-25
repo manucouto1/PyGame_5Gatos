@@ -1,5 +1,5 @@
 from src.sprites.groups.scroll_adjusted import ScrollAdjustedLayeredGroup
-from src.sprites.pasive.platform import Platform
+from src.sprites.passive.platform import Platform
 from src.sprites.spritesheet import SpriteSheet
 from src.utils import assets
 
