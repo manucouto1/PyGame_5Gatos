@@ -2,7 +2,7 @@ import pygame as pg
 from pygame._sprite import collide_mask
 
 from src.sprites.active.shutter_entity import ShutterEntity
-from src.sprites.pasive.life import Life
+from src.sprites.passive.life import Life
 import time
 
 from src.sprites.spritesheet import SpriteSheet

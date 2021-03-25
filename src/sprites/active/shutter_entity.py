@@ -1,5 +1,5 @@
 from src.sprites.active.active_entity import ActiveEntity
-from src.sprites.pasive.projectile import Projectile
+from src.sprites.passive.projectile import Projectile
 import pygame as pg
 import src.utils.assets as assets
 from src.sprites.spritesheet import SpriteSheet

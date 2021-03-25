@@ -1,9 +1,8 @@
 import pygame as pg
 import src.utils.assets as assets
-from src.sprites.pasive.hearts import Heart
+from src.sprites.passive.hearts import Heart
 from src.sprites.spritesheet import SpriteSheet
 from math import ceil
-
 
 LIFE_X = Heart.SIZE + 4
 LIFE_Y = 50

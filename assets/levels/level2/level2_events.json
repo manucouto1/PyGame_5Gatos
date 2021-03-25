@@ -1,0 +1,10 @@
+{
+  "events": [
+      {
+        "path": "src.sprites.passive.event.EndGame",
+        "scale": 32,
+        "x":63, "y":22
+      }
+  ]
+
+}

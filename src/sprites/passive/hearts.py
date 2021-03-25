@@ -2,13 +2,8 @@ import pygame as pg
 
 
 class Heart(pg.sprite.Sprite):
-
     SIZE = 50
 
-    # state represents init frame of the heart:
-    #   - 0: full heart
-    #   - 1: half-Heart
-    #   - 2: empty heart
     def __init__(self, sheet, state):
         super().__init__()
         self.orig_size = 160
