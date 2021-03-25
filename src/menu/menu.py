@@ -1,5 +1,6 @@
 import pygame as pg
 
+from src.game.dto.game_dto import GameDTO
 from src.levels.level import LevelBuilder
 from src.menu.screen import ScreenGUIInitial
 from src.sprites.pasive.cursor import Cursor
@@ -49,7 +50,9 @@ class Menu:
         self.init_sound.play()
         pg.mixer.music.load(assets.path_to("sounds", "game.ogg"))
         pg.mixer.music.play(-1)
-        self.director.stack_scene(LevelBuilder(self.director.container, "level2"))
+        game = self.director.container.get_object('game')
+        for level in game.levels:
+            self.director.stack_scene(LevelBuilder(self.director.container, level))
 
     def show_initial_scene(self):
         self.initial_scene = 0

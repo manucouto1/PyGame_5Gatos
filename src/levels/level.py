@@ -1,6 +1,7 @@
 import pygame as pg
 import numpy as np
-from src.game.dto.level_dto import LevelDTO
+from pygame._sprite import collide_mask
+
 from src.sprites.groups.layers import LayersBuilder
 from src.sprites.active.hero import HeroBuilder
 from src.sprites.groups.camera import CameraBuilder
@@ -18,10 +19,9 @@ SCREEN_SIZE = pg.Rect((0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
 class LevelBuilder:
-    def __init__(self, container, level_name):
-
+    def __init__(self, container, level_dto):
         self.container = container
-        self.level_dto = LevelDTO(level_name)
+        self.level_dto = level_dto
         self.layers_builder = LayersBuilder(container, self.level_dto)
         self.enemies_builder = EnemiesBuilder(container, self.level_dto)
         self.hero_builder = HeroBuilder(container, self.level_dto)
@@ -67,6 +67,7 @@ class Level:
             self.h_bullets = builder.h_bullets
             self.e_bullets = builder.e_bullets
             self.zone_events = ScrollAdjustedGroup(self.camera.scroll)
+            self.dead_enemies = ScrollAdjustedGroup(self.camera.scroll)
             self.zone_events.add(Item(self))
 
         except IOError:
@@ -79,11 +80,16 @@ class Level:
 
         for enemy_hit in enemies_damaged:
             enemy_hit.is_hit()
+            if enemy_hit.life == 0:
+                self.enemies.remove(enemy_hit)
+                self.dead_enemies.add(enemy_hit)
 
         list_remove = list(
             filter(lambda bll: not self.dto.map_width * 32 > bll.x > 0 or not self.dto.map_height * 32 > bll.y > 0,
                    self.h_bullets.sprites()))
         self.h_bullets.remove(list_remove)
+
+        self.hero.is_hit_destroy(self.e_bullets)
 
         pg.sprite.groupcollide(self.e_bullets, self.platforms, True, False)
         list_remove = list(
@@ -110,6 +116,7 @@ class Level:
         self.h_bullets.update(dt)
         self.e_bullets.update(dt)
         self.enemies.update(self.platforms, dt)
+        self.dead_enemies.update(self.platforms, dt)
         self.camera.update(self.platforms, self.dangerous, dt)
         self.cursor.update(pg.mouse.get_pos())
 
@@ -126,6 +133,7 @@ class Level:
 
         self.layers.draw(self.screen)
         self.enemies.draw(self.screen)
+        self.dead_enemies.draw(self.screen)
         self.camera.draw(self.screen)
         self.cursor.draw(self.screen)
         self.h_bullets.draw(self.screen)

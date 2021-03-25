@@ -3,16 +3,14 @@ import math
 
 
 class Projectile(pg.sprite.Sprite):
-    def __init__(self, x, y, radius, color=(0, 0, 0)):
+    def __init__(self, image, x, y, radius):
         super().__init__()
         self.x = x
         self.y = y
-        self.image = pg.Surface((int(radius * 2), int(radius * 2)))
-        self.radius = radius
-        self.color = color
+        self.image = image
         self.vel = pg.Vector2((25, 25))
         self.angle = 0
-        self.rect = pg.Rect(self.x - self.radius, self.y - self.radius, self.radius * 2, self.radius * 2)
+        self.rect = pg.Rect(self.x - radius, self.y - radius, radius * 2, radius * 2)
 
     def trajectory(self, pos):
         mx, my = pos
