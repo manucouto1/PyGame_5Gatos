@@ -14,9 +14,16 @@ class LevelDTO:
                 if level_config is not None:
                     self.path = level_config["path"]
                     self.bg = level_config["background"]
+                    self.camera_name = level_config["camera_name"]
                     tiles = level_config["tiles"]
                     entities = level_config["entities"]
                     events = level_config['events']
+
+                    try:
+                        self.gap_line = level_config["gap"]
+                    except KeyError or TypeError as ex:
+                        print(ex)
+                        self.gap_line = None
 
                     self.tiles_image = tiles['image']
 
@@ -26,6 +33,10 @@ class LevelDTO:
                     self.tile_size = tiles_config["tile_size"]
                     self.map_width = tiles_config["map_width"]
                     self.map_height = tiles_config["map_height"]
+                    if self.gap_line:
+                        self.gap_line *= int(self.tile_size)
+                        print("GAP > ", self.gap_line)
+
                     layers = tiles_config["layers"]
 
                     self.layers = []

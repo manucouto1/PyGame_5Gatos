@@ -1,5 +1,6 @@
 import pygame as pg
 import numpy as np
+from pygame.sprite import collide_mask
 
 from src.sprites.groups.Events import EventsBuilder
 from src.sprites.groups.layers import LayersBuilder
@@ -24,7 +25,7 @@ class LevelBuilder:
         self.layers_builder = LayersBuilder(container, self.level_dto)
         self.enemies_builder = EnemiesBuilder(container, self.level_dto)
         self.hero_builder = HeroBuilder(container, self.level_dto)
-        self.camera_builder = CameraBuilder(self.level_dto, SCREEN_SIZE)
+        self.camera_builder = CameraBuilder(container, self.level_dto, SCREEN_SIZE)
         self.zone_events_builder = EventsBuilder(container, self.level_dto)
         self.platforms = pg.sprite.Group()
         self.dangerous = pg.sprite.Group()
@@ -71,8 +72,8 @@ class Level:
             print("Level Error")
 
     def check_bullets_hits(self):
-        pg.sprite.groupcollide(self.h_bullets, self.platforms, True, False)
-        enemies_hits = pg.sprite.groupcollide(self.h_bullets, self.enemies, True, False)
+        pg.sprite.groupcollide(self.h_bullets, self.platforms, True, False, collided=collide_mask)
+        enemies_hits = pg.sprite.groupcollide(self.h_bullets, self.enemies, True, False )
         enemies_damaged = list(enemies_hits.values())
         enemies_damaged = np.array(enemies_damaged).flatten()
 
@@ -89,7 +90,7 @@ class Level:
 
         self.hero.is_hit_destroy(self.e_bullets)
 
-        pg.sprite.groupcollide(self.e_bullets, self.platforms, True, False)
+        pg.sprite.groupcollide(self.e_bullets, self.platforms, True, False, collided=collide_mask)
         list_remove = list(
             filter(lambda bll: not self.dto.map_width * 32 > bll.x > 0 or not self.dto.map_height * 32 > bll.y > 0,
                    self.e_bullets.sprites()))

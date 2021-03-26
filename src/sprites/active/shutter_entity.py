@@ -26,7 +26,7 @@ class ShutterEntity(ActiveEntity):
 
         image = self.projectile_sheet.image_at((0, 0, 64, 64))
         image = pg.transform.scale(image, (32, 32))
-        bullet = Projectile(image, round(self.rect.x + correct), round(self.rect.y + self.rect.height // 2), 6)
+        bullet = Projectile(image, round(self.rect.x + correct), round(self.rect.y), 6)
 
         bullet.trajectory(m_pos)
 

@@ -5,7 +5,8 @@
     "image":  "level1.png",
     "config": "level1.txt"
   },
-
   "entities": "level1_active_object.json",
-  "events": "level1_events.json"
+  "events": "level1_events.json",
+  "camera_name": "src.sprites.groups.camera.Camera",
+  "gap": null
 }
