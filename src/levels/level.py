@@ -25,7 +25,7 @@ class LevelBuilder:
         self.enemies_builder = EnemiesBuilder(container, self.level_dto)
         self.hero_builder = HeroBuilder(container, self.level_dto)
         self.camera_builder = CameraBuilder(self.level_dto, SCREEN_SIZE)
-        self.zone_events_builder = EventsBuilder(self, container, self.level_dto)
+        self.zone_events_builder = EventsBuilder(container, self.level_dto)
         self.platforms = pg.sprite.Group()
         self.dangerous = pg.sprite.Group()
         self.h_bullets, self.enemies, self.e_bullets = None, None, None
@@ -40,7 +40,6 @@ class LevelBuilder:
         self.container.set_object('hero', self.hero)
         self.enemies = self.enemies_builder.build(self.camera.scroll)
         self.layers = self.layers_builder.build(self.camera.scroll)
-        self.zone_events = self.zone_events_builder.build(self.camera.scroll)
         self.platforms = self.layers.get_ground()
         self.dangerous = self.layers.get_dangerous()
         return self.container.object_from_name(self.level_dto.path, self)
@@ -51,11 +50,10 @@ class Level:
         self.container = builder.container
         self.screen_rect = pg.Rect(SCREEN_SIZE)
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.cursor = Cursor(pg.mouse.get_pos())
+        self.cursor = Cursor(self.container, pg.mouse.get_pos())
         pg.mouse.set_visible(False)
 
         try:
-
             self.dto = builder.level_dto
             self.bg = self.container.image_from_parts(self.dto.bg)
             self.layers = builder.layers
@@ -66,7 +64,7 @@ class Level:
             self.dangerous = builder.dangerous
             self.h_bullets = builder.h_bullets
             self.e_bullets = builder.e_bullets
-            self.zone_events = ScrollAdjustedGroup(self.camera.scroll)
+            self.zone_events = builder.zone_events_builder.build(self, self.camera.scroll)
             self.dead_enemies = ScrollAdjustedGroup(self.camera.scroll)
 
         except IOError:
@@ -117,9 +115,9 @@ class Level:
         self.hero.is_hit(self.enemies)
         self.hero.is_hit(self.e_bullets)
 
-        self.layers.update()
         self.h_bullets.update(dt)
         self.e_bullets.update(dt)
+
         self.enemies.update(self.platforms, dt)
         self.dead_enemies.update(self.platforms, dt)
         self.camera.update(self.platforms, self.dangerous, dt)

@@ -13,6 +13,7 @@ class EnemiesBuilder:
 class Enemies(ScrollAdjustedLayeredGroup):
     def __init__(self, camera_scroll, builder: EnemiesBuilder):
         super().__init__(camera_scroll)
-
+        game = builder.container.get_object('game')
         for entity in builder.level_dto.enemies:
-            self.add(builder.container.object_from_name(entity.path, builder.container, entity))
+            character = game.characters[entity.name]
+            self.add(builder.container.object_from_name(character.path, builder.container, entity, character))

@@ -1,0 +1,25 @@
+{
+  "tofe": {
+    "name": "tofe",
+    "sheet": "Hero_full.png",
+    "projectile": "wool3.png",
+    "rows": 6,
+    "path": ""
+  },
+
+  "dummy": {
+    "name": "enemy",
+    "sheet": "enemy_full.png",
+    "projectile": null,
+    "rows": 4,
+    "path": "src.sprites.active.enemy_dummy.EnemyDummy"
+  },
+
+  "turret": {
+    "name": "enemy",
+    "sheet": "enemy_full.png",
+    "projectile": "wool.png",
+    "rows": 4,
+    "path": "src.sprites.active.enemy_turret_shutter.EnemyTurretShutter"
+  }
+}

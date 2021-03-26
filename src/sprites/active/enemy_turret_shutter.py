@@ -11,6 +11,8 @@ class EnemyTurretShutter(ShutterEntity):
         self.life = 2
         self.dead_id = 0
         self.dt_count = 0
+        self.wait_time = 900/5
+        self.shots = 0
 
         self.sheet[0].set_frames_skip(2)
         self.sheet[1].set_frames_skip(2)
@@ -25,11 +27,18 @@ class EnemyTurretShutter(ShutterEntity):
         self.dt_count += dt
 
         if distance < 300:
-            #TODO esto es un parche
-            if len(self.e_bullets) < 5 and self.dt_count >= 7200/5:
-                self.dt_count = 0
-                bullet = self.shoot((self.hero.rect.x, self.hero.rect.y))
-                self.e_bullets.add(bullet)
+            if self.shots < 5:
+                if self.dt_count >= self.wait_time:
+                    self.wait_time = 450 / 5
+                    self.dt_count = 0
+                    bullet = self.shoot((self.hero.rect.x, self.hero.rect.y))
+                    self.e_bullets.add(bullet)
+                    self.shots += 1
+            else:
+                self.wait_time = 14400 / 5
+                self.shots = 0
+        else:
+            self.wait_time = 450 / 5
 
     def dead_loop(self, dt):
         self.image = self.sheet[3].next(dt)

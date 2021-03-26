@@ -8,10 +8,10 @@ GRAVITY = pg.Vector2((0, 3.8))
 
 
 class ActiveEntity(pg.sprite.Sprite):
-    def __init__(self, container, entity, *groups):
+    def __init__(self, container, entity, character, *groups):
         super().__init__(*groups)
-        sheet_path = assets.path_to("characters", entity.name, entity.sheet)
-        sheet = SpriteStripAnim(container, sheet_path, (0, 0, 32, 32), entity.rows, rows=4)
+        sheet_path = assets.path_to("characters", character.name, character.sheet)
+        sheet = SpriteStripAnim(container, sheet_path, (0, 0, 32, 32), character.rows, rows=4)
 
         self.scroll = pg.Vector2(0, 0)
         self.sheet = sheet
@@ -91,6 +91,6 @@ class ActiveEntity(pg.sprite.Sprite):
         self.rect.x += vel_x if (vel_x <= 63) else 63
         self.collide_ground(self.vel.x, 0, platforms)
         vel_y = (self.vel.y / 50 * dt)
-        self.rect.y += vel_y
+        self.rect.y += vel_y if (vel_y <= 63) else 63
         self.onGround = False
         self.collide_ground(0, self.vel.y, platforms)
