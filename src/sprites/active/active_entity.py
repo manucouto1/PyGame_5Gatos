@@ -1,4 +1,3 @@
-import pygame
 import pygame as pg
 
 from src.sprites.spritesheet import SpriteStripAnim

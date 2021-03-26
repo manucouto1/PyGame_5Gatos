@@ -6,5 +6,7 @@
     "config": "level2.txt"
   },
   "entities": "level2_active_object.json",
-  "events": "level2_events.json"
+  "events": "level2_events.json",
+  "camera_name": "src.sprites.groups.camera.CameraVerticalGap",
+  "gap": 20
 }
