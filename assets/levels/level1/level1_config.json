@@ -7,6 +7,5 @@
   },
   "entities": "level1_active_object.json",
   "events": "level1_events.json",
-  "camera_name": "src.sprites.groups.camera.Camera",
-  "gap": null
+  "gaps": "level1_gaps.json"
 }

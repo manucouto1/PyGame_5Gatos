@@ -1,5 +1,6 @@
 from src.game.dto.entity_dto import EntityDTO
 from src.game.dto.event_dto import EventDTO
+from src.game.dto.gaps_dto import GapsDTO
 from src.game.dto.layer_dto import LayerDTO
 import src.utils.assets as assets
 import json
@@ -14,18 +15,13 @@ class LevelDTO:
                 if level_config is not None:
                     self.path = level_config["path"]
                     self.bg = level_config["background"]
-                    self.camera_name = level_config["camera_name"]
                     tiles = level_config["tiles"]
                     entities = level_config["entities"]
                     events = level_config['events']
-
-                    try:
-                        self.gap_line = level_config["gap"]
-                    except KeyError or TypeError as ex:
-                        print(ex)
-                        self.gap_line = None
-
                     self.tiles_image = tiles['image']
+
+            with open(assets.path_to('levels', level_name, level_config["gaps"])) as f:
+                self.gaps = GapsDTO(json.load(f))
 
             with open(assets.path_to('levels', level_name, tiles['config'])) as f:
                 tiles_config = json.load(f)
@@ -33,9 +29,6 @@ class LevelDTO:
                     self.tile_size = tiles_config["tile_size"]
                     self.map_width = tiles_config["map_width"]
                     self.map_height = tiles_config["map_height"]
-                    if self.gap_line:
-                        self.gap_line *= int(self.tile_size)
-                        print("GAP > ", self.gap_line)
 
                     layers = tiles_config["layers"]
 
