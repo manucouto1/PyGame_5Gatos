@@ -1,5 +1,7 @@
 {
   "fps": 30,
+  "cursor": "point-cursor.png",
+  "characters": "game_characters.json",
   "levels": [
     "level2",
     "level1"

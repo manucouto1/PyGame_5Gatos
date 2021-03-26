@@ -33,6 +33,7 @@ class EndGame(Event):
         super().__init__(observer, *groups)
         self.event = "Level end"
         self.image = sheet.image_at((0, 0, 32, 32))
+        print(self.image)
         self.rect = self.image.get_rect()
         self.rect.bottomleft = event_dto.pos
 

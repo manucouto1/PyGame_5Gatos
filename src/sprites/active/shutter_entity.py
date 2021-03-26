@@ -6,21 +6,21 @@ from src.sprites.spritesheet import SpriteSheet
 
 
 class ShutterEntity(ActiveEntity):
-    def __init__(self, container, entity):
-        path_projectiles = assets.path_to('projectiles', entity.projectile)
+    def __init__(self, container, entity, character, *groups):
+        path_projectiles = assets.path_to('projectiles', character.projectile)
         self.projectile_sheet = SpriteSheet(container, path_projectiles)
-        ActiveEntity.__init__(self, container, entity)
+        ActiveEntity.__init__(self, container, entity, character, *groups)
 
     def shoot(self, target):
         (m_x, m_y) = target
-        m_pos = (m_x - self.scroll.x, m_y - self.scroll.y)
+        m_pos = (t_x, _) = (m_x - self.scroll.x, m_y - self.scroll.y)
 
-        if m_x > self.rect.x + self.scroll.x:
+        if t_x > self.rect.x:
             self.direction = pg.K_RIGHT
-            correct = self.rect.width
-        elif m_x < self.rect.x + self.scroll.x:
+            correct = self.rect.width/2
+        elif t_x < self.rect.x:
             self.direction = pg.K_LEFT
-            correct = 0
+            correct = -self.rect.width/2
         else:
             correct = 0
 

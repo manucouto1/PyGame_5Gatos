@@ -10,12 +10,11 @@ import src.utils.assets as assets
 class Menu:
 
     def __init__(self, director):
-        pg.mouse.set_visible(True)
         self.initial_scene = -1
         self.director = director
         self.scenes_list = []
         self.scenes_list.append(ScreenGUIInitial(self, "background2.png"))
-        self.cursor = Cursor(pg.mouse.get_pos())
+        self.cursor = Cursor(director.container, pg.mouse.get_pos())
         self.show_initial_scene()
 
         pg.mixer.music.load(assets.path_to("sounds", "menu.ogg"))
@@ -27,6 +26,9 @@ class Menu:
         return
 
     def events(self, events):
+        if not pg.mouse.get_visible():
+            pg.mouse.set_visible(True)
+
         for event in events:
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
@@ -50,9 +52,11 @@ class Menu:
         self.init_sound.play()
         pg.mixer.music.load(assets.path_to("sounds", "game.ogg"))
         pg.mixer.music.play(-1)
-        game = self.director.container.get_object('game')
+        container = self.director.container
+        game = self.director.game
+
         for level in game.levels:
-            self.director.stack_scene(LevelBuilder(self.director.container, level))
+            self.director.stack_scene(LevelBuilder(container, level))
 
     def show_initial_scene(self):
         self.initial_scene = 0

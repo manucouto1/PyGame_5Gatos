@@ -18,8 +18,15 @@ class EnemyDummy(Enemy):
 
     def collide_ground(self, xvel, yvel, platforms):
         collide_l = pg.sprite.spritecollide(self, platforms, False)
+        bot_left_collided = 0
+        bot_right_collided = 0
+        bot_mid_collided = 0
+
         for p in collide_l:
             if pg.sprite.collide_rect(self, p):
+                bot_left_collided = p.rect.collidepoint(self.rect.bottomleft)
+                bot_mid_collided = p.rect.collidepoint(self.rect.midbottom)
+                bot_right_collided = p.rect.collidepoint(self.rect.bottomright)
                 if xvel > 0:
                     self.rect.right = p.rect.left
                     if self.moving == RIGHT:
@@ -37,3 +44,10 @@ class EnemyDummy(Enemy):
                 if yvel < 0:
                     self.rect.top = p.rect.bottom
                     self.vel.y = 0
+
+        if len(collide_l) == 1 and not bot_right_collided and not bot_mid_collided and bot_left_collided:
+            self.reset_movement()
+            self.moving = LEFT
+        if len(collide_l) == 1 and not bot_left_collided and not bot_mid_collided and bot_right_collided:
+            self.reset_movement()
+            self.moving = RIGHT

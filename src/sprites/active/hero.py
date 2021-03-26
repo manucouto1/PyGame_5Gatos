@@ -19,7 +19,9 @@ class HeroBuilder:
 
 class Hero(ShutterEntity):
     def __init__(self, player, builder: HeroBuilder):
-        ShutterEntity.__init__(self, builder.container, builder.entity_dto)
+        game = builder.container.get_object('game')
+        character = game.characters[builder.entity_dto.name]
+        ShutterEntity.__init__(self, builder.container, builder.entity_dto, character)
 
         self.last_hit = time.time()
         self.life = Life(builder.container, 3, player)
