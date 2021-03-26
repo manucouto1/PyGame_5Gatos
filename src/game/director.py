@@ -63,5 +63,5 @@ class Director:
             scene.update(dt)
             scene.draw()
 
-            pg.display.update()
+            pg.display.flip()
             dt = self.clock.tick(self.game.fps)

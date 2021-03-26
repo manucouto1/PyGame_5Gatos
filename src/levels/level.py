@@ -13,6 +13,7 @@ from src.sprites.passive.cursor import Cursor
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
 
+
 white = (255, 255, 255)
 
 SCREEN_SIZE = pg.Rect((0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -30,7 +31,7 @@ class LevelBuilder:
         self.platforms = pg.sprite.Group()
         self.dangerous = pg.sprite.Group()
         self.h_bullets, self.enemies, self.e_bullets = None, None, None
-        self.hero, self.camera, self.layers, self.zone_events = None, None, None, None
+        self.hero, self.a, self.layers, self.zone_events = None, None, None, None
 
     def build(self, player):
         self.hero = self.hero_builder.build(player)
@@ -49,8 +50,10 @@ class LevelBuilder:
 class Level:
     def __init__(self, builder: LevelBuilder):
         self.container = builder.container
-        self.screen_rect = pg.Rect(SCREEN_SIZE)
-        self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        #self.screen_rect = pg.Rect(SCREEN_SIZE)
+        self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pg.RESIZABLE)
+        self.screen_rect = self.screen.get_rect()
+        self.monitor_size = [pg.display.Info().current_w, pg.display.Info().current_h]
         self.cursor = Cursor(self.container, pg.mouse.get_pos())
         pg.mouse.set_visible(False)
 
@@ -73,7 +76,7 @@ class Level:
 
     def check_bullets_hits(self):
         pg.sprite.groupcollide(self.h_bullets, self.platforms, True, False, collided=collide_mask)
-        enemies_hits = pg.sprite.groupcollide(self.h_bullets, self.enemies, True, False )
+        enemies_hits = pg.sprite.groupcollide(self.h_bullets, self.enemies, True, False)
         enemies_damaged = list(enemies_hits.values())
         enemies_damaged = np.array(enemies_damaged).flatten()
 
