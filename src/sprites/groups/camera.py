@@ -7,11 +7,10 @@ class CameraBuilder:
         self.container = container
         self.world_size = pg.Rect(0, 0, level_dto.map_width * 32, level_dto.map_height * 32)
         self.screen_size = screen_size
-        self.gap_line = level_dto.gap_line
-        self.camera_name = level_dto.camera_name
+        self.gaps = level_dto.gaps
 
     def build(self, hero):
-        return self.container.object_from_name(self.camera_name, hero, self)
+        return self.container.object_from_name(self.gaps.name, hero, self)
 
 
 class Camera(ScrollAdjustedGroup):
@@ -22,7 +21,6 @@ class Camera(ScrollAdjustedGroup):
         self.target = target
         self.world_size = builder.world_size
         self.screen_size = builder.screen_size
-        self.gap_line = builder.gap_line
 
     def do_scroll(self, x, y, smooth):
         self.scroll += (pg.Vector2((x, y)) - self.scroll) * smooth
@@ -40,15 +38,19 @@ class Camera(ScrollAdjustedGroup):
 class CameraVerticalGap(Camera):
     def __init__(self, target, builder: CameraBuilder):
         super().__init__(target, builder)
+        self.gaps_list = builder.gaps.list
 
     def update(self, *args):
         super().update(*args)
         if self.target:
             x = -self.target.rect.center[0] + self.screen_size.width / 2
 
-            if self.target.rect.center[1] > self.gap_line:
-                y = -self.target.rect.center[1] + self.screen_size.height / 2
-            else:
-                y = -self.target.rect.center[1] + self.screen_size.height
+            for gap in self.gaps_list:
+                if gap["end"] > self.target.rect.center[1] > gap["init"]:
+                    y = -(gap["init"]+gap['end']/2) + self.screen_size.height / 2
+                    self.do_scroll(x, y, 0.05)
+                    return
 
+            y = -self.target.rect.center[1] + self.screen_size.height / 2
             self.do_scroll(x, y, 0.05)
+

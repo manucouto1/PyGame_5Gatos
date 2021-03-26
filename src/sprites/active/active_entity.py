@@ -43,6 +43,8 @@ class ActiveEntity(pg.sprite.Sprite):
             self.vel += (GRAVITY/50)*dt
             if self.vel.y > 63:
                 self.vel.y = 63
+            if self.vel.x > 63:
+                self.vel.x = 63
 
     def jump(self):
         if self.onGround:
