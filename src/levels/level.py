@@ -30,7 +30,7 @@ class LevelBuilder:
         self.zone_events_builder = EventsBuilder(container, self.level_dto)
         self.platforms = pg.sprite.Group()
         self.dangerous = pg.sprite.Group()
-        self.h_bullets, self.enemies, self.e_bullets = None, None, None
+        self.h_bullets, self.enemies, self.e_bullets, self.camera = None, None, None, None
         self.hero, self.a, self.layers, self.zone_events = None, None, None, None
 
     def build(self, player):
@@ -70,7 +70,6 @@ class Level:
             self.e_bullets = builder.e_bullets
             self.zone_events = builder.zone_events_builder.build(self, self.camera.scroll)
             self.dead_enemies = ScrollAdjustedGroup(self.camera.scroll)
-
         except IOError:
             print("Level Error")
 
