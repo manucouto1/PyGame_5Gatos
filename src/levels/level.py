@@ -30,7 +30,7 @@ class LevelBuilder:
         self.zone_events_builder = EventsBuilder(container, self.level_dto)
         self.platforms = pg.sprite.Group()
         self.dangerous = pg.sprite.Group()
-        self.h_bullets, self.enemies, self.e_bullets = None, None, None
+        self.h_bullets, self.enemies, self.e_bullets, self.camera = None, None, None, None
         self.hero, self.a, self.layers, self.zone_events = None, None, None, None
 
     def build(self, player):
@@ -56,6 +56,7 @@ class Level:
         self.monitor_size = [pg.display.Info().current_w, pg.display.Info().current_h]
         self.cursor = Cursor(self.container, pg.mouse.get_pos())
         pg.mouse.set_visible(False)
+
         try:
             self.dto = builder.level_dto
             self.bg = self.container.image_from_parts(self.dto.bg)
@@ -69,7 +70,7 @@ class Level:
             self.e_bullets = builder.e_bullets
             self.zone_events = builder.zone_events_builder.build(self, self.camera.scroll)
             self.dead_enemies = ScrollAdjustedGroup(self.camera.scroll)
-            self.limit = self.camera.world_size[3]
+
         except IOError:
             print("Level Error")
 
