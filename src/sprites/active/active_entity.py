@@ -73,21 +73,18 @@ class ActiveEntity(pg.sprite.Sprite):
     def collide_ground(self, xvel, yvel, platforms):
         collide_l = pg.sprite.spritecollide(self, platforms, False)
         for p in collide_l:
-            if yvel != 0:
-                if pg.sprite.collide_mask(self, p):
-                    if yvel > 0:
-                        self.rect.bottom = p.rect.top
-                        self.onGround = True
-                        self.num_jumps = 0
-                    if yvel < 0:
-                        self.rect.top = p.rect.bottom
-                        self.vel.y = 0
-            if xvel != 0:
-                if pg.sprite.collide_rect(self, p):
-                    if xvel > 0:
-                        self.rect.right = p.rect.left
-                    if xvel < 0:
-                        self.rect.left = p.rect.right
+            if pg.sprite.collide_rect(self, p):
+                if yvel > 0:
+                    self.rect.bottom = p.rect.top
+                    self.onGround = True
+                    self.num_jumps = 0
+                if yvel < 0:
+                    self.rect.top = p.rect.bottom
+                    self.vel.y = 0
+                if xvel > 0:
+                    self.rect.right = p.rect.left
+                if xvel < 0:
+                    self.rect.left = p.rect.right
 
     def apply(self, platforms, dt):
         self.gravity(dt)
