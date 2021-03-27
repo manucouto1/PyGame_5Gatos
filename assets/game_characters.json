@@ -1,6 +1,10 @@
 {
   "tofe": {
     "name": "tofe",
+    "height": 32,
+    "width": 32,
+    "rescale_x": 32,
+    "rescale_y": 32,
     "sheet": "Hero_full.png",
     "projectile": "wool3.png",
     "rows": 6,
@@ -9,6 +13,10 @@
 
   "dummy": {
     "name": "enemy",
+    "height": 32,
+    "width": 32,
+    "rescale_x": 32,
+    "rescale_y": 32,
     "sheet": "enemy_full.png",
     "projectile": null,
     "rows": 4,
@@ -16,8 +24,12 @@
   },
 
   "turret": {
-    "name": "enemy",
-    "sheet": "enemy_full.png",
+    "name": "fufi",
+    "height": 64,
+    "width": 64,
+    "rescale_x": 32,
+    "rescale_y": 32,
+    "sheet": "standing/Sprite-fufi-standing-Sheet.png",
     "projectile": "wool.png",
     "rows": 4,
     "path": "src.sprites.active.enemy_turret_shutter.EnemyTurretShutter"

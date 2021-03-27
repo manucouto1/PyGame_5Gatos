@@ -1,5 +1,6 @@
 import pygame as pg
 import numpy as np
+import parallax as px
 from pygame.sprite import collide_mask
 
 from src.sprites.groups.Events import EventsBuilder
@@ -9,6 +10,7 @@ from src.sprites.groups.camera import CameraBuilder
 from src.sprites.groups.enemies import EnemiesBuilder
 from src.sprites.groups.scroll_adjusted import ScrollAdjustedGroup
 from src.sprites.passive.cursor import Cursor
+from src.utils import assets
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
@@ -50,16 +52,17 @@ class LevelBuilder:
 class Level:
     def __init__(self, builder: LevelBuilder):
         self.container = builder.container
-        #self.screen_rect = pg.Rect(SCREEN_SIZE)
-        self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pg.RESIZABLE)
-        self.screen_rect = self.screen.get_rect()
+        self.screen_rect = pg.Rect(SCREEN_SIZE)
         self.monitor_size = [pg.display.Info().current_w, pg.display.Info().current_h]
+        self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),  pg.HWSURFACE | pg.DOUBLEBUF)
         self.cursor = Cursor(self.container, pg.mouse.get_pos())
         pg.mouse.set_visible(False)
 
         try:
             self.dto = builder.level_dto
-            self.bg = self.container.image_from_parts(self.dto.bg)
+            self.limit = self.dto.map_height * self.dto.tile_size
+            self.bg = px.ParallaxSurface((self.dto.map_width * self.dto.tile_size, self.dto.map_height * self.dto.tile_size), pg.RLEACCEL)
+            self.bg.add(assets.path_to(self.dto.bg), 1)
             self.layers = builder.layers
             self.enemies = builder.enemies
             self.hero = builder.hero
@@ -87,7 +90,7 @@ class Level:
                 self.dead_enemies.add(enemy_hit)
 
         list_remove = list(
-            filter(lambda bll: not self.dto.map_width * 32 > bll.x > 0 or not self.dto.map_height * 32 > bll.y > 0,
+            filter(lambda bll: not self.dto.map_width * self.dto.tile_size > bll.x > 0 or not self.dto.map_height * self.dto.tile_size > bll.y > 0,
                    self.h_bullets.sprites()))
         self.h_bullets.remove(list_remove)
 
@@ -95,7 +98,7 @@ class Level:
 
         pg.sprite.groupcollide(self.e_bullets, self.platforms, True, False, collided=collide_mask)
         list_remove = list(
-            filter(lambda bll: not self.dto.map_width * 32 > bll.x > 0 or not self.dto.map_height * 32 > bll.y > 0,
+            filter(lambda bll: not self.dto.map_width * self.dto.tile_size > bll.x > 0 or not self.dto.map_height * self.dto.tile_size > bll.y > 0,
                    self.e_bullets.sprites()))
 
         self.e_bullets.remove(list_remove)
@@ -130,6 +133,8 @@ class Level:
         self.camera.update(self.platforms, self.dangerous, dt)
         self.cursor.update(pg.mouse.get_pos())
 
+
+
     def map_limit(self):
         (x, y, h, w) = self.screen.get_rect()
         (cam_x, cam_y) = self.camera.camera_rect
@@ -138,7 +143,7 @@ class Level:
         self.hero.rect.clamp_ip((x, y, h, w))
 
     def draw(self):
-        self.screen.blit(self.bg, (0, 0))
+        self.bg.draw(self.screen)
         self.map_limit()
         self.layers.draw(self.screen)
         self.enemies.draw(self.screen)

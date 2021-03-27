@@ -3,14 +3,13 @@
          "name": "tofe",
          "scale": 32,
          "x":2,
-         "y":24
+         "y":33
         },
  "enemies":[
         {
          "name":"dummy",
          "scale": 32,
-         "x":59,
-          "y":22
+         "x":59, "y":22
         },
         {
          "name":"dummy",
