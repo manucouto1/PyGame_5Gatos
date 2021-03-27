@@ -56,3 +56,7 @@ class EnemyTurretShooter(ShooterEntity):
 
     def is_hit(self):
         self.life -= 1
+        if self.life == 0:
+            self.mixer.play_destroy_enemy()
+        else:
+            self.mixer.play_enemy_hit()

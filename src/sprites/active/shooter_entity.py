@@ -30,4 +30,6 @@ class ShooterEntity(ActiveEntity):
 
         bullet.trajectory(m_pos)
 
+        self.mixer.play_shoot()
+
         return bullet

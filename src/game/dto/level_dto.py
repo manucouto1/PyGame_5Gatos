@@ -15,6 +15,8 @@ class LevelDTO:
                 if level_config is not None:
                     self.path = level_config["path"]
                     self.bg = level_config["background"]
+                    self.sounds = level_config["sounds_profile"]
+                    self.music = level_config["music_profile"]
                     tiles = level_config["tiles"]
                     entities = level_config["entities"]
                     events = level_config['events']

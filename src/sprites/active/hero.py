@@ -39,6 +39,7 @@ class Hero(ShooterEntity):
             if self.last_hit + 2 < new_hit:
                 self.last_hit = new_hit
                 self.life.decrease()
+                self.mixer.play_hero_hit()
 
     def is_hit_destroy(self, dangerous):
         list_e_bullets = pg.sprite.spritecollide(self, dangerous, True, collided=collide_mask)
@@ -47,6 +48,7 @@ class Hero(ShooterEntity):
             if self.last_hit + 2 < new_hit:
                 self.last_hit = new_hit
                 self.life.decrease()
+                self.mixer.play_hero_hit()
 
     def update(self, platforms, _, dt):
         if self.movement:

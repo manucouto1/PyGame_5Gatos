@@ -26,6 +26,8 @@ class ActiveEntity(pg.sprite.Sprite):
         self.jump_strength = 27
         self.num_jumps = 0
 
+        self.mixer = container.get_object('mixer')
+
     def idle_loop(self, dt):
         self.image = self.sheet[0].next(dt)
         self.mask = self.sheet.get_mask()
@@ -51,10 +53,12 @@ class ActiveEntity(pg.sprite.Sprite):
             self.vel.y = -self.jump_strength
             self.num_jumps += 1
             print("jump num:", self.num_jumps)
+            self.mixer.play_jump()
         elif self.num_jumps < 2:
             self.vel.y = -self.jump_strength
             self.num_jumps += 1
             print("double num:", self.num_jumps)
+            self.mixer.play_jump()
 
     def move_left(self):
         self.vel.x = -self.speed
