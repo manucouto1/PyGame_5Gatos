@@ -10,7 +10,7 @@ class EnemyDummy(Enemy):
         Enemy.__init__(self, container, entity, *groups)
         self.moving = LEFT
 
-    def move(self):
+    def move(self, dt):
         if self.moving == RIGHT:
             self.move_right()
         elif self.moving == LEFT:

@@ -15,7 +15,6 @@ from src.utils import assets
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
 
-
 white = (255, 255, 255)
 
 SCREEN_SIZE = pg.Rect((0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -56,15 +55,17 @@ class Level:
         self.container = builder.container
         self.screen_rect = pg.Rect(SCREEN_SIZE)
         self.monitor_size = [pg.display.Info().current_w, pg.display.Info().current_h]
-        self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),  pg.HWSURFACE | pg.DOUBLEBUF)
+        self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pg.HWSURFACE | pg.DOUBLEBUF)
         self.cursor = Cursor(self.container, pg.mouse.get_pos())
         pg.mouse.set_visible(False)
 
         try:
             self.dto = builder.level_dto
             self.limit = self.dto.map_height * self.dto.tile_size
-            self.bg = px.ParallaxSurface((self.dto.map_width * self.dto.tile_size, self.dto.map_height * self.dto.tile_size), pg.RLEACCEL)
-            self.bg.add(assets.path_to(self.dto.bg), 1)
+            self.bg = px.ParallaxSurface(
+                (self.dto.map_width * self.dto.tile_size, self.dto.map_height * self.dto.tile_size), pg.RLEACCEL)
+            for i in range(1, 6):
+                self.bg.add(assets.path_to('levels', self.dto.level_name, self.dto.bg, f"{i}.png"), 6 - i)
             self.layers = builder.layers
             self.enemies = builder.enemies
             self.hero = builder.hero
@@ -75,7 +76,7 @@ class Level:
             self.e_bullets = builder.e_bullets
             self.zone_events = builder.zone_events_builder.build(self, self.camera.scroll)
             self.dead_enemies = ScrollAdjustedGroup(self.camera.scroll)
-
+            self.container.set_object('zone_events', self.zone_events)
             self.container.get_object('mixer').load_new_profile(builder.level_sounds)
             self.container.get_object('mixer').load_music(builder.level_music)
 
@@ -85,35 +86,28 @@ class Level:
     def check_bullets_hits(self):
         pg.sprite.groupcollide(self.h_bullets, self.platforms, True, False, collided=collide_mask)
         enemies_hits = pg.sprite.groupcollide(self.h_bullets, self.enemies, True, False)
-        enemies_damaged = list(enemies_hits.values())
-        enemies_damaged = np.array(enemies_damaged).flatten()
+        for bullet, enemies_damaged in enemies_hits.items():
+            for enemy_hit in enemies_damaged:
+                enemy_hit.is_hit(bullet)
+                if enemy_hit.life == 0:
+                    self.enemies.remove(enemy_hit)
+                    self.dead_enemies.add(enemy_hit)
 
-        for enemy_hit in enemies_damaged:
-            enemy_hit.is_hit()
-            if enemy_hit.life == 0:
-                self.enemies.remove(enemy_hit)
-                self.dead_enemies.add(enemy_hit)
+        map_filter = lambda bll: not self.dto.map_width * self.dto.tile_size > bll.x > 0 or \
+                                 not self.dto.map_height * self.dto.tile_size > bll.y > 0
 
-        list_remove = list(
-            filter(lambda bll: not self.dto.map_width * self.dto.tile_size > bll.x > 0 or not self.dto.map_height * self.dto.tile_size > bll.y > 0,
-                   self.h_bullets.sprites()))
-        self.h_bullets.remove(list_remove)
-
+        self.h_bullets.remove(list(filter(map_filter, self.h_bullets.sprites())))
         self.hero.is_hit_destroy(self.e_bullets)
 
         pg.sprite.groupcollide(self.e_bullets, self.platforms, True, False, collided=collide_mask)
-        list_remove = list(
-            filter(lambda bll: not self.dto.map_width * self.dto.tile_size > bll.x > 0 or not self.dto.map_height * self.dto.tile_size > bll.y > 0,
-                   self.e_bullets.sprites()))
-
-        self.e_bullets.remove(list_remove)
+        self.e_bullets.remove(list(filter(map_filter, self.e_bullets.sprites())))
 
     def notify(self, event):
         print(event)
 
     def next_level(self):
         director = self.container.get_object('director')
-        #TODO Control de musica
+        # TODO Control de musica
         director.exit_scene()
 
     def check_event_reached(self):
@@ -136,8 +130,6 @@ class Level:
         self.dead_enemies.update(self.platforms, dt)
         self.camera.update(self.platforms, self.dangerous, dt)
         self.cursor.update(pg.mouse.get_pos())
-
-
 
     def map_limit(self):
         (x, y, h, w) = self.screen.get_rect()
