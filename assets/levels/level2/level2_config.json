@@ -7,5 +7,7 @@
   },
   "entities": "level2_active_object.json",
   "events": "level2_events.json",
-  "gaps": "level2_gaps.json"
+  "gaps": "level2_gaps.json",
+  "sounds_profile": "common",
+  "music_profile": "game"
 }

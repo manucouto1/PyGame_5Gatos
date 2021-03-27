@@ -1,6 +1,7 @@
 import pygame as pg
 
 from src.game.dto.game_dto import GameDTO
+from src.game.mixer import Mixer
 from src.game.player import Player
 from src.game.container import Container
 
@@ -20,9 +21,11 @@ class Director:
         self.clock = pg.time.Clock()
         self.player = Player()
         self.container = Container()
+        self.mixer = Mixer()
         self.game = GameDTO("game_config.json")
         self.container.set_object('game', self.game)
         self.container.set_object('director', self)
+        self.container.set_object('mixer', self.mixer)
 
     def __new__(cls):
         if Director._instance is None:
@@ -57,11 +60,13 @@ class Director:
         pg.event.clear()
         scene = scene.build(self.player)
 
-        dt = self.clock.tick(self.game.fps)
+        #dt = self.clock.tick(self.game.fps)
         while not self.exit:
+            dt = self.clock.tick(self.game.fps)
             scene.events(pg.event.get())
             scene.update(dt)
+            self.mixer.check_busy()
             scene.draw()
 
             pg.display.flip()
-            dt = self.clock.tick(self.game.fps)
+            #dt = self.clock.tick(self.game.fps)

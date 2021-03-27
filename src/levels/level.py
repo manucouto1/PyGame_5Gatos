@@ -1,6 +1,6 @@
 import pygame as pg
 import numpy as np
-import external.parallax as px
+import parallax as px
 from pygame.sprite import collide_mask
 
 from src.sprites.groups.Events import EventsBuilder
@@ -34,6 +34,8 @@ class LevelBuilder:
         self.dangerous = pg.sprite.Group()
         self.h_bullets, self.enemies, self.e_bullets, self.camera = None, None, None, None
         self.hero, self.a, self.layers, self.zone_events = None, None, None, None
+        self.level_sounds = container.get_object("game").sounds[level_dto.sounds]
+        self.level_music = container.get_object("game").music[level_dto.music]
 
     def build(self, player):
         self.hero = self.hero_builder.build(player)
@@ -73,6 +75,9 @@ class Level:
             self.e_bullets = builder.e_bullets
             self.zone_events = builder.zone_events_builder.build(self, self.camera.scroll)
             self.dead_enemies = ScrollAdjustedGroup(self.camera.scroll)
+
+            self.container.get_object('mixer').load_new_profile(builder.level_sounds)
+            self.container.get_object('mixer').load_music(builder.level_music)
 
         except IOError:
             print("Level Error")
