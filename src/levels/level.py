@@ -1,6 +1,6 @@
 import pygame as pg
 import numpy as np
-import parallax as px
+import external.parallax as px
 from pygame.sprite import collide_mask
 
 from src.sprites.groups.Events import EventsBuilder
@@ -125,8 +125,7 @@ class Level:
         self.h_bullets.update(dt)
         self.e_bullets.update(dt)
 
-        self.limit -= dt * 0.01
-        self.layers.update(self.limit)
+        self.layers.update(dt, self.camera.world_size.size)
 
         self.enemies.update(self.platforms, dt)
         self.dead_enemies.update(self.platforms, dt)
