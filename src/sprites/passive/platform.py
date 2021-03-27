@@ -1,5 +1,7 @@
 import pygame as pg
 
+from sprites.groups.scroll_adjusted import ScrollAdjustedGroup
+
 
 class Platform(pg.sprite.Sprite):
     def __init__(self, sheet, tile_size, plat_dto, *groups):
@@ -13,6 +15,7 @@ class Platform(pg.sprite.Sprite):
         self.mask = pg.mask.from_surface(self.image)
         self.rect.x = plat_dto.x * tile_size
         self.rect.y = plat_dto.y * tile_size
+        self.tile_size = tile_size
 
     def update(self, *args):
         pass
@@ -21,25 +24,34 @@ class Platform(pg.sprite.Sprite):
 class FallingPlatform(Platform):
     def __init__(self, sheet, tile_size, plat_dto, *groups):
         super().__init__(sheet, tile_size, plat_dto, *groups)
-        self.time_to_shake = self.rect.x
-        self.limit_speed = 1
+        self.row = self.rect.y // 32
+        self.col = self.rect.x // 32
+
+        self.time_to_fall = None
+
         self.last_level = None
         self.forth = True
-        self.shake_period = 50
+        self.shake_period = 10
         self.last_shake = 0
         self.vel = pg.Vector2((0, 0))
 
-    def update(self, limit_level):
-        limit_dt = 0 if self.last_level is None else self.last_level - limit_level
-        if self.rect.y > limit_level:
-            if self.time_to_shake > 0:
-                self.time_to_shake -= limit_dt
-                self.shake(limit_dt)
+    def update(self, dt, world_size):
+        if self.time_to_fall is None:
+            self.set_world_size(world_size)
+        self.time_to_fall -= dt
+        if self.time_to_fall < 5000:
+            if self.time_to_fall > 0:
+                self.shake(dt)
             else:
                 self.rect.y += 5
-                pass
 
-        self.last_level = limit_level
+            self.last_level = dt
+
+    def set_world_size(self, world_size):
+        w, h = world_size
+        w = w // self.tile_size
+        h = h // self.tile_size
+        self.time_to_fall = ((h - self.row) * w * 100) + (self.col * 100)
 
     def shake(self, dt):
         self.last_shake += dt
