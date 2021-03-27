@@ -17,7 +17,7 @@ class Enemy(ActiveEntity):
         self.sheet[2].set_frames_skip(2)
         self.sheet[3].set_frames_skip(2)
 
-    def move(self):
+    def move(self, dt):
         raise NotImplementedError
 
     def dead_loop(self, dt):
@@ -25,7 +25,7 @@ class Enemy(ActiveEntity):
 
     def update(self, platforms, dt):
         if self.life > 0:
-            self.move()
+            self.move(dt)
             self.walk_loop(dt)
             self.apply(platforms, dt)
         else:
@@ -33,9 +33,11 @@ class Enemy(ActiveEntity):
             self.dead_loop(dt)
             self.apply(platforms, dt)
 
-    def is_hit(self):
+    def is_hit(self, bullet):
         self.life -= 1
         if self.life == 0:
+            self.damage_effect(bullet)
             self.mixer.play_destroy_enemy()
         else:
+            self.damage_effect(bullet)
             self.mixer.play_enemy_hit()

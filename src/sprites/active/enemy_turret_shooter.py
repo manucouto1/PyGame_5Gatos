@@ -1,10 +1,14 @@
+from src.sprites.active.enemy import Enemy
 from src.sprites.active.shooter_entity import ShooterEntity
 import numpy as np
 
+from src.sprites.passive.event import ExtraLife
 
-class EnemyTurretShooter(ShooterEntity):
+
+class EnemyTurretShooter(ShooterEntity, Enemy):
     def __init__(self, container, entity, *groups):
         ShooterEntity.__init__(self, container, entity, *groups)
+        self.container = container
         self.hero = container.get_object('hero')
         self.e_bullets = container.get_object('e_bullets')
         self.walk_count = 0
@@ -31,9 +35,10 @@ class EnemyTurretShooter(ShooterEntity):
                 if self.dt_count >= self.wait_time:
                     self.wait_time = 450 / 5
                     self.dt_count = 0
-                    bullet = self.shoot((self.hero.rect.x, self.hero.rect.y))
-                    self.e_bullets.add(bullet)
-                    self.shots += 1
+                    if self.onGround:
+                        bullet = self.shoot((self.hero.rect.x, self.hero.rect.y))
+                        self.e_bullets.add(bullet)
+                        self.shots += 1
             else:
                 self.wait_time = 14400 / 5
                 self.shots = 0
@@ -51,12 +56,7 @@ class EnemyTurretShooter(ShooterEntity):
             self.apply(platforms, dt)
         else:
             self.vel.x = 0
-            self.dead_loop(dt)
-            self.apply(platforms, dt)
+            zone_events = self.container.get_object('zone_events')
+            zone_events.add(ExtraLife(self.hero, (self.rect.x, self.rect.y)))
+            self.kill()
 
-    def is_hit(self):
-        self.life -= 1
-        if self.life == 0:
-            self.mixer.play_destroy_enemy()
-        else:
-            self.mixer.play_enemy_hit()

@@ -14,14 +14,23 @@ class Heart(pg.sprite.Sprite):
         self.heart_id = 10 * state
         self.animation = 10
         self.decreasing = False
+        self.increasing = False
 
     def update(self):
         if self.decreasing:
             self.heart_id = self.heart_id + 1
             if self.heart_id % self.animation == 0:
                 self.decreasing = False
+        elif self.increasing:
+            self.heart_id = self.heart_id - 1
+            if self.heart_id % self.animation == 0:
+                self.increasing = False
+
         self.image = self.sheet.image_at((self.heart_id * self.orig_size, 0, self.orig_size, self.orig_size))
         self.image = pg.transform.scale(self.image, (Heart.SIZE, Heart.SIZE))
 
     def decrease(self):
         self.decreasing = True
+
+    def increase(self):
+        self.increasing = True

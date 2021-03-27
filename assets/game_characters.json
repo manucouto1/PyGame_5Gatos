@@ -29,7 +29,7 @@
     "width": 64,
     "rescale_x": 32,
     "rescale_y": 32,
-    "sheet": "standing/Sprite-fufi-standing-Sheet.png",
+    "sheet": "fufi_full.png",
     "projectile": "wool.png",
     "rows": 4,
     "path": "src.sprites.active.enemy_turret_shooter.EnemyTurretShooter"

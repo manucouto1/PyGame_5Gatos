@@ -1,6 +1,8 @@
 from pygame.sprite import Sprite
 import pygame as pg
 
+from src.utils import assets
+
 
 class Event(Sprite):
 
@@ -41,3 +43,18 @@ class EndGame(Event):
         Event.kill(self)
         self.observer.next_level()
         Sprite.kill(self)
+
+
+class ExtraLife(Event):
+    def __init__(self, hero, pos, *groups):
+        super().__init__(hero, *groups)
+        self.event = "Extra life"
+        self.image = hero.life.sheet.image_at((0, 0, 160, 160))
+        self.image = pg.transform.scale(self.image, (32, 32))
+        self.rect = self.image.get_rect()
+        self.rect.bottomleft = pos
+
+    def kill(self):
+        self.observer.add_life()
+        Sprite.kill(self)
+

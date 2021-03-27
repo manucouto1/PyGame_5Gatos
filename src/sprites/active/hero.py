@@ -37,6 +37,7 @@ class Hero(ShooterEntity):
         if its_hit:
             new_hit = time.time()
             if self.last_hit + 2 < new_hit:
+                self.damage_effect(its_hit)
                 self.last_hit = new_hit
                 self.life.decrease()
                 self.mixer.play_hero_hit()
@@ -46,9 +47,15 @@ class Hero(ShooterEntity):
         if list_e_bullets:
             new_hit = time.time()
             if self.last_hit + 2 < new_hit:
+                for its_hit in list_e_bullets:
+                    self.damage_effect(its_hit)
+                    self.jump()
                 self.last_hit = new_hit
                 self.life.decrease()
                 self.mixer.play_hero_hit()
+
+    def add_life(self):
+        self.life.increase()
 
     def update(self, platforms, _, dt):
         if self.movement:
@@ -57,4 +64,10 @@ class Hero(ShooterEntity):
             self.idle_loop(dt)
         self.life.update()
         self.apply(platforms, dt)
-        self.reset_movement()
+        if not self.getting_damage:
+            self.reset_movement()
+        else:
+            new_time = time.time()
+            if self.damage_time + 0.5 < new_time:
+                self.getting_damage = False
+                self.reset_movement()

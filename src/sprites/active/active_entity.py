@@ -1,3 +1,5 @@
+import time
+import random
 import pygame as pg
 
 from src.sprites.spritesheet import SpriteStripAnim
@@ -21,11 +23,12 @@ class ActiveEntity(pg.sprite.Sprite):
         self.movement = None
         self.direction = None
         self.onGround = False
+        self.getting_damage = False
         self.vel = pg.Vector2((0, 0))
         self.speed = 8
-        self.jump_strength = 27
+        self.jump_strength = 28
         self.num_jumps = 0
-
+        self.damage_time = 0
         self.mixer = container.get_object('mixer')
 
     def idle_loop(self, dt):
@@ -52,12 +55,10 @@ class ActiveEntity(pg.sprite.Sprite):
         if self.onGround:
             self.vel.y = -self.jump_strength
             self.num_jumps += 1
-            print("jump num:", self.num_jumps)
             self.mixer.play_jump()
         elif self.num_jumps < 2:
             self.vel.y = -self.jump_strength
             self.num_jumps += 1
-            print("double num:", self.num_jumps)
             self.mixer.play_jump()
 
     def move_left(self):
@@ -73,6 +74,28 @@ class ActiveEntity(pg.sprite.Sprite):
     def reset_movement(self):
         self.movement = False
         self.vel.x = 0
+
+    def damage_effect(self, its_hit):
+        bot_left_collided = its_hit.rect.collidepoint(self.rect.bottomleft)
+        top_left_collided = its_hit.rect.collidepoint(self.rect.topleft)
+        mid_left_collided = its_hit.rect.collidepoint(self.rect.midleft)
+
+        bot_right_collided = its_hit.rect.collidepoint(self.rect.bottomright)
+        top_right_collided = its_hit.rect.collidepoint(self.rect.topright)
+        mid_right_collided = its_hit.rect.collidepoint(self.rect.midright)
+
+        if bot_left_collided or top_left_collided or mid_left_collided:
+            self.move_right()
+
+        elif bot_right_collided or top_right_collided or mid_right_collided:
+            self.move_left()
+        else:
+            random.choice([self.move_right, self.move_left])()
+            
+        self.getting_damage = True
+        self.damage_time = time.time()
+
+        self.jump()
 
     def collide_ground(self, xvel, yvel, platforms):
         collide_l = pg.sprite.spritecollide(self, platforms, False)

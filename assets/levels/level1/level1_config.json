@@ -1,6 +1,6 @@
 {
   "path": "src.levels.level_2d_scroller.Scroller2D",
-  "background": "background.png",
+  "background": "background",
   "tiles": {
     "image":  "level1.png",
     "config": "level1.txt"
