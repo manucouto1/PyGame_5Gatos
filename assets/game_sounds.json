@@ -3,7 +3,7 @@
     "common": {
       "jump": "jump.ogg",
       "shoot": "ball_throw.ogg",
-      "hero_hit": "dog_hit.ogg",
+      "hero_hit": "dog_hit2.ogg",
       "enemy_hit": "cat_meow.ogg",
       "destroy_enemy": "cat_purr.ogg",
       "button_click": "button_click.ogg"
