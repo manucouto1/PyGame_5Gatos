@@ -5,7 +5,7 @@ import src.utils.assets as assets
 from src.sprites.spritesheet import SpriteSheet
 
 
-class ShutterEntity(ActiveEntity):
+class ShooterEntity(ActiveEntity):
     def __init__(self, container, entity, character, *groups):
         path_projectiles = assets.path_to('projectiles', character.projectile)
         self.projectile_sheet = SpriteSheet(container, path_projectiles)

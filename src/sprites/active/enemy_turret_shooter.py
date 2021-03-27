@@ -1,10 +1,10 @@
-from src.sprites.active.shutter_entity import ShutterEntity
+from src.sprites.active.shooter_entity import ShooterEntity
 import numpy as np
 
 
-class EnemyTurretShutter(ShutterEntity):
+class EnemyTurretShooter(ShooterEntity):
     def __init__(self, container, entity, *groups):
-        ShutterEntity.__init__(self, container, entity, *groups)
+        ShooterEntity.__init__(self, container, entity, *groups)
         self.hero = container.get_object('hero')
         self.e_bullets = container.get_object('e_bullets')
         self.walk_count = 0

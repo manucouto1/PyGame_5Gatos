@@ -1,7 +1,7 @@
 import pygame as pg
 from pygame._sprite import collide_mask
 
-from src.sprites.active.shutter_entity import ShutterEntity
+from src.sprites.active.shooter_entity import ShooterEntity
 from src.sprites.passive.life import Life
 import time
 
@@ -17,11 +17,11 @@ class HeroBuilder:
         return Hero(player, self)
 
 
-class Hero(ShutterEntity):
+class Hero(ShooterEntity):
     def __init__(self, player, builder: HeroBuilder):
         game = builder.container.get_object('game')
         character = game.characters[builder.entity_dto.name]
-        ShutterEntity.__init__(self, builder.container, builder.entity_dto, character)
+        ShooterEntity.__init__(self, builder.container, builder.entity_dto, character)
 
         self.last_hit = time.time()
         self.life = Life(builder.container, 3, player)

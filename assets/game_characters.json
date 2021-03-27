@@ -32,6 +32,6 @@
     "sheet": "standing/Sprite-fufi-standing-Sheet.png",
     "projectile": "wool.png",
     "rows": 4,
-    "path": "src.sprites.active.enemy_turret_shutter.EnemyTurretShutter"
+    "path": "src.sprites.active.enemy_turret_shooter.EnemyTurretShooter"
   }
 }
