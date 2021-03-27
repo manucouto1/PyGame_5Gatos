@@ -14,7 +14,7 @@ class ScreenGUI:
     def __init__(self, menu, image):
         self.menu = menu
         self.bg = assets.load_image(image)
-        self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pg.RESIZABLE)
+        self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         # list of elementGUI
         self.elementGUI = []
 

@@ -17,10 +17,12 @@ class Camera(ScrollAdjustedGroup):
     def __init__(self, target, builder: CameraBuilder):
         self.scroll = pg.Vector2(0, 0)
         ScrollAdjustedGroup.__init__(self, self.scroll, target)
-
         self.target = target
         self.world_size = builder.world_size
         self.screen_size = builder.screen_size
+        x = -self.target.rect.center[0] + self.screen_size.width / 2
+        y = -self.target.rect.center[1] + self.screen_size.height / 2
+        self.do_scroll(x, y, 1, 1)
 
     def do_scroll(self, x, y, smooth_x, smooth_y):
         (aux_x, aux_y) = (pg.Vector2((x, y)) - self.scroll)
@@ -33,7 +35,7 @@ class Camera(ScrollAdjustedGroup):
         if self.target:
             x = -self.target.rect.center[0] + self.screen_size.width / 2
             y = -self.target.rect.center[1] + self.screen_size.height / 2
-            self.do_scroll(x, y, 0.05, 0.005)
+            self.do_scroll(x, y, 0.05, 0.01)
 
 
 class CameraVerticalGap(Camera):
@@ -49,9 +51,9 @@ class CameraVerticalGap(Camera):
             for gap in self.gaps_list:
                 if gap["end"] > self.target.rect.center[1] > gap["init"]:
                     y = -(gap["init"]+gap['end']/2) + self.screen_size.height / 2
-                    self.do_scroll(x, y, 0.05, 0.0075)
+                    self.do_scroll(x, y, 0.05, 0.01)
                     return
 
             y = -self.target.rect.center[1] + self.screen_size.height / 2
-            self.do_scroll(x, y, 0.05, 0.0075)
+            self.do_scroll(x, y, 0.05, 0.01)
 

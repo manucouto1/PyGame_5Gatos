@@ -1,6 +1,5 @@
 import pygame as pg
 
-from src.game.dto.game_dto import GameDTO
 from src.levels.level import LevelBuilder
 from src.menu.screen import ScreenGUIInitial
 from src.sprites.passive.cursor import Cursor
