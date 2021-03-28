@@ -51,7 +51,7 @@ class Mixer:
         self.enemy_hit_sound.play() if self.enemy_hit_sound else print("Enemy hit not loaded")
 
     def play_destroy_enemy(self):
-        self.enemy_hit_sound.stop()  if self.enemy_hit_sound else print("Enemy hit not loaded")
+        self.enemy_hit_sound.stop() if self.enemy_hit_sound else print("Enemy hit not loaded")
         self.destroy_enemy_sound.play() if self.destroy_enemy_sound else print("Destroy enemy not loaded")
 
     def play_button_click(self):
@@ -64,7 +64,7 @@ class Mixer:
             self.playing = True
 
         if mixer.get_busy() and not self.changed:
-            mixer.music.set_volume(MAX_VOLUME * 0.3)
+            mixer.music.set_volume(MAX_VOLUME * 0.5)
             self.changed = True
 
         elif not mixer.get_busy() and self.changed:

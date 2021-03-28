@@ -1,0 +1,13 @@
+{
+  "path": "src.levels.level_2d_vertical_destruction.Scroller2DVerticalDestruction",
+  "background": "background",
+  "tiles": {
+    "image":  "level3.png",
+    "config": "level3.json"
+  },
+  "entities": "level3_active_object.json",
+  "events": "level3_events.json",
+  "gaps": "level3_gaps.json",
+  "sounds_profile": "common",
+  "music_profile": "game"
+}

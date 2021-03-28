@@ -5,8 +5,8 @@ import sys
 
 class Scroller2D(Level):
 
-    def __init__(self, level_name):
-        super().__init__(level_name)
+    def __init__(self, builder):
+        super().__init__(builder)
         self.fullscreen = False
         self.last_scroll_x = 0
         self.last_scroll_y = 0

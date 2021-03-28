@@ -1,6 +1,6 @@
-import pygame as pg
+import time
 
-from sprites.groups.scroll_adjusted import ScrollAdjustedGroup
+import pygame as pg
 
 
 class Platform(pg.sprite.Sprite):
@@ -35,17 +35,29 @@ class FallingPlatform(Platform):
         self.last_shake = 0
         self.vel = pg.Vector2((0, 0))
 
-    def update(self, dt, world_size):
+    def update(self, dt, collided=False):
+        """
         if self.time_to_fall is None:
             self.set_world_size(world_size)
         self.time_to_fall -= dt
+
         if self.time_to_fall < 5000:
             if self.time_to_fall > 0:
                 self.shake(dt)
             else:
                 self.rect.y += 5
-
             self.last_level = dt
+        """
+
+        if self.time_to_fall is None:
+            if collided:
+                self.time_to_fall = time.time()
+        else:
+            now = time.time()
+            if self.time_to_fall + 10 > now:
+                self.shake(dt)
+            else:
+                self.rect.y += 5
 
     def set_world_size(self, world_size):
         w, h = world_size

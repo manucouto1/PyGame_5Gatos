@@ -1,6 +1,7 @@
 import time
 import random
 import pygame as pg
+from pygame.sprite import collide_rect
 
 from src.sprites.spritesheet import SpriteStripAnim
 from src.utils import assets
@@ -12,7 +13,8 @@ class ActiveEntity(pg.sprite.Sprite):
     def __init__(self, container, entity, character, *groups):
         super().__init__(*groups)
         sheet_path = assets.path_to("characters", character.name, character.sheet)
-        sheet = SpriteStripAnim(container, sheet_path, (0, 0, character.height, character.width), character.rows, rows=4)
+        sheet = SpriteStripAnim(container, sheet_path, (0, 0, character.height, character.width), character.rows,
+                                rows=4)
 
         self.scroll = pg.Vector2(0, 0)
         self.sheet = sheet
@@ -45,7 +47,7 @@ class ActiveEntity(pg.sprite.Sprite):
 
     def gravity(self, dt):
         if not self.onGround:
-            self.vel += (GRAVITY/50)*dt
+            self.vel += (GRAVITY / 50) * dt
             if self.vel.y > 63:
                 self.vel.y = 63
             if self.vel.x > 63:
@@ -91,20 +93,21 @@ class ActiveEntity(pg.sprite.Sprite):
             self.move_left()
         else:
             random.choice([self.move_right, self.move_left])()
-            
+
         self.getting_damage = True
         self.damage_time = time.time()
 
         self.jump()
 
-    def collide_ground(self, xvel, yvel, platforms):
+    def collide_ground(self, xvel, yvel, platforms, dt):
         collide_l = pg.sprite.spritecollide(self, platforms, False)
         for p in collide_l:
-            if pg.sprite.collide_rect(self, p):
+            if collide_rect(self, p):
                 if yvel > 0:
                     self.rect.bottom = p.rect.top
                     self.onGround = True
                     self.num_jumps = 0
+                    p.update(dt, True)
                 if yvel < 0:
                     self.rect.top = p.rect.bottom
                     self.vel.y = 0
@@ -115,10 +118,10 @@ class ActiveEntity(pg.sprite.Sprite):
 
     def apply(self, platforms, dt):
         self.gravity(dt)
-        vel_x = (self.vel.x/50 * dt)
+        vel_x = (self.vel.x / 50 * dt)
         self.rect.x += vel_x if (vel_x <= 63) else 63
-        self.collide_ground(self.vel.x, 0, platforms)
+        self.collide_ground(self.vel.x, 0, platforms, dt)
         vel_y = (self.vel.y / 50 * dt)
         self.rect.y += vel_y if (vel_y <= 63) else 63
         self.onGround = False
-        self.collide_ground(0, self.vel.y, platforms)
+        self.collide_ground(0, self.vel.y, platforms, dt)

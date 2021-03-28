@@ -1,3 +1,7 @@
+import time
+import pygame as pg
+from pygame.sprite import collide_mask
+
 from src.sprites.active.enemy import Enemy
 from src.sprites.active.shooter_entity import ShooterEntity
 import numpy as np
@@ -5,9 +9,10 @@ import numpy as np
 from src.sprites.passive.event import ExtraLife
 
 
-class EnemyTurretShooter(ShooterEntity, Enemy):
+class EnemyTurretShooter(ShooterEntity):
     def __init__(self, container, entity, *groups):
         ShooterEntity.__init__(self, container, entity, *groups)
+        self.last_hit = time.time()
         self.container = container
         self.hero = container.get_object('hero')
         self.e_bullets = container.get_object('e_bullets')
@@ -48,6 +53,24 @@ class EnemyTurretShooter(ShooterEntity, Enemy):
     def dead_loop(self, dt):
         self.image = self.sheet[3].next(dt)
         self.mask = self.sheet.get_mask()
+
+    def is_hit(self, dangerous):
+        its_hit = pg.sprite.spritecollideany(self, dangerous, collided=collide_mask)
+        if its_hit:
+            new_hit = time.time()
+            if self.last_hit + 0.5 < new_hit:
+                self.damage_effect(its_hit)
+                self.last_hit = new_hit
+                self.mixer.play_hero_hit()
+
+    def is_shoot(self, bullet):
+        self.life -= 1
+        if self.life == 0:
+            self.damage_effect(bullet)
+            self.mixer.play_destroy_enemy()
+        else:
+            self.damage_effect(bullet)
+            self.mixer.play_enemy_hit()
 
     def update(self, platforms, dt):
         if self.life > 0:
