@@ -56,13 +56,29 @@ class Hero(ShooterEntity):
         self.last_hit = time.time()
         self.life.increase()
 
-    def update(self, platforms, _, dt):
+    def apply_2(self, platforms, platforms2, dt):
+        self.gravity(dt)
+        vel_x = (self.vel.x / 50 * dt)
+        self.rect.x += vel_x if (vel_x <= 63) else 63
+        self.collide_ground(self.vel.x, 0, platforms, dt)
+        vel_y = (self.vel.y / 50 * dt)
+        self.rect.y += vel_y if (vel_y <= 63) else 63
+        self.onGround = False
+        self.collide_ground(0, self.vel.y, platforms, dt)
+        self.collide_ground_falling(0, self.vel.y, platforms2, dt, collide_mask)
+
+    def update(self, platforms, _, dt, platforms2=None):
         if self.movement:
             self.walk_loop(dt)
         else:
             self.idle_loop(dt)
+
         self.life.update()
-        self.apply(platforms, dt)
+        if platforms2 is None:
+            self.apply(platforms, dt)
+        else:
+            self.apply_2(platforms, platforms2, dt)
+
         if not self.getting_damage:
             self.reset_movement()
         else:

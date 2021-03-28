@@ -65,6 +65,7 @@ class Level:
                 (self.dto.map_width * self.dto.tile_size, self.dto.map_height * self.dto.tile_size), pg.RLEACCEL)
             for i in range(1, 6):
                 self.bg.add(assets.path_to('levels', self.dto.level_name, self.dto.bg, f"{i}.png"), 6 - i)
+
             self.layers = builder.layers
             self.enemies = builder.enemies
             self.hero = builder.hero
@@ -73,14 +74,16 @@ class Level:
             self.dangerous = builder.dangerous
             self.h_bullets = builder.h_bullets
             self.e_bullets = builder.e_bullets
+
             self.zone_events = builder.zone_events_builder.build(self, self.camera.scroll)
             self.dead_enemies = ScrollAdjustedGroup(self.camera.scroll)
             self.container.set_object('zone_events', self.zone_events)
+            print("Estamos aquí")
             self.container.get_object('mixer').load_new_profile(builder.level_sounds)
             self.container.get_object('mixer').load_music(builder.level_music)
 
-        except IOError:
-            print("Level Error")
+        except IOError as ex:
+            print("Level Error > ", ex)
 
     def check_limits(self, bll):
         return not self.dto.map_width * self.dto.tile_size > bll.x > 0 or \
@@ -124,7 +127,7 @@ class Level:
         self.h_bullets.update(dt)
         self.e_bullets.update(dt)
 
-        self.layers.update(dt, self.camera.world_size.size, self.hero)
+        self.layers.update(dt)
         self.enemies.update(self.platforms, dt)
         self.dead_enemies.update(self.platforms, dt)
         self.camera.update(self.platforms, self.dangerous, dt)

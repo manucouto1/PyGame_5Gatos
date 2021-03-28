@@ -44,7 +44,13 @@ class LevelDTO:
 
                 self.enemies = []
                 for entity in entities_config["enemies"]:
-                    self.enemies.append(EntityDTO(entity))
+                    enemy_aux = dict()
+                    enemy_aux["name"] = entity["name"]
+                    enemy_aux["scale"] = entity["scale"]
+                    for pos in entity["positions"]:
+                        enemy_aux["x"] = pos["x"]
+                        enemy_aux["y"] = pos["y"]
+                        self.enemies.append(EntityDTO(enemy_aux))
 
             with open(assets.path_to('levels', level_name, events)) as f:
                 entities_config = json.load(f)
