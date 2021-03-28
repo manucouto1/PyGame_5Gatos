@@ -4,7 +4,8 @@
 	"map_height": 25,
 	"layers": [
 		{
-			"name": "0", 
+			"name": "0",
+			"path": "src.sprites.passive.platform.Platform",
 			"positions": [
 				{ "x":11, "y":16, "id":0 },
 				{ "x":11, "y":17, "id":1 },
@@ -227,7 +228,8 @@
 			]
 		},
 		{
-			"name": "1", 
+			"name": "1",
+			"path": "src.sprites.passive.platform.Platform",
 			"positions": [
 				{ "x":0, "y":16, "id":17 },
 				{ "x":0, "y":17, "id":18 },
@@ -619,7 +621,8 @@
 			]
 		},
 		{
-			"name": "2", 
+			"name": "2",
+			"path": "src.sprites.passive.platform.Platform",
 			"positions": [
 				{ "x":11, "y":23, "id":51 },
 				{ "x":12, "y":23, "id":51 },

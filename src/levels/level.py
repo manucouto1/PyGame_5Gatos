@@ -1,5 +1,4 @@
 import pygame as pg
-import numpy as np
 import parallax as px
 from pygame.sprite import collide_mask
 
@@ -83,31 +82,31 @@ class Level:
         except IOError:
             print("Level Error")
 
+    def check_limits(self, bll):
+        return not self.dto.map_width * self.dto.tile_size > bll.x > 0 or \
+               not self.dto.map_height * self.dto.tile_size > bll.y > 0
+
     def check_bullets_hits(self):
         pg.sprite.groupcollide(self.h_bullets, self.platforms, True, False, collided=collide_mask)
         enemies_hits = pg.sprite.groupcollide(self.h_bullets, self.enemies, True, False)
         for bullet, enemies_damaged in enemies_hits.items():
             for enemy_hit in enemies_damaged:
-                enemy_hit.is_hit(bullet)
+                enemy_hit.is_shoot(bullet)
                 if enemy_hit.life == 0:
                     self.enemies.remove(enemy_hit)
                     self.dead_enemies.add(enemy_hit)
 
-        map_filter = lambda bll: not self.dto.map_width * self.dto.tile_size > bll.x > 0 or \
-                                 not self.dto.map_height * self.dto.tile_size > bll.y > 0
-
-        self.h_bullets.remove(list(filter(map_filter, self.h_bullets.sprites())))
+        self.h_bullets.remove(list(filter(self.check_limits, self.h_bullets.sprites())))
         self.hero.is_hit_destroy(self.e_bullets)
 
         pg.sprite.groupcollide(self.e_bullets, self.platforms, True, False, collided=collide_mask)
-        self.e_bullets.remove(list(filter(map_filter, self.e_bullets.sprites())))
+        self.e_bullets.remove(list(filter(self.check_limits, self.e_bullets.sprites())))
 
     def notify(self, event):
         print(event)
 
     def next_level(self):
         director = self.container.get_object('director')
-        # TODO Control de musica
         director.exit_scene()
 
     def check_event_reached(self):
@@ -120,12 +119,12 @@ class Level:
         self.hero.is_hit(self.dangerous)
         self.hero.is_hit(self.enemies)
         self.hero.is_hit(self.e_bullets)
+        self.enemies.is_hit(self.dangerous)
 
         self.h_bullets.update(dt)
         self.e_bullets.update(dt)
 
-        self.layers.update(dt, self.camera.world_size.size)
-
+        self.layers.update(dt, self.camera.world_size.size, self.hero)
         self.enemies.update(self.platforms, dt)
         self.dead_enemies.update(self.platforms, dt)
         self.camera.update(self.platforms, self.dangerous, dt)

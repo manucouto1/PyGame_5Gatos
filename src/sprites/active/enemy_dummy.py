@@ -1,3 +1,5 @@
+from pygame.sprite import collide_rect
+
 from src.sprites.active.enemy import Enemy
 import pygame as pg
 
@@ -16,7 +18,7 @@ class EnemyDummy(Enemy):
         elif self.moving == LEFT:
             self.move_left()
 
-    def collide_ground(self, xvel, yvel, platforms):
+    def collide_ground(self, xvel, yvel, platforms, _):
         collide_l = pg.sprite.spritecollide(self, platforms, False)
         bot_left_collided = 0
         bot_right_collided = 0

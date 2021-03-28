@@ -1,11 +1,9 @@
 import pygame as pg
-from pygame._sprite import collide_mask
 
+from pygame.sprite import collide_mask
 from src.sprites.active.shooter_entity import ShooterEntity
 from src.sprites.passive.life import Life
 import time
-
-from src.sprites.spritesheet import SpriteSheet
 
 
 class HeroBuilder:
@@ -32,16 +30,6 @@ class Hero(ShooterEntity):
         elif self.direction == pg.K_RIGHT:
             self.image = self.sheet[2].next(dt)
 
-    def is_hit(self, dangerous):
-        its_hit = pg.sprite.spritecollideany(self, dangerous, collided=collide_mask)
-        if its_hit:
-            new_hit = time.time()
-            if self.last_hit + 2 < new_hit:
-                self.damage_effect(its_hit)
-                self.last_hit = new_hit
-                self.life.decrease()
-                self.mixer.play_hero_hit()
-
     def is_hit_destroy(self, dangerous):
         list_e_bullets = pg.sprite.spritecollide(self, dangerous, True, collided=collide_mask)
         if list_e_bullets:
@@ -54,7 +42,18 @@ class Hero(ShooterEntity):
                 self.life.decrease()
                 self.mixer.play_hero_hit()
 
+    def is_hit(self, dangerous):
+        its_hit = pg.sprite.spritecollideany(self, dangerous, collided=collide_mask)
+        if its_hit:
+            new_hit = time.time()
+            if self.last_hit + 2 < new_hit:
+                self.damage_effect(its_hit)
+                self.last_hit = new_hit
+                self.life.decrease()
+                self.mixer.play_hero_hit()
+
     def add_life(self):
+        self.last_hit = time.time()
         self.life.increase()
 
     def update(self, platforms, _, dt):

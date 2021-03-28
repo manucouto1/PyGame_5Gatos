@@ -1,0 +1,11 @@
+{
+  "events": [
+      {
+        "path": "src.sprites.passive.event.EndGame",
+        "scale": 32,
+        "id": 21,
+        "x":24, "y":6
+      }
+  ]
+
+}

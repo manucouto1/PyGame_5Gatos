@@ -1,0 +1,36 @@
+{
+  "hero":{
+    "name": "tofe",
+    "scale": 32,
+    "x":1,
+    "y":55
+  },
+
+  "enemies": [
+    { "name":"dummy", "scale": 32, "x":6, "y":34},
+    { "name":"dummy", "scale": 32, "x":7, "y":53},
+    { "name":"dummy", "scale": 32, "x":6, "y":22},
+    { "name":"dummy", "scale": 32, "x":9, "y":44},
+    { "name":"dummy", "scale": 32, "x":13, "y":5},
+    { "name":"dummy", "scale": 32, "x":14, "y":24},
+    { "name":"dummy", "scale": 32, "x":15, "y":53},
+    { "name":"dummy", "scale": 32, "x":16, "y":8},
+    { "name":"dummy", "scale": 32, "x":16, "y":44},
+    { "name":"dummy", "scale": 32, "x":18, "y":5},
+    { "name":"dummy", "scale": 32, "x":19, "y":34},
+    { "name":"dummy", "scale": 32, "x":23, "y":22},
+    { "name": "turret", "scale": 32, "x":1, "y":21},
+    { "name": "turret", "scale": 32, "x":4, "y":3},
+    { "name": "turret", "scale": 32, "x":9, "y":48},
+    { "name": "turret", "scale": 32, "x":11, "y":35},
+    { "name": "turret", "scale": 32, "x":13, "y":30},
+    { "name": "turret", "scale": 32, "x":16, "y":3},
+    { "name": "turret", "scale": 32, "x":16, "y":40},
+    { "name": "turret", "scale": 32, "x":16, "y":48},
+    { "name": "turret", "scale": 32, "x":18, "y":16},
+    { "name": "turret", "scale": 32, "x":23, "y":40},
+    { "name": "maniac", "scale": 32, "x":3, "y":40},
+    { "name": "maniac", "scale": 32, "x":7, "y":15}
+  ]
+
+}

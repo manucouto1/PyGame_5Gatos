@@ -6,6 +6,7 @@ from src.utils import assets
 
 class LayersBuilder:
     def __init__(self, container, level_dto):
+        self.container = container
         path = assets.path_to('levels', level_dto.level_name, level_dto.tiles_image)
         self.sheet = SpriteSheet(container, path)
         self.level_dto = level_dto
@@ -19,10 +20,14 @@ class Layers(ScrollAdjustedLayeredGroup):
         super().__init__(camera_scroll)
         for layer in builder.level_dto.layers:
             for platform in layer.platforms:
-                self.add(Platform(builder.sheet, builder.level_dto.tile_size, platform), layer=layer.id)
+                self.add(builder.container.object_from_name(layer.path, builder.sheet, builder.level_dto.tile_size,
+                                                            platform), layer=layer.id)
 
-    def get_ground(self):
-        return self.get_sprites_from_layer(layer=1)
+    def get_ground(self, layer=1):
+        return self.get_sprites_from_layer(layer)
 
-    def get_dangerous(self):
-        return self.get_sprites_from_layer(layer=2)
+    def get_dangerous(self, layer=2):
+        return self.get_sprites_from_layer(layer)
+
+    def get_falling(self, layer=3):
+        return self.get_sprites_from_layer(layer)

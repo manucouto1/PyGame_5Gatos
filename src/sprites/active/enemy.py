@@ -1,5 +1,7 @@
-import pygame as pg
+import time
 
+import pygame as pg
+from pygame.sprite import collide_mask
 from src.sprites.active.active_entity import ActiveEntity
 
 GRAVITY = pg.Vector2((0, 2.8))
@@ -11,6 +13,7 @@ class Enemy(ActiveEntity):
         self.walk_count = 0
         self.life = 2
         self.dead_id = 0
+        self.last_hit = time.time()
 
         self.sheet[0].set_frames_skip(2)
         self.sheet[1].set_frames_skip(2)
@@ -33,7 +36,16 @@ class Enemy(ActiveEntity):
             self.dead_loop(dt)
             self.apply(platforms, dt)
 
-    def is_hit(self, bullet):
+    def is_hit(self, dangerous):
+        its_hit = pg.sprite.spritecollideany(self, dangerous, collided=collide_mask)
+        if its_hit:
+            new_hit = time.time()
+            if self.last_hit + 0.5 < new_hit:
+                self.damage_effect(its_hit)
+                self.last_hit = new_hit
+                self.mixer.play_hero_hit()
+
+    def is_shoot(self, bullet):
         self.life -= 1
         if self.life == 0:
             self.damage_effect(bullet)
