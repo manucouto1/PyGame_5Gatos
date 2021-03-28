@@ -21,6 +21,7 @@ class LevelDTO:
                     entities = level_config["entities"]
                     events = level_config['events']
                     self.tiles_image = tiles['image']
+                    self.layers_id = tiles["layers_id"]
 
             with open(assets.path_to('levels', level_name, level_config["gaps"])) as f:
                 self.gaps = GapsDTO(json.load(f))
@@ -31,6 +32,7 @@ class LevelDTO:
                     self.tile_size = tiles_config["tile_size"]
                     self.map_width = tiles_config["map_width"]
                     self.map_height = tiles_config["map_height"]
+
 
                     layers = tiles_config["layers"]
 
