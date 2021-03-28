@@ -18,16 +18,17 @@ class LayersBuilder:
 class Layers(ScrollAdjustedLayeredGroup):
     def __init__(self, camera_scroll, builder: LayersBuilder):
         super().__init__(camera_scroll)
+        self.layers_id = builder.level_dto.layers_id
         for layer in builder.level_dto.layers:
             for platform in layer.platforms:
                 self.add(builder.container.object_from_name(layer.path, builder.sheet, builder.level_dto.tile_size,
                                                             platform), layer=layer.id)
 
-    def get_ground(self, layer=1):
-        return self.get_sprites_from_layer(layer)
+    def get_ground(self):
+        return self.get_sprites_from_layer(self.layers_id["ground"])
 
-    def get_dangerous(self, layer=2):
-        return self.get_sprites_from_layer(layer)
+    def get_dangerous(self):
+        return self.get_sprites_from_layer(self.layers_id["danger"])
 
-    def get_falling(self, layer=3):
-        return self.get_sprites_from_layer(layer)
+    def get_falling(self):
+        return self.get_sprites_from_layer(self.layers_id["falling"])
