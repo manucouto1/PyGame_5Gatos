@@ -53,8 +53,7 @@ class CameraVerticalGap(Camera):
 
             for gap in self.gaps_list:
                 if gap["init"] < self.target.rect.center[1] < gap["end"]:
-                    print(gap["init"], self.target.rect[1], gap["end"])
-                    y = -(gap["init"]+gap['end']/2) + self.screen_size.height / 2
+                    y = -(gap["init"]+gap['end'])/2 + self.screen_size.height / 2
                     self.do_scroll(x, y, 0.05, 0.05)
                     return
 

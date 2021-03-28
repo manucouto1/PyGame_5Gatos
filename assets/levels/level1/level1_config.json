@@ -1,9 +1,9 @@
 {
-  "path": "src.levels.level_2d_scroller.Scroller2D",
+  "path": "src.levels.level_2d_vertical_destruction.Scroller2DVerticalDestruction",
   "background": "background",
   "tiles": {
     "image":  "level1.png",
-    "config": "level1.txt"
+    "config": "level1.json"
   },
   "entities": "level1_active_object.json",
   "events": "level1_events.json",
