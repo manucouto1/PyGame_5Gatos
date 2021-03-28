@@ -61,7 +61,6 @@ class EnemyTurretShooter(ShooterEntity):
             if self.last_hit + 0.5 < new_hit:
                 self.damage_effect(its_hit)
                 self.last_hit = new_hit
-                self.mixer.play_hero_hit()
 
     def is_shoot(self, bullet):
         self.life -= 1

@@ -68,7 +68,8 @@ class Mixer:
             self.playing = True
 
         if mixer.get_busy() and not self.changed:
-            mixer.music.set_volume(MAX_VOLUME * 0.5)
+            mixer.music.set_volume(MAX_VOLUME * 0.3)
+
             self.changed = True
 
         elif not mixer.get_busy() and self.changed:
