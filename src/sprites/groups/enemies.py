@@ -1,4 +1,5 @@
 from src.sprites.groups.scroll_adjusted import ScrollAdjustedLayeredGroup
+import pygame as pg
 
 
 class EnemiesBuilder:
@@ -18,6 +19,21 @@ class Enemies(ScrollAdjustedLayeredGroup):
             character = game.characters[entity.name]
             self.add(builder.container.object_from_name(character.path, builder.container, entity, character))
 
-    def is_hit(self, dangerous):
-        for sprite in self.sprites():
-            sprite.is_hit(dangerous)
+    def are_hit(self, dangerous):
+        enemies = pg.sprite.groupcollide(self, dangerous, False, False)
+        for (enemy, dangerous) in enemies.items():
+            enemy.is_hit(dangerous)
+
+    def are_shot(self, bullets, dead_group):
+        enemies = pg.sprite.groupcollide(self, bullets, False, True)
+        for (enemy, bullet) in enemies.items():
+            enemy.is_shoot(bullet[0])
+            if enemy.life <= 0:
+                self.remove(enemy)
+                dead_group.add(enemy)
+
+    def update(self, hero, *args):
+        for enemy in self.sprites():
+            if enemy.calc_distance(hero) < 500:
+                enemy.update(*args)
+

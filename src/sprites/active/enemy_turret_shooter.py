@@ -28,15 +28,18 @@ class EnemyTurretShooter(ShooterEntity):
         self.sheet[2].set_frames_skip(2)
         self.sheet[3].set_frames_skip(2)
 
-    def move(self, dt):
-        a = (self.rect.x - self.hero.rect.x) ** 2
-        b = (self.rect.y - self.hero.rect.y) ** 2
+    def calc_distance(self, hero):
+        a = (self.rect.x - hero.rect.x) ** 2
+        b = (self.rect.y - hero.rect.y) ** 2
 
-        distance = np.sqrt(a + b)
+        return np.sqrt(a + b)
+
+    def move(self, dt):
+        distance = self.calc_distance(self.hero)
         self.dt_count += dt
 
         if distance < 300:
-            if self.shots < 5:
+            if self.shots < 5 and len(self.e_bullets.sprites()) < 10:
                 if self.dt_count >= self.wait_time:
                     self.wait_time = 450 / 5
                     self.dt_count = 0
@@ -55,12 +58,10 @@ class EnemyTurretShooter(ShooterEntity):
         self.mask = self.sheet.get_mask()
 
     def is_hit(self, dangerous):
-        its_hit = pg.sprite.spritecollideany(self, dangerous, collided=collide_mask)
-        if its_hit:
-            new_hit = time.time()
-            if self.last_hit + 0.5 < new_hit:
-                self.damage_effect(its_hit)
-                self.last_hit = new_hit
+        new_hit = time.time()
+        if self.last_hit + 0.5 < new_hit:
+            self.damage_effect(dangerous[0])
+            self.last_hit = new_hit
 
     def is_shoot(self, bullet):
         self.life -= 1

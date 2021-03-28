@@ -31,13 +31,15 @@ class Hero(ShooterEntity):
             self.image = self.sheet[2].next(dt)
 
     def is_hit_destroy(self, dangerous):
-        list_e_bullets = pg.sprite.spritecollide(self, dangerous, True, collided=collide_mask)
-        if list_e_bullets:
+        #list_e_bullets = pg.sprite.spritecollide(self, dangerous, True, collided=collide_mask)
+        its_hit = pg.sprite.spritecollideany(self, dangerous, collided=collide_mask)
+        if its_hit:
             new_hit = time.time()
             if self.last_hit + 2 < new_hit:
-                for its_hit in list_e_bullets:
-                    self.damage_effect(its_hit)
-                    self.jump()
+                #for its_hit in list_e_bullets:
+                its_hit.kill()
+                self.damage_effect(its_hit)
+                self.jump()
                 self.last_hit = new_hit
                 self.life.decrease()
                 self.mixer.play_hero_hit()

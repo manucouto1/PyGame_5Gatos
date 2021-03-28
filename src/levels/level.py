@@ -11,6 +11,8 @@ from src.sprites.groups.scroll_adjusted import ScrollAdjustedGroup
 from src.sprites.passive.cursor import Cursor
 from src.utils import assets
 
+import threading
+
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
 
@@ -57,6 +59,7 @@ class Level:
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pg.HWSURFACE | pg.DOUBLEBUF)
         self.cursor = Cursor(self.container, pg.mouse.get_pos())
         pg.mouse.set_visible(False)
+        self.screen.set_alpha(None)
 
         try:
             self.dto = builder.level_dto
@@ -90,7 +93,9 @@ class Level:
                not self.dto.map_height * self.dto.tile_size > bll.y > 0
 
     def check_bullets_hits(self):
-        pg.sprite.groupcollide(self.h_bullets, self.platforms, True, False, collided=collide_mask)
+        pg.sprite.groupcollide(self.h_bullets, self.platforms, True, False)
+        pg.sprite.groupcollide(self.e_bullets, self.platforms, True, False)
+        """
         enemies_hits = pg.sprite.groupcollide(self.h_bullets, self.enemies, True, False)
         for bullet, enemies_damaged in enemies_hits.items():
             for enemy_hit in enemies_damaged:
@@ -98,12 +103,12 @@ class Level:
                 if enemy_hit.life == 0:
                     self.enemies.remove(enemy_hit)
                     self.dead_enemies.add(enemy_hit)
+        """
 
-        self.h_bullets.remove(list(filter(self.check_limits, self.h_bullets.sprites())))
         self.hero.is_hit_destroy(self.e_bullets)
-
-        pg.sprite.groupcollide(self.e_bullets, self.platforms, True, False, collided=collide_mask)
-        self.e_bullets.remove(list(filter(self.check_limits, self.e_bullets.sprites())))
+        self.enemies.are_shot(self.h_bullets, self.dead_enemies)
+        #self.h_bullets.remove(list(filter(self.check_limits, self.h_bullets.sprites())))
+        #self.e_bullets.remove(list(filter(self.check_limits, self.e_bullets.sprites())))
 
     def notify(self, event):
         print(event)
@@ -128,7 +133,7 @@ class Level:
         self.e_bullets.update(dt)
 
         self.layers.update(dt)
-        self.enemies.update(self.platforms, dt)
+        self.enemies.update(self.hero, self.platforms, dt)
         self.dead_enemies.update(self.platforms, dt)
         self.camera.update(self.platforms, self.dangerous, dt)
         self.cursor.update(pg.mouse.get_pos())
