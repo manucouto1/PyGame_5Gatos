@@ -1,5 +1,7 @@
 import time
 import random
+
+import numpy as np
 import pygame as pg
 from pygame.sprite import collide_rect
 
@@ -32,6 +34,12 @@ class ActiveEntity(pg.sprite.Sprite):
         self.num_jumps = 0
         self.damage_time = 0
         self.mixer = container.get_object('mixer')
+
+    def calc_distance(self, hero):
+        a = (self.rect.x - hero.rect.x) ** 2
+        b = (self.rect.y - hero.rect.y) ** 2
+
+        return np.sqrt(a + b)
 
     def idle_loop(self, dt):
         self.image = self.sheet[0].next(dt)
@@ -78,18 +86,14 @@ class ActiveEntity(pg.sprite.Sprite):
         self.vel.x = 0
 
     def damage_effect(self, its_hit):
-        bot_left_collided = its_hit.rect.collidepoint(self.rect.bottomleft)
-        top_left_collided = its_hit.rect.collidepoint(self.rect.topleft)
-        mid_left_collided = its_hit.rect.collidepoint(self.rect.midleft)
 
-        bot_right_collided = its_hit.rect.collidepoint(self.rect.bottomright)
-        top_right_collided = its_hit.rect.collidepoint(self.rect.topright)
-        mid_right_collided = its_hit.rect.collidepoint(self.rect.midright)
+        left = its_hit.rect.left > self.rect.left
 
-        if bot_left_collided or top_left_collided or mid_left_collided:
+        right = its_hit.rect.right > self.rect.right
+
+        if left:
             self.move_right()
-
-        elif bot_right_collided or top_right_collided or mid_right_collided:
+        elif right:
             self.move_left()
         else:
             random.choice([self.move_right, self.move_left])()
@@ -100,41 +104,43 @@ class ActiveEntity(pg.sprite.Sprite):
         self.jump()
 
     def collide_ground(self, xvel, yvel, platforms, dt, fun=collide_rect):
-        collide_l = pg.sprite.spritecollide(self, platforms, False, collided=fun)
-        for p in collide_l:
-            if fun(self, p):
-                if yvel > 0:
-                    self.rect.bottom = p.rect.top
-                    self.onGround = True
-                    self.num_jumps = 0
-                    p.update(dt, True)
-                if yvel < 0:
-                    self.rect.top = p.rect.bottom
-                    self.vel.y = 0
-                if xvel > 0:
-                    self.rect.right = p.rect.left
-                if xvel < 0:
-                    self.rect.left = p.rect.right
+        #collide_l = pg.sprite.spritecollide(self, platforms, False, collided=fun)
+        p = pg.sprite.spritecollideany(self, platforms, collided=fun)
+        #for p in collide_l:
+        if p:
+            if yvel > 0:
+                self.rect.bottom = p.rect.top
+                self.onGround = True
+                self.num_jumps = 0
+                p.update(dt, True)
+            if yvel < 0:
+                self.rect.top = p.rect.bottom
+                self.vel.y = 0
+            if xvel > 0:
+                self.rect.right = p.rect.left
+            if xvel < 0:
+                self.rect.left = p.rect.right
 
     def collide_ground_falling(self, xvel, yvel, platforms, dt, fun=collide_rect):
-        collide_l = pg.sprite.spritecollide(self, platforms, False, collided=fun)
-        for p in collide_l:
-            if fun(self, p):
-                if yvel > 0:
-                    """
-                    bottom_left = p.rect.collidepoint(self.rect.bottomleft)
-                    bottom_right = p.rect.collidepoint(self.rect.bottomright)
-                    mid_bottom = p.rect.collidepoint(self.rect.midbottom)
-                    if bottom_left and mid_bottom or bottom_right and mid_bottom:
-                    """
-                    self.rect.bottom = p.rect.top
-                    self.onGround = True
-                    self.num_jumps = 0
-                    p.update(dt, True)
-                if xvel > 0:
-                    self.rect.right = p.rect.left
-                if xvel < 0:
-                    self.rect.left = p.rect.right
+        #collide_l = pg.sprite.spritecollide(self, platforms, False, collided=fun)
+        p = pg.sprite.spritecollideany(self, platforms, collided=fun)
+        #for p in collide_l:
+        if p:
+            if yvel > 0:
+                """
+                bottom_left = p.rect.collidepoint(self.rect.bottomleft)
+                bottom_right = p.rect.collidepoint(self.rect.bottomright)
+                mid_bottom = p.rect.collidepoint(self.rect.midbottom)
+                if bottom_left and mid_bottom or bottom_right and mid_bottom:
+                """
+                self.rect.bottom = p.rect.top
+                self.onGround = True
+                self.num_jumps = 0
+                p.update(dt, True)
+            if xvel > 0:
+                self.rect.right = p.rect.left
+            if xvel < 0:
+                self.rect.left = p.rect.right
 
     def apply(self, platforms, dt):
         self.gravity(dt)

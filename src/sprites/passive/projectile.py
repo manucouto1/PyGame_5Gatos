@@ -1,10 +1,13 @@
 import pygame as pg
 import math
+import time
 
 
 class Projectile(pg.sprite.Sprite):
     def __init__(self, image, x, y, radius):
         super().__init__()
+        self.born_moment = time.time()
+        self.life_time = 2
         self.x = x
         self.y = y
         self.image = image
@@ -19,7 +22,11 @@ class Projectile(pg.sprite.Sprite):
         self.angle = math.atan2(slope_y, slope_x)
 
     def update(self, dt):
-        self.x += math.cos(self.angle) * self.vel.x / 50 * dt
-        self.y += math.sin(self.angle) * self.vel.y / 50 * dt
-        self.rect.x = self.x
-        self.rect.y = self.y
+        if time.time() - self.born_moment > self.life_time:
+            self.kill()
+
+        else:
+            self.x += math.cos(self.angle) * self.vel.x / 50 * dt
+            self.y += math.sin(self.angle) * self.vel.y / 50 * dt
+            self.rect.x = self.x
+            self.rect.y = self.y

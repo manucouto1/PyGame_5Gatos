@@ -37,12 +37,10 @@ class Enemy(ActiveEntity):
             self.apply(platforms, dt)
 
     def is_hit(self, dangerous):
-        its_hit = pg.sprite.spritecollideany(self, dangerous, collided=collide_mask)
-        if its_hit:
-            new_hit = time.time()
-            if self.last_hit + 0.5 < new_hit:
-                self.damage_effect(its_hit)
-                self.last_hit = new_hit
+        new_hit = time.time()
+        if self.last_hit + 0.5 < new_hit:
+            self.damage_effect(dangerous[0])
+            self.last_hit = new_hit
 
     def is_shoot(self, bullet):
         self.life -= 1
