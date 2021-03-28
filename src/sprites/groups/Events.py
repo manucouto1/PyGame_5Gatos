@@ -7,6 +7,8 @@ class EventsBuilder:
     def __init__(self, container, level_dto):
         self.container = container
         self.events = level_dto.events
+        path = assets.path_to('levels', level_dto.level_name, level_dto.tiles_image)
+        self.sheet = SpriteSheet(container, path)
 
     def build(self, level, camera_scroll):
         return Events(camera_scroll, level, self)
@@ -15,6 +17,5 @@ class EventsBuilder:
 class Events(ScrollAdjustedGroup):
     def __init__(self, camera_scroll, level, builder: EventsBuilder):
         super().__init__(camera_scroll)
-        sheet = SpriteSheet(builder.container, assets.path_to('characters', 'catcifer', 'standing', 'Sprite-catcifer-standing-Sheet.png'))
         for event in builder.events:
-            self.add(builder.container.object_from_name(event.path, sheet, event, level))
+            self.add(builder.container.object_from_name(event.path, builder.sheet, event, level))

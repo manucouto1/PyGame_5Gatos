@@ -33,10 +33,11 @@ class Item(Event):
 class EndGame(Event):
     def __init__(self, sheet, event_dto, observer, *groups):
         super().__init__(observer, *groups)
+        column = event_dto.id % 8
+        row = event_dto.id // 8
         self.event = "Level end"
-        self.image = sheet.image_at((0, 0, 32, 32))
-        print(self.image)
-        self.rect = self.image.get_rect()
+        self.rect = pg.Rect(column * event_dto.scale, row * event_dto.scale, event_dto.scale, event_dto.scale)
+        self.image = sheet.image_at(self.rect)
         self.rect.bottomleft = event_dto.pos
 
     def kill(self):

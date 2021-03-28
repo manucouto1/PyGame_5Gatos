@@ -8,7 +8,7 @@ class Scroller2DVerticalDestruction(Scroller2D):
     def __init__(self, builder):
         super().__init__(builder)
         self.falling_platforms = self.layers.get_falling()
-        self.platforms += self.falling_platforms
+
 
     def check_bullets_hits(self):
         super().check_bullets_hits()
@@ -27,9 +27,9 @@ class Scroller2DVerticalDestruction(Scroller2D):
         self.h_bullets.update(dt)
         self.e_bullets.update(dt)
 
-        self.enemies.update(self.platforms, dt)
-        self.dead_enemies.update(self.platforms, dt)
-        self.camera.update(self.platforms, self.dangerous, dt)
+        self.enemies.update(self.platforms+self.falling_platforms, dt)
+        self.dead_enemies.update(self.platforms+self.falling_platforms, dt)
+        self.camera.update(self.platforms, self.dangerous, dt, self.falling_platforms)
         self.layers.update(dt)
         self.cursor.update(pg.mouse.get_pos())
 

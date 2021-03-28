@@ -4,11 +4,11 @@ from src.utils import assets
 
 MAX_VOLUME = 0.8
 
+
 class Mixer:
     def __init__(self):
         self.changed = False
         self.playing = False
-
         self.jump_sound = None
         self.shoot_sound = None
         self.hero_hit_sound = None
@@ -18,20 +18,24 @@ class Mixer:
 
         self.music = None
 
+    @staticmethod
+    def load_sound(sound):
+        return mixer.Sound(assets.path_to("sounds", sound)) if sound else None
+
     def load_new_profile(self, sound_dto):
-        self.jump_sound = mixer.Sound(assets.path_to("sounds", sound_dto.jump)) if sound_dto.jump else None
-        self.shoot_sound = mixer.Sound(assets.path_to("sounds", sound_dto.shoot)) if sound_dto.shoot else None
-        self.hero_hit_sound = mixer.Sound(assets.path_to("sounds", sound_dto.hero_hit)) if sound_dto.hero_hit else None
-        self.enemy_hit_sound = mixer.Sound(assets.path_to("sounds", sound_dto.enemy_hit)) if sound_dto.enemy_hit else None
-        self.destroy_enemy_sound = mixer.Sound(assets.path_to("sounds", sound_dto.destroy_enemy)) if sound_dto.destroy_enemy else None
-        self.button_click_sound = mixer.Sound(assets.path_to("sounds", sound_dto.button_click)) if sound_dto.button_click else None
+        self.jump_sound = self.load_sound(sound_dto.jump)
+        self.shoot_sound = self.load_sound(sound_dto.shoot)
+        self.hero_hit_sound = self.load_sound(sound_dto.hero_hit)
+        self.enemy_hit_sound = self.load_sound(sound_dto.enemy_hit)
+        self.destroy_enemy_sound = self.load_sound(sound_dto.destroy_enemy)
+        self.button_click_sound = self.load_sound(sound_dto.button_click)
 
     def load_music(self, music):
         if music != self.music:
             mixer.music.stop()
             self.playing = False
             mixer.music.unload()
-            mixer.music.load(assets.path_to("sounds",music))
+            mixer.music.load(assets.path_to("sounds", music))
             if not mixer.get_busy():
                 mixer.music.play(-1)
                 mixer.music.set_volume(MAX_VOLUME)
