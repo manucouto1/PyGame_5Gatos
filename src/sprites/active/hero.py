@@ -59,10 +59,12 @@ class Hero(ShooterEntity):
     def add_life(self):
         self.last_hit = time.time()
         self.life.increase()
+        self.mixer.play_one_up()
 
     def add_point(self):
         #Crear un visualizador de puntuacion
         self.points.increase()
+        self.mixer.play_point()
 
     def apply_2(self, platforms, platforms2, dt):
         self.gravity(dt)
