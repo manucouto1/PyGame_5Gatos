@@ -2,9 +2,9 @@ import pygame as pg
 
 from pygame.sprite import collide_mask
 from src.sprites.active.shooter_entity import ShooterEntity
-from src.sprites.passive.ui.life import Life
+from src.sprites.passive.hud.life import Life
 import time
-from src.sprites.passive.ui.punctuation import Punctuation
+from src.sprites.passive.hud.punctuation import Punctuation
 
 
 class HeroBuilder:
@@ -62,7 +62,6 @@ class Hero(ShooterEntity):
         self.mixer.play_one_up()
 
     def add_point(self):
-        #Crear un visualizador de puntuacion
         self.points.increase()
         self.mixer.play_point()
 
