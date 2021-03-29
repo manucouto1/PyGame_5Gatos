@@ -2,6 +2,13 @@ import time
 
 import pygame as pg
 
+# Time fo the platform to
+FALL = 3
+VANISH = 10
+
+# Fall speed
+GRAVITY = 5
+
 
 class Platform(pg.sprite.Sprite):
     def __init__(self, sheet, tile_size, plat_dto, *groups):
@@ -17,9 +24,6 @@ class Platform(pg.sprite.Sprite):
         self.rect.y = plat_dto.y * tile_size
         self.tile_size = tile_size
 
-    def update(self, *args):
-        pass
-
 
 class FallingPlatform(Platform):
     def __init__(self, sheet, tile_size, plat_dto, *groups):
@@ -27,39 +31,27 @@ class FallingPlatform(Platform):
         self.row = self.rect.y // 32
         self.col = self.rect.x // 32
 
-        self.time_to_fall = None
-        self.falling = None
+        self.stepped_at = None
+        self.falling_at = None
         self.last_level = None
         self.forth = True
-        self.shake_period = 10
-        self.last_shake = 0
-        self.vel = pg.Vector2((0, 0))
 
-    def update(self, dt, collided=False):
-        if self.time_to_fall is None:
+    def update(self, collided=False):
+        if self.stepped_at is None:
             if collided:
-                self.time_to_fall = time.time()
+                self.stepped_at = time.time()
         else:
             now = time.time()
-            if self.time_to_fall + 3 > now:
-                self.shake(dt)
+            if self.stepped_at + FALL > now:
+                self.shake()
             else:
-                self.falling = time.time()
-                self.rect.y += 5
+                self.falling_at = time.time()
+                self.rect.y += GRAVITY
 
-        if self.falling is not None and time.time() - self.falling > 10:
+        if self.falling_at is not None and time.time() - self.falling_at > VANISH:
             self.kill()
 
-    def set_world_size(self, world_size):
-        w, h = world_size
-        w = w // self.tile_size
-        h = h // self.tile_size
-        self.time_to_fall = ((h - self.row) * w * 100) + (self.col * 100)
-
-    def shake(self, dt):
-        self.last_shake += dt
-        if self.last_shake > self.shake_period:
-            self.last_shake = 0
-            mov = 5 if self.forth else -5
-            self.forth = not self.forth
-            self.rect.x += mov
+    def shake(self):
+        mov = 5 if self.forth else -5
+        self.forth = not self.forth
+        self.rect.x += mov

@@ -48,10 +48,11 @@ class SpriteSheet(object):
 
 
 class SpriteStripAnim(SpriteSheet):
-    def __init__(self, container, filename, rect, count, colorkey=None, rows=1):
+    def __init__(self, container, filename, rect, frames, colorkey=None, rows=1):
         super().__init__(container, filename)
+        self.frames = frames
         self.images = [
-            SpriteSheet.load_strip(self, pygame.Rect(rect[0], rect[1] + rect[3] * y, rect[2], rect[3]), count, colorkey)
+            SpriteSheet.load_strip(self, pygame.Rect(rect[0], rect[1] + rect[3] * y, rect[2], rect[3]), frames, colorkey)
             for y in range(rows)
         ]
         self.masks = [
@@ -89,7 +90,7 @@ class SpriteStripAnim(SpriteSheet):
 
         self.dt_count += dt
 
-        if self.idx >= len(self.images[0]):
+        if self.idx >= self.frames:
             self.idx = 0
 
         return image
