@@ -1,26 +1,17 @@
 from pygame.sprite import Sprite
 import pygame as pg
 
-from src.utils import assets
-
 
 class Event(Sprite):
-
     def __init__(self, observer, *groups):
-
-        self.event = ''
         self.observer = observer
         super().__init__(*groups)
 
     def update(self, dt):
         return NotImplemented
 
-    def kill(self):
-        self.observer.notify(self.event)
-
 
 class Item(Event):
-
     def __init__(self, sheet, event_dto, observer, *groups):
         super().__init__(observer, *groups)
         self.event = "Got pow up"
@@ -29,7 +20,6 @@ class Item(Event):
         self.rect.bottomleft = event_dto.pos
 
     def kill(self):
-        Event.kill(self)
         Sprite.kill(self)
 
 
@@ -44,9 +34,7 @@ class EndGame(Event):
         self.rect.bottomleft = event_dto.pos
 
     def kill(self):
-        Event.kill(self)
         self.observer.next_level()
-        Sprite.kill(self)
 
 
 class ExtraLife(Event):
@@ -66,10 +54,9 @@ class ExtraLife(Event):
 class KittyPoint(Event):
     def __init__(self, hero, sheet, pos, *groups):
         super().__init__(hero, *groups)
-        self.event = "X1 Point"
+        self.event = "+1 Point"
         self.sheet = sheet
-        self.image = self.sheet.images[self.sheet.row][self.sheet.idx]
-        self.image = pg.transform.scale(self.image, (32, 32))
+        self.image = self.sheet.next(0)
         self.rect = self.image.get_rect()
         self.rect.bottomleft = pos
 
@@ -79,4 +66,3 @@ class KittyPoint(Event):
     def kill(self):
         self.observer.add_point()
         Sprite.kill(self)
-
