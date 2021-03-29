@@ -1,6 +1,6 @@
 import pygame as pg
 import src.utils.assets as assets
-from src.sprites.passive.hearts import Heart
+from src.sprites.passive.ui.hearts import Heart
 from src.sprites.spritesheet import SpriteSheet
 from math import ceil
 
@@ -41,8 +41,6 @@ class Life(pg.sprite.Group):
 
     def decrease(self):
         if self.player.life > 1:
-            print("Decreasing > ", ceil(self.player.life / 2) - 1)
-            print("Lifes > ", self.player.life)
             self.hearts[ceil(self.player.life / 2) - 1].decrease()
             self.player.life -= 1
         elif self.player.life == 1:
@@ -51,7 +49,6 @@ class Life(pg.sprite.Group):
 
     def increase(self):
         if self.player.life < 6:
-            print("Increasing > ", ceil(self.player.life / 2) - 1)
             self.player.life += 1
             self.hearts[ceil(self.player.life / 2) - 1].increase()
         elif self.player.life == 1:

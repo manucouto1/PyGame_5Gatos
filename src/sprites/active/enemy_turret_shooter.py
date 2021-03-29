@@ -14,7 +14,6 @@ class EnemyTurretShooter(ShooterEntity):
         ShooterEntity.__init__(self, container, entity, *groups)
         self.last_hit = time.time()
         self.container = container
-        self.hero = container.get_object('hero')
         self.e_bullets = container.get_object('e_bullets')
         self.walk_count = 0
         self.life = 2
@@ -34,8 +33,8 @@ class EnemyTurretShooter(ShooterEntity):
 
         return np.sqrt(a + b)
 
-    def move(self, dt):
-        distance = self.calc_distance(self.hero)
+    def move(self, hero, dt):
+        distance = self.calc_distance(hero)
         self.dt_count += dt
 
         if distance < 300:
@@ -44,7 +43,7 @@ class EnemyTurretShooter(ShooterEntity):
                     self.wait_time = 450 / 5
                     self.dt_count = 0
                     if self.onGround:
-                        bullet = self.shoot((self.hero.rect.x, self.hero.rect.y))
+                        bullet = self.shoot((hero.rect.x, hero.rect.y))
                         self.e_bullets.add(bullet)
                         self.shots += 1
             else:
@@ -72,14 +71,13 @@ class EnemyTurretShooter(ShooterEntity):
             self.damage_effect(bullet)
             self.mixer.play_enemy_hit()
 
-    def update(self, platforms, dt):
+    def update(self, hero, zone_events, platforms, dt):
         if self.life > 0:
             self.idle_loop(dt)
-            self.move(dt)
+            self.move(hero, dt)
             self.apply(platforms, dt)
         else:
             self.vel.x = 0
-            zone_events = self.container.get_object('zone_events')
-            zone_events.add(ExtraLife(self.hero, (self.rect.x, self.rect.y)))
+            zone_events.add(ExtraLife(hero, (self.rect.x, self.rect.y)))
             self.kill()
 
