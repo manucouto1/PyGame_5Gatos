@@ -6,7 +6,9 @@
       "hero_hit": "dog_hit.ogg",
       "enemy_hit": "cat_meow.ogg",
       "destroy_enemy": "cat_purr.ogg",
-      "button_click": "button_click.ogg"
+      "button_click": "button_click.ogg",
+      "point": "point.ogg",
+      "one_up": "one_up.ogg"
     },
     "menu": {
       "jump": null,
@@ -14,7 +16,9 @@
       "hero_hit": null,
       "enemy_hit": null,
       "destroy_enemy": null,
-      "button_click": "button_click.ogg"
+      "button_click": "button_click.ogg",
+      "point": null,
+      "one_up": null
     }
   },
   "music": {
