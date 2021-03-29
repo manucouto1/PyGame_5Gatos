@@ -47,7 +47,9 @@ class Mixer:
             self.music = music
 
     def play_jump(self):
-        self.jump_sound.play() if self.jump_sound else print("Jump not loaded")
+        channel = self.jump_sound.play() if self.jump_sound else print("Jump not loaded")
+        if channel:
+            channel.set_volume(0.7)
 
     def play_shoot(self):
         self.shoot_sound.play() if self.shoot_sound else print("Shoot not loaded")
@@ -79,7 +81,7 @@ class Mixer:
             self.playing = True
 
         if mixer.get_busy() and not self.changed:
-            mixer.music.set_volume(MAX_VOLUME * 0.3)
+            mixer.music.set_volume(MAX_VOLUME * 0.6)
 
             self.changed = True
 
