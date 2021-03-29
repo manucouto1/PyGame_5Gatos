@@ -12,6 +12,9 @@ class Event(Sprite):
         self.observer = observer
         super().__init__(*groups)
 
+    def update(self, dt):
+        return NotImplemented
+
     def kill(self):
         self.observer.notify(self.event)
 
@@ -57,5 +60,23 @@ class ExtraLife(Event):
 
     def kill(self):
         self.observer.add_life()
+        Sprite.kill(self)
+
+
+class KittyPoint(Event):
+    def __init__(self, hero, sheet, pos, *groups):
+        super().__init__(hero, *groups)
+        self.event = "X1 Point"
+        self.sheet = sheet
+        self.image = self.sheet.images[self.sheet.row][self.sheet.idx]
+        self.image = pg.transform.scale(self.image, (32, 32))
+        self.rect = self.image.get_rect()
+        self.rect.bottomleft = pos
+
+    def update(self, dt):
+        self.image = self.sheet[3].next(dt)
+
+    def kill(self):
+        self.observer.add_point()
         Sprite.kill(self)
 

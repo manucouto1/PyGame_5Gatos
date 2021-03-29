@@ -79,8 +79,7 @@ class Level:
             self.e_bullets = builder.e_bullets
 
             self.zone_events = builder.zone_events_builder.build(self, self.camera.scroll)
-            self.dead_enemies = ScrollAdjustedGroup(self.camera.scroll)
-            self.container.set_object('zone_events', self.zone_events)
+            #self.container.set_object('zone_events', self.zone_events)
             print("Estamos aquí")
             self.container.get_object('mixer').load_new_profile(builder.level_sounds)
             self.container.get_object('mixer').load_music(builder.level_music)
@@ -106,7 +105,7 @@ class Level:
         """
 
         self.hero.is_hit_destroy(self.e_bullets)
-        self.enemies.are_shot(self.h_bullets, self.dead_enemies)
+        self.enemies.are_shot(self.h_bullets)
         #self.h_bullets.remove(list(filter(self.check_limits, self.h_bullets.sprites())))
         #self.e_bullets.remove(list(filter(self.check_limits, self.e_bullets.sprites())))
 
@@ -133,10 +132,10 @@ class Level:
         self.e_bullets.update(dt)
 
         self.layers.update(dt)
-        self.enemies.update(self.hero, self.platforms, dt)
-        self.dead_enemies.update(self.platforms, dt)
+        self.enemies.update(self.hero, self.zone_events, self.platforms, dt)
         self.camera.update(self.platforms, self.dangerous, dt)
         self.cursor.update(pg.mouse.get_pos())
+        self.zone_events.update(dt)
 
     def map_limit(self):
         (x, y, h, w) = self.screen.get_rect()
@@ -150,10 +149,10 @@ class Level:
         self.map_limit()
         self.layers.draw(self.screen)
         self.enemies.draw(self.screen)
-        self.dead_enemies.draw(self.screen)
         self.camera.draw(self.screen)
         self.cursor.draw(self.screen)
         self.h_bullets.draw(self.screen)
         self.e_bullets.draw(self.screen)
         self.hero.life.draw(self.screen)
+        self.hero.points.draw(self.screen)
         self.zone_events.draw(self.screen)

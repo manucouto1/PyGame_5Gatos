@@ -15,6 +15,8 @@ class GameDTO:
 
                 self.fps = game_config["fps"]
                 self.cursor = game_config["cursor"]
+                self.screen_height = game_config["screen_height"]
+                self.screen_width = game_config["screen_width"]
                 self.levels = list(map(lambda x: LevelDTO(x), game_config["levels"]))
 
                 with open(assets.path_to(game_config["characters"])) as f2:

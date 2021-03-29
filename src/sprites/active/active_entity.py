@@ -86,9 +86,7 @@ class ActiveEntity(pg.sprite.Sprite):
         self.vel.x = 0
 
     def damage_effect(self, its_hit):
-
         left = its_hit.rect.left > self.rect.left
-
         right = its_hit.rect.right > self.rect.right
 
         if left:
@@ -100,26 +98,25 @@ class ActiveEntity(pg.sprite.Sprite):
 
         self.getting_damage = True
         self.damage_time = time.time()
-
         self.jump()
+        self.num_jumps = 0
 
     def collide_ground(self, xvel, yvel, platforms, dt, fun=collide_rect):
-        #collide_l = pg.sprite.spritecollide(self, platforms, False, collided=fun)
-        p = pg.sprite.spritecollideany(self, platforms, collided=fun)
-        #for p in collide_l:
-        if p:
-            if yvel > 0:
-                self.rect.bottom = p.rect.top
-                self.onGround = True
-                self.num_jumps = 0
-                p.update(dt, True)
-            if yvel < 0:
-                self.rect.top = p.rect.bottom
-                self.vel.y = 0
-            if xvel > 0:
-                self.rect.right = p.rect.left
-            if xvel < 0:
-                self.rect.left = p.rect.right
+        collide_l = pg.sprite.spritecollide(self, platforms, False, collided=fun)
+        for p in collide_l:
+            if fun(self, p):
+                if yvel > 0:
+                    self.rect.bottom = p.rect.top
+                    self.onGround = True
+                    self.num_jumps = 0
+                    p.update(dt, True)
+                if yvel < 0:
+                    self.rect.top = p.rect.bottom
+                    self.vel.y = 0
+                if xvel > 0:
+                    self.rect.right = p.rect.left
+                if xvel < 0:
+                    self.rect.left = p.rect.right
 
     def collide_ground_falling(self, xvel, yvel, platforms, dt, fun=collide_rect):
         #collide_l = pg.sprite.spritecollide(self, platforms, False, collided=fun)

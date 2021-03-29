@@ -1,8 +1,8 @@
 import time
 
 import pygame as pg
-from pygame.sprite import collide_mask
 from src.sprites.active.active_entity import ActiveEntity
+from src.sprites.passive.event import KittyPoint
 
 GRAVITY = pg.Vector2((0, 2.8))
 
@@ -26,15 +26,15 @@ class Enemy(ActiveEntity):
     def dead_loop(self, dt):
         self.image = self.sheet[3].next(dt)
 
-    def update(self, platforms, dt):
+    def update(self, hero, zone_events, platforms, dt):
         if self.life > 0:
             self.move(dt)
             self.walk_loop(dt)
             self.apply(platforms, dt)
         else:
             self.vel.x = 0
-            self.dead_loop(dt)
-            self.apply(platforms, dt)
+            zone_events.add(KittyPoint(hero, self.sheet, self.rect.bottomleft))
+            self.kill()
 
     def is_hit(self, dangerous):
         new_hit = time.time()

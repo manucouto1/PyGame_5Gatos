@@ -2,10 +2,10 @@
   "path": "src.levels.level_2d_vertical_destruction.Scroller2DVerticalDestruction",
   "background": "background",
   "tiles": {
-    "image":  "level2.png",
-    "config": "level2.json",
+    "image":  "level2_light.png",
+    "config": "level2_light.json",
     "layers_id": {
-      "falling": 5,
+      "falling": 6,
       "ground": 4,
       "danger": 2
     }

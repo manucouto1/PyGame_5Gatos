@@ -25,10 +25,9 @@ class Scroller2DVerticalDestruction(Scroller2D):
 
         self.h_bullets.update(dt)
         self.e_bullets.update(dt)
-
-        self.enemies.update(self.hero, self.platforms+self.falling_platforms, dt)
-        self.dead_enemies.update(self.platforms, dt)
+        self.enemies.update(self.hero, self.zone_events, self.platforms+self.falling_platforms, dt)
         self.camera.update(self.platforms, self.dangerous, dt, self.falling_platforms)
+        self.zone_events.update(dt)
         self.layers.update(dt)
         self.cursor.update(pg.mouse.get_pos())
 

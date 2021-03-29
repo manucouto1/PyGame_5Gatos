@@ -2,8 +2,9 @@ import pygame as pg
 
 from pygame.sprite import collide_mask
 from src.sprites.active.shooter_entity import ShooterEntity
-from src.sprites.passive.life import Life
+from src.sprites.passive.ui.life import Life
 import time
+from src.sprites.passive.ui.punctuation import Punctuation
 
 
 class HeroBuilder:
@@ -23,6 +24,7 @@ class Hero(ShooterEntity):
 
         self.last_hit = time.time()
         self.life = Life(builder.container, 3, player)
+        self.points = Punctuation(builder.container, player)
 
     def walk_loop(self, dt):
         if self.direction == pg.K_LEFT:
@@ -35,7 +37,7 @@ class Hero(ShooterEntity):
         its_hit = pg.sprite.spritecollideany(self, dangerous, collided=collide_mask)
         if its_hit:
             new_hit = time.time()
-            if self.last_hit + 2 < new_hit:
+            if self.last_hit + 1 < new_hit:
                 #for its_hit in list_e_bullets:
                 its_hit.kill()
                 self.damage_effect(its_hit)
@@ -58,6 +60,10 @@ class Hero(ShooterEntity):
         self.last_hit = time.time()
         self.life.increase()
 
+    def add_point(self):
+        #Crear un visualizador de puntuacion
+        self.points.increase()
+
     def apply_2(self, platforms, platforms2, dt):
         self.gravity(dt)
         vel_x = (self.vel.x / 50 * dt)
@@ -75,7 +81,6 @@ class Hero(ShooterEntity):
         else:
             self.idle_loop(dt)
 
-        self.life.update()
         if platforms2 is None:
             self.apply(platforms, dt)
         else:
@@ -88,3 +93,6 @@ class Hero(ShooterEntity):
             if self.damage_time + 0.5 < new_time:
                 self.getting_damage = False
                 self.reset_movement()
+
+        self.life.update()
+        self.points.update(dt)

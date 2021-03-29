@@ -24,16 +24,17 @@ class Enemies(ScrollAdjustedLayeredGroup):
         for (enemy, dangerous) in enemies.items():
             enemy.is_hit(dangerous)
 
-    def are_shot(self, bullets, dead_group):
+    def are_shot(self, bullets):
         enemies = pg.sprite.groupcollide(self, bullets, False, True)
         for (enemy, bullet) in enemies.items():
             enemy.is_shoot(bullet[0])
+            """
             if enemy.life <= 0:
                 self.remove(enemy)
-                dead_group.add(enemy)
+            """
 
     def update(self, hero, *args):
         for enemy in self.sprites():
-            if enemy.calc_distance(hero) < 500:
-                enemy.update(*args)
+            if enemy.calc_distance(hero) < 700:
+                enemy.update(hero, *args)
 
