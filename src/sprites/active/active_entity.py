@@ -109,7 +109,7 @@ class ActiveEntity(pg.sprite.Sprite):
                     self.rect.bottom = p.rect.top
                     self.onGround = True
                     self.num_jumps = 0
-                    p.update(dt, True)
+                    p.update(True)
                 if yvel < 0:
                     self.rect.top = p.rect.bottom
                     self.vel.y = 0
@@ -133,7 +133,7 @@ class ActiveEntity(pg.sprite.Sprite):
                 self.rect.bottom = p.rect.top
                 self.onGround = True
                 self.num_jumps = 0
-                p.update(dt, True)
+                p.update(True)
             if xvel > 0:
                 self.rect.right = p.rect.left
             if xvel < 0:
