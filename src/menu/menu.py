@@ -13,6 +13,7 @@ class Menu:
     def __init__(self, director):
         self.current_screen = -1
         self.director = director
+        self.mixer = director.container.get_object('mixer')
         self.scenes_list = []
         self.scenes_list.append(ScreenGUIInitial(self, "menu/menu_background.png"))
         self.scenes_list.append(ScreenGUIControls(self, "menu/menu_background.png"))
@@ -38,7 +39,6 @@ class Menu:
 
     def build(self, _):
         sounds_profile = self.director.container.get_object('game').sounds["menu"]
-        print("sounds:", sounds_profile)
         self.director.container.get_object('mixer').load_music("menu.ogg")
         self.director.container.get_object('mixer').load_new_profile(sounds_profile)
         self.show_initial_screen()
@@ -52,7 +52,7 @@ class Menu:
 
     def execute_game(self):
         container = self.director.container
-        container.get_object('mixer').play_button_click()
+        self.mixer.play_button_click()
 
         game = self.director.game
 
@@ -69,13 +69,7 @@ class Menu:
         self.current_screen = 2
 
     def music_louder(self):
-        volume = self.director.container.get_object('mixer').get_volume()
-        if volume < MAX_VOLUME:
-            self.director.container.get_object('mixer').change_volume(volume + 0.1)
+        self.mixer.music_louder()
 
     def music_lower(self):
-        volume = self.director.container.get_object('mixer').get_volume()
-        if volume > 0.0:
-            self.director.container.get_object('mixer').change_volume(volume - 0.1)
-            if volume < 0.1:
-                self.director.container.get_object('mixer').change_volume(0.0)
+        self.mixer.music_lower()
