@@ -17,14 +17,16 @@ class Enemies(ScrollAdjustedLayeredGroup):
     def __init__(self, camera_scroll, builder: EnemiesBuilder):
         super().__init__(camera_scroll)
         game = builder.container.get_object('game')
+        self.center_x = game.screen_width / 2
+        self.center_y = game.screen_height / 2
+        self.max_distance = np.sqrt(self.center_x ** 2 + self.center_y ** 2)
         for entity in builder.level_dto.enemies:
             character = game.characters[entity.name]
             self.add(builder.container.object_from_name(character.path, builder.container, entity, character))
 
-    @staticmethod
-    def calc_distance(sprite, target):
-        a = (sprite.rect.x - abs(target[0])) ** 2
-        b = (sprite.rect.y - abs(target[1])) ** 2
+    def calc_distance(self, sprite, target):
+        a = (sprite.rect.x - abs(target[0]) - self.center_x) ** 2
+        b = (sprite.rect.y - abs(target[1]) - self.center_y) ** 2
         return np.sqrt(a + b)
 
     def are_hit(self, dangerous):
@@ -39,5 +41,5 @@ class Enemies(ScrollAdjustedLayeredGroup):
 
     def update(self, hero, *args):
         for enemy in self.sprites():
-            if self.calc_distance(enemy, self.camera_rect) < 1132:
+            if self.calc_distance(enemy, self.camera_rect) <= self.max_distance:
                 enemy.update(hero, *args)

@@ -45,7 +45,7 @@ class LevelBuilder:
         self.container.set_object('hero', self.hero)
         self.enemies = self.enemies_builder.build(self.camera.scroll)
         self.layers = self.layers_builder.build(self.camera.scroll)
-        self.platforms = Platforms(self.layers.get_ground())
+        self.platforms = Platforms( self.container.get_object("game"), self.layers.get_ground())
         self.dangerous = self.layers.get_dangerous()
         return self.container.object_from_name(self.level_dto.path, self)
 
