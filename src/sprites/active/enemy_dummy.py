@@ -1,15 +1,26 @@
-from pygame.sprite import collide_rect
+import time
 
-from src.sprites.active.enemy import Enemy
+from pygame.sprite import collide_rect
+from src.sprites.active.active_entity import ActiveEntity
 import pygame as pg
+
+from src.sprites.passive.event import KittyPoint
 
 RIGHT = 0
 LEFT = 1
 
 
-class EnemyDummy(Enemy):
+class EnemyDummy(ActiveEntity):
     def __init__(self, container, entity, *groups):
-        Enemy.__init__(self, container, entity, *groups)
+        super().__init__(container, entity, *groups)
+        self.walk_count = 0
+        self.dead_id = 0
+        self.last_hit = time.time()
+
+        self.sheet[0].set_frames_skip(2)
+        self.sheet[1].set_frames_skip(2)
+        self.sheet[2].set_frames_skip(2)
+        self.sheet[3].set_frames_skip(2)
         self.moving = LEFT
         self.life = 1
 
@@ -18,6 +29,34 @@ class EnemyDummy(Enemy):
             self.move_right()
         elif self.moving == LEFT:
             self.move_left()
+
+    def dead_loop(self, dt):
+        self.image = self.sheet[3].next(dt)
+
+    def update(self, hero, zone_events, platforms, dt):
+        if self.life > 0:
+            self.move(dt)
+            self.walk_loop(dt)
+            self.apply(platforms, dt)
+        else:
+            self.vel.x = 0
+            zone_events.add(KittyPoint(hero, self.sheet, self.rect.bottomleft))
+            self.kill()
+
+    def is_hit(self, dangerous):
+        new_hit = time.time()
+        if self.last_hit + 0.5 < new_hit:
+            self.damage_effect(dangerous[0])
+            self.last_hit = new_hit
+
+    def is_shoot(self, bullet):
+        self.life -= 1
+        if self.life == 0:
+            self.damage_effect(bullet)
+            self.mixer.play_destroy_enemy()
+        else:
+            self.damage_effect(bullet)
+            self.mixer.play_enemy_hit()
 
     def collide_ground(self, xvel, yvel, platforms, _):
         collide_l = pg.sprite.spritecollide(self, platforms, False)
