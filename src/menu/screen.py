@@ -81,9 +81,13 @@ class ScreenGUIOptions(ScreenGUI):
         self.elementGUI.append(TextBack(self))
         self.elementGUI.append(ButtonMusicLower(self))
         self.elementGUI.append(ButtonMusicLouder(self))
+        self.elementGUI.append(ButtonSoundLower(self))
+        self.elementGUI.append(ButtonSoundLouder(self))
 
     def draw(self):
         ScreenGUI.draw(self)
         font = pg.font.SysFont('purisa', 26)
-        text = font.render('Volume settings:', True, (0, 0, 0))
-        self.screen.blit(text, (80, 100))
+        text1 = font.render('Volume settings:', True, (0, 0, 0))
+        text2 = font.render('Sounds settings:', True, (0, 0, 0))
+        self.screen.blit(text1, (80, 100))
+        self.screen.blit(text2, (80, 200))
