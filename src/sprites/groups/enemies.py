@@ -41,4 +41,3 @@ class Enemies(ScrollAdjustedLayeredGroup):
         for enemy in self.sprites():
             if self.calc_distance(enemy, self.camera_rect) < 1132:
                 enemy.update(hero, *args)
-

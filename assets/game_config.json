@@ -6,8 +6,8 @@
   "characters": "game_characters.json",
   "levels": [
     "level1",
-    "level2",
-    "level3"
+    "level3",
+    "level2"
   ],
   "sounds": "game_sounds.json"
 }

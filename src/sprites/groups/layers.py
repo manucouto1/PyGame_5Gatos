@@ -1,5 +1,4 @@
 from src.sprites.groups.scroll_adjusted import ScrollAdjustedLayeredGroup
-from src.sprites.passive.platform import Platform
 from src.sprites.spritesheet import SpriteSheet
 from src.utils import assets
 
@@ -22,8 +21,8 @@ class Layers(ScrollAdjustedLayeredGroup):
         self.layers_id = builder.level_dto.layers_id
         for layer in builder.level_dto.layers:
             for platform in layer.platforms:
-                self.add(builder.container.object_from_name(layer.path, builder.sheet, builder.level_dto.tile_size,
-                                                            platform), layer=layer.id)
+                self.add(builder.container.object_from_name(
+                    layer.path, builder.sheet, builder.level_dto.tile_size, platform), layer=layer.id)
 
     def get_ground(self):
         return self.get_sprites_from_layer(self.layers_id["ground"])

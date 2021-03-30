@@ -38,9 +38,7 @@ class Heart(pg.sprite.Sprite):
         self.image = self.sheet.image_at((self.heart_id * Heart.SIZE, 0, Heart.SIZE, Heart.SIZE))
 
     def decrease(self):
-        #self.decreasing = True
         self.queue.append(DECREASE)
 
     def increase(self):
-        #self.increasing = True
         self.queue.append(INCREASE)

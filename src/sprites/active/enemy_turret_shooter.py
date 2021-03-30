@@ -67,8 +67,19 @@ class EnemyTurretShooter(ShooterEntity):
             self.mixer.play_enemy_hit()
 
     def update(self, hero, zone_events, platforms, dt):
+        if not self.getting_damage:
+            self.reset_movement()
+        else:
+            new_time = time.time()
+            if self.damage_time + 1 < new_time:
+                self.getting_damage = False
+                self.reset_movement()
+
         if self.life > 0:
-            self.idle_loop(dt)
+            if self.movement:
+                self.walk_loop(dt)
+            else:
+                self.idle_loop(dt)
             self.move(hero, dt)
             self.apply(platforms, dt)
         else:
