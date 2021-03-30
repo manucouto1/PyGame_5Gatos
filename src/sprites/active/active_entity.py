@@ -119,18 +119,10 @@ class ActiveEntity(pg.sprite.Sprite):
                 if xvel < 0:
                     self.rect.left = p.rect.right
 
-    def collide_ground_falling(self, xvel, yvel, platforms, dt, fun=collide_rect):
-        #collide_l = pg.sprite.spritecollide(self, platforms, False, collided=fun)
+    def collide_ground_falling(self, xvel, yvel, platforms, fun=collide_rect):
         p = pg.sprite.spritecollideany(self, platforms, collided=fun)
-        #for p in collide_l:
         if p:
             if yvel > 0:
-                """
-                bottom_left = p.rect.collidepoint(self.rect.bottomleft)
-                bottom_right = p.rect.collidepoint(self.rect.bottomright)
-                mid_bottom = p.rect.collidepoint(self.rect.midbottom)
-                if bottom_left and mid_bottom or bottom_right and mid_bottom:
-                """
                 self.rect.bottom = p.rect.top
                 self.onGround = True
                 self.num_jumps = 0
