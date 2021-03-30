@@ -24,12 +24,6 @@ class Enemy(ActiveEntity):
     def dead_loop(self, dt):
         self.image = self.sheet[3].next(dt)
 
-    def walk_loop(self, dt):
-        if self.direction == pg.K_LEFT:
-            self.image = self.sheet[1].next(dt)
-        elif self.direction == pg.K_RIGHT:
-            self.image = self.sheet[2].next(dt)
-
     def update(self, hero, zone_events, platforms, dt):
         if self.life > 0:
             self.move(dt)

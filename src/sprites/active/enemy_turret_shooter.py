@@ -1,5 +1,6 @@
 import time
 import numpy as np
+import pygame as pg
 from src.sprites.active.shooter_entity import ShooterEntity
 from src.sprites.passive.event import ExtraLife
 
@@ -27,6 +28,12 @@ class EnemyTurretShooter(ShooterEntity):
         b = (self.rect.y - hero.rect.y) ** 2
 
         return np.sqrt(a + b)
+
+    def walk_loop(self, dt):
+        if self.direction == pg.K_LEFT:
+            self.image = self.sheet[1].next(dt)
+        elif self.direction == pg.K_RIGHT:
+            self.image = self.sheet[2].next(dt)
 
     def move(self, hero, dt):
         distance = self.calc_distance(hero)
