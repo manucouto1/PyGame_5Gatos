@@ -32,7 +32,7 @@
     "sheet": "fufi_full.png",
     "projectile": "wool.png",
     "rows": 3,
-    "path": "src.sprites.active.enemy_turret_shooter.Maniac"
+    "path": "src.sprites.active.enemy_turret_shooter.EnemyTurretShooter"
   },
 
   "maniac": {
@@ -44,6 +44,6 @@
     "sheet": "catcifer_full.png",
     "projectile": "wool.png",
     "rows": 3,
-    "path": "src.sprites.active.enemy_turret_shooter.EnemyTurretShooter"
+    "path": "src.sprites.active.enemy_maniac_shooter.Maniac"
   }
 }
