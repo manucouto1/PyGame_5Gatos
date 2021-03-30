@@ -21,7 +21,7 @@ class ElementGUI:
 			return False
 
 	# abstract methods
-	def draw(self):
+	def draw(self, screen):
 		raise NotImplemented("You have to implement method draw.")
 
 	def action(self):

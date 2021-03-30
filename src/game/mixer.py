@@ -19,10 +19,15 @@ class Mixer:
         self.one_up_sound = None
 
         self.music = None
+        self.current_volume = None
 
     @staticmethod
     def load_sound(sound):
         return mixer.Sound(assets.path_to("sounds", sound)) if sound else None
+
+    @staticmethod
+    def get_volume():
+        return mixer.music.get_volume()
 
     def load_new_profile(self, sound_dto):
         self.jump_sound = self.load_sound(sound_dto.jump)
@@ -43,6 +48,7 @@ class Mixer:
             if not mixer.get_busy():
                 mixer.music.play(-1)
                 mixer.music.set_volume(MAX_VOLUME)
+                self.current_volume = self.get_volume()
                 self.playing = True
             self.music = music
 
@@ -74,17 +80,21 @@ class Mixer:
     def play_one_up(self):
         self.one_up_sound.play()
 
+    def change_volume(self, volume):
+        self.current_volume = volume
+        mixer.music.set_volume(volume)
+
     def check_busy(self):
         if not mixer.get_busy() and not self.playing:
             mixer.music.play(-1)
-            mixer.music.set_volume(MAX_VOLUME)
+            mixer.music.set_volume(self.current_volume)
             self.playing = True
 
         if mixer.get_busy() and not self.changed:
-            mixer.music.set_volume(MAX_VOLUME * 0.6)
+            mixer.music.set_volume(self.current_volume * 0.6)
 
             self.changed = True
 
         elif not mixer.get_busy() and self.changed:
-            mixer.music.set_volume(MAX_VOLUME)
+            mixer.music.set_volume(self.current_volume)
             self.changed = False
