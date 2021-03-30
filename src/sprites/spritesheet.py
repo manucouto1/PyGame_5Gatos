@@ -2,8 +2,8 @@ import pygame
 
 
 class SpriteSheet(object):
-    def __init__(self, container, path):
-        self.sheet = container.image_from_path(path)
+    def __init__(self, sheet):
+        self.sheet = sheet
 
     def image_at(self, rectangle, color_key=None):
         rect = pygame.Rect(rectangle)
@@ -48,8 +48,8 @@ class SpriteSheet(object):
 
 
 class SpriteStripAnim(SpriteSheet):
-    def __init__(self, container, filename, rect, frames, colorkey=None, rows=1):
-        super().__init__(container, filename)
+    def __init__(self, sheet, rect, frames, colorkey=None, rows=1):
+        super().__init__(sheet)
         self.frames = frames
         self.images = [
             SpriteSheet.load_strip(self, pygame.Rect(rect[0], rect[1] + rect[3] * y, rect[2], rect[3]), frames, colorkey)
@@ -63,7 +63,8 @@ class SpriteStripAnim(SpriteSheet):
         self.idx = 0
         self.frames_skip = [1] * rows
         self.frame = 1
-        self.dt_count = 0
+        self._dt_count = 0
+        self._roll_once = True
 
     def __getitem__(self, item):
         self.row = item
@@ -74,13 +75,27 @@ class SpriteStripAnim(SpriteSheet):
         self.frames_skip[self.row] = i
 
     def reset(self):
+        self._roll_once = False
         self.idx = 0
+        self._dt_count = 0
+
+    def roll_once(self, dt):
+        if not self._roll_once:
+            image = self.next(dt)
+        else:
+            image = self.images[self.row][0]
+
+        if self.idx == self.frames - 1:
+            self._roll_once = True
+            image = self.next(dt)
+
+        return image
 
     def next(self, dt):
-        if self.dt_count < 450 / 8:
+        if self._dt_count < 450 / 8:
             image = self.images[self.row][self.idx]
         else:
-            self.dt_count = 0
+            self._dt_count = 0
             image = self.images[self.row][self.idx]
 
             self.frame -= 1
@@ -88,7 +103,7 @@ class SpriteStripAnim(SpriteSheet):
                 self.idx += 1
                 self.frame = self.frames_skip[self.row]
 
-        self.dt_count += dt
+        self._dt_count += dt
 
         if self.idx >= self.frames:
             self.idx = 0
