@@ -84,6 +84,20 @@ class Mixer:
         self.current_volume = volume
         mixer.music.set_volume(volume)
 
+    def music_louder(self):
+        if self.current_volume < MAX_VOLUME:
+            self.current_volume += 0.1
+            if self.current_volume > MAX_VOLUME:
+                self.current_volume = 0.0
+            mixer.music.set_volume(self.current_volume)
+
+    def music_lower(self):
+        if self.current_volume > 0.0:
+            self.current_volume -= 0.1
+            if self.current_volume < 0.1:
+                self.current_volume = 0.0
+            mixer.music.set_volume(self.current_volume)
+
     def check_busy(self):
         if not mixer.get_busy() and not self.playing:
             mixer.music.play(-1)
