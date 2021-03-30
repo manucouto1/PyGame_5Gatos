@@ -94,20 +94,9 @@ class Level:
     def check_bullets_hits(self):
         pg.sprite.groupcollide(self.h_bullets, self.platforms, True, False)
         pg.sprite.groupcollide(self.e_bullets, self.platforms, True, False)
-        """
-        enemies_hits = pg.sprite.groupcollide(self.h_bullets, self.enemies, True, False)
-        for bullet, enemies_damaged in enemies_hits.items():
-            for enemy_hit in enemies_damaged:
-                enemy_hit.is_shoot(bullet)
-                if enemy_hit.life == 0:
-                    self.enemies.remove(enemy_hit)
-                    self.dead_enemies.add(enemy_hit)
-        """
 
         self.hero.is_hit_destroy(self.e_bullets)
         self.enemies.are_shot(self.h_bullets)
-        #self.h_bullets.remove(list(filter(self.check_limits, self.h_bullets.sprites())))
-        #self.e_bullets.remove(list(filter(self.check_limits, self.e_bullets.sprites())))
 
     def notify(self, event):
         print(event)

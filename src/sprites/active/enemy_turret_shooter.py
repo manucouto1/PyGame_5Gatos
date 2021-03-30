@@ -1,11 +1,6 @@
 import time
-import pygame as pg
-from pygame.sprite import collide_mask
-
-from src.sprites.active.enemy import Enemy
-from src.sprites.active.shooter_entity import ShooterEntity
 import numpy as np
-
+from src.sprites.active.shooter_entity import ShooterEntity
 from src.sprites.passive.event import ExtraLife
 
 
@@ -38,7 +33,7 @@ class EnemyTurretShooter(ShooterEntity):
         self.dt_count += dt
 
         if distance < 300:
-            if self.shots < 5 and len(self.e_bullets.sprites()) < 10:
+            if self.shots < 3 and len(self.e_bullets.sprites()) < 5:
                 if self.dt_count >= self.wait_time:
                     self.wait_time = 450 / 5
                     self.dt_count = 0
