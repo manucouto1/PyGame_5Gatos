@@ -2,7 +2,8 @@ import pygame.mixer as mixer
 
 from src.utils import assets
 
-MAX_VOLUME = 0.8
+MAX_MUSIC_VOLUME = 0.8
+MAX_SOUND_VOLUME = 1
 
 
 class Mixer:
@@ -19,11 +20,12 @@ class Mixer:
         self.one_up_sound = None
 
         self.music = None
-        self.current_volume = None
+        self.current_music_volume = MAX_MUSIC_VOLUME
+        self.current_sound_volume = MAX_SOUND_VOLUME
 
     @staticmethod
-    def load_sound(sound):
-        return mixer.Sound(assets.path_to("sounds", sound)) if sound else None
+    def load_sound(sound_file):
+        return mixer.Sound(assets.path_to("sounds", sound_file)) if sound_file else None
 
     @staticmethod
     def get_volume():
@@ -39,6 +41,8 @@ class Mixer:
         self.point_sound = self.load_sound(sound_dto.point)
         self.one_up_sound = self.load_sound(sound_dto.one_up)
 
+        self.change_profile_volume(self.current_sound_volume)
+
     def load_music(self, music):
         if music != self.music:
             mixer.music.stop()
@@ -47,15 +51,12 @@ class Mixer:
             mixer.music.load(assets.path_to("sounds", music))
             if not mixer.get_busy():
                 mixer.music.play(-1)
-                mixer.music.set_volume(MAX_VOLUME)
-                self.current_volume = self.get_volume()
+                mixer.music.set_volume(self.current_music_volume)
                 self.playing = True
             self.music = music
 
     def play_jump(self):
-        channel = self.jump_sound.play() if self.jump_sound else print("Jump not loaded")
-        if channel:
-            channel.set_volume(0.7)
+        self.jump_sound.play() if self.jump_sound else print("Jump not loaded")
 
     def play_shoot(self):
         self.shoot_sound.play() if self.shoot_sound else print("Shoot not loaded")
@@ -80,35 +81,60 @@ class Mixer:
     def play_one_up(self):
         self.one_up_sound.play()
 
-    def change_volume(self, volume):
-        self.current_volume = volume
-        mixer.music.set_volume(volume)
-
     def music_louder(self):
-        if self.current_volume < MAX_VOLUME:
-            self.current_volume += 0.1
-            if self.current_volume > MAX_VOLUME:
-                self.current_volume = MAX_VOLUME
-            mixer.music.set_volume(self.current_volume)
+        if self.current_music_volume < MAX_MUSIC_VOLUME:
+            self.current_music_volume += 0.1
+            if self.current_music_volume > MAX_MUSIC_VOLUME:
+                self.current_music_volume = MAX_MUSIC_VOLUME
+            mixer.music.set_volume(self.current_music_volume)
 
     def music_lower(self):
-        if self.current_volume > 0.0:
-            self.current_volume -= 0.1
-            if self.current_volume < 0.1:
-                self.current_volume = 0.0
-            mixer.music.set_volume(self.current_volume)
+        if self.current_music_volume > 0.0:
+            self.current_music_volume -= 0.1
+            if self.current_music_volume < 0.1:
+                self.current_music_volume = 0.0
+            mixer.music.set_volume(self.current_music_volume)
+
+    @staticmethod
+    def change_volume(sound, volume):
+        sound.set_volume(volume) if sound else None
+
+    def change_profile_volume(self, volume):
+        self.change_volume(self.jump_sound, 0.7 * volume)
+        self.change_volume(self.shoot_sound, volume)
+        self.change_volume(self.hero_hit_sound, volume)
+        self.change_volume(self.enemy_hit_sound, volume)
+        self.change_volume(self.destroy_enemy_sound, volume)
+        self.change_volume(self.button_click_sound, volume)
+        self.change_volume(self.point_sound, volume)
+        self.change_volume(self.one_up_sound, volume)
+
+    def sound_louder(self):
+        if self.current_sound_volume < MAX_SOUND_VOLUME:
+            self.current_sound_volume += 0.1
+            if self.current_sound_volume > MAX_SOUND_VOLUME:
+                self.current_sound_volume = MAX_SOUND_VOLUME
+            self.change_profile_volume(self.current_sound_volume)
+
+    def sound_lower(self):
+        if self.current_sound_volume > 0.0:
+            self.current_sound_volume -= 0.1
+            if self.current_sound_volume < 0.1:
+                self.current_sound_volume = 0.0
+            self.change_profile_volume(self.current_sound_volume)
 
     def check_busy(self):
         if not mixer.get_busy() and not self.playing:
             mixer.music.play(-1)
-            mixer.music.set_volume(self.current_volume)
+            mixer.music.set_volume(self.current_music_volume)
             self.playing = True
 
         if mixer.get_busy() and not self.changed:
-            mixer.music.set_volume(self.current_volume * 0.6)
+            mixer.music.set_volume(self.current_music_volume * 0.6)
 
             self.changed = True
 
         elif not mixer.get_busy() and self.changed:
-            mixer.music.set_volume(self.current_volume)
+            mixer.music.set_volume(self.current_music_volume)
             self.changed = False
+
