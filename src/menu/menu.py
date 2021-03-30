@@ -1,23 +1,24 @@
-import json
-
 import pygame as pg
-
 from src.levels.level import LevelBuilder
 from src.menu.screen import ScreenGUIInitial
+from src.menu.screen import ScreenGUIControls
+from src.menu.screen import ScreenGUIOptions
 from src.sprites.passive.cursor import Cursor
-import src.utils.assets as assets
+
+MAX_VOLUME = 0.8
 
 
 class Menu:
 
     def __init__(self, director):
-        self.initial_scene = -1
+        self.current_screen = -1
         self.director = director
         self.scenes_list = []
-        self.scenes_list.append(ScreenGUIInitial(self, "background2.png"))
+        self.scenes_list.append(ScreenGUIInitial(self, "menu/menu_background.png"))
+        self.scenes_list.append(ScreenGUIControls(self, "menu/menu_background.png"))
+        self.scenes_list.append(ScreenGUIOptions(self, "menu/menu_background.png"))
         self.cursor = Cursor(director.container, pg.mouse.get_pos())
-        self.show_initial_scene()
-
+        self.show_initial_screen()
 
     # static menu
     def update(self, *args):
@@ -33,18 +34,18 @@ class Menu:
                     self.exit_program()
             elif event.type == pg.QUIT:
                 self.director.exit_program()
-        self.scenes_list[self.initial_scene].events(events)
+        self.scenes_list[self.current_screen].events(events)
 
     def build(self, _):
         sounds_profile = self.director.container.get_object('game').sounds["menu"]
         print("sounds:", sounds_profile)
         self.director.container.get_object('mixer').load_music("menu.ogg")
         self.director.container.get_object('mixer').load_new_profile(sounds_profile)
-        self.show_initial_scene()
+        self.show_initial_screen()
         return self
 
     def draw(self):
-        self.scenes_list[self.initial_scene].draw()
+        self.scenes_list[self.current_screen].draw()
 
     def exit_program(self):
         self.director.exit_program()
@@ -58,5 +59,23 @@ class Menu:
         for level in game.levels:
             self.director.stack_scene(LevelBuilder(container, level))
 
-    def show_initial_scene(self):
-        self.initial_scene = 0
+    def show_initial_screen(self):
+        self.current_screen = 0
+
+    def show_controls_screen(self):
+        self.current_screen = 1
+
+    def show_options_screen(self):
+        self.current_screen = 2
+
+    def music_louder(self):
+        volume = self.director.container.get_object('mixer').get_volume()
+        if volume < MAX_VOLUME:
+            self.director.container.get_object('mixer').change_volume(volume + 0.1)
+
+    def music_lower(self):
+        volume = self.director.container.get_object('mixer').get_volume()
+        if volume > 0.0:
+            self.director.container.get_object('mixer').change_volume(volume - 0.1)
+            if volume < 0.1:
+                self.director.container.get_object('mixer').change_volume(0.0)
