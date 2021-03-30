@@ -2,13 +2,13 @@ from src.sprites.active.active_entity import ActiveEntity
 from src.sprites.passive.projectile import Projectile
 import pygame as pg
 import src.utils.assets as assets
-from src.sprites.spritesheet import SpriteSheet
 
 
 class ShooterEntity(ActiveEntity):
     def __init__(self, container, entity, character, *groups):
-        path_projectiles = assets.path_to('projectiles', character.projectile)
-        self.projectile_sheet = SpriteSheet(container, path_projectiles)
+        path = assets.path_to('projectiles', character.projectile)
+        image = container.image_from_path(path)
+        self.projectile = pg.transform.scale(image, (32, 32))
         ActiveEntity.__init__(self, container, entity, character, *groups)
 
     def shoot(self, target):
@@ -24,13 +24,10 @@ class ShooterEntity(ActiveEntity):
         else:
             correct = 0
 
-        image = self.projectile_sheet.image_at((0, 0, 64, 64))
-        image = pg.transform.scale(image, (32, 32))
-
         if self.rect.width > 32:
-            bullet = Projectile(image, round(self.rect.x), round(self.rect.y + (self.rect.height/2)), 6)
+            bullet = Projectile(self.projectile, round(self.rect.x), round(self.rect.y + (self.rect.height/2)), 6)
         else:
-            bullet = Projectile(image, round(self.rect.x + correct), round(self.rect.y), 6)
+            bullet = Projectile(self.projectile, round(self.rect.x + correct), round(self.rect.y), 6)
 
         bullet.trajectory(m_pos)
         self.mixer.play_shoot()

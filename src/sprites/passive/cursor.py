@@ -8,7 +8,9 @@ class Cursor(pg.sprite.Sprite):
     def __init__(self, container, mouse_pos):
         super().__init__()
         game = container.get_object('game')
-        self.sheet = SpriteSheet(container, assets.path_to("cursor", game.cursor))
+        path = assets.path_to("cursor", game.cursor)
+        sheet = container.image_from_path(path)
+        self.sheet = SpriteSheet(sheet)
         self.image = pg.transform.scale(self.sheet.image_at((64, 0, 16, 16)), (16, 16))
         self.rect = self.image.get_rect()
         self.rect.center = mouse_pos

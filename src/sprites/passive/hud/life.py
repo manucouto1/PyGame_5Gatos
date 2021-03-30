@@ -10,7 +10,10 @@ LIFE_Y = 30
 
 class Life(pg.sprite.Group):
     def __init__(self, container, n_hearts, player):
-        self.sheet = SpriteSheet(container, assets.path_to("player", "Corazon-Sheet.png"))
+        path = assets.path_to("player", "Corazon-Sheet.png")
+        sheet = container.image_from_path(path)
+        sheet = pg.transform.scale(sheet, (Heart.SIZE * 21, Heart.SIZE))
+        self.sheet = SpriteSheet(sheet)
         self.hearts = []
         self.player = player
         pos = ceil(self.player.life / 2) - 1

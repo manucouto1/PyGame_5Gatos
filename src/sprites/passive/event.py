@@ -1,6 +1,8 @@
 from pygame.sprite import Sprite
 import pygame as pg
 
+from sprites.passive.hud.hearts import Heart
+
 
 class Event(Sprite):
     def __init__(self, observer, *groups):
@@ -41,7 +43,7 @@ class ExtraLife(Event):
     def __init__(self, hero, pos, *groups):
         super().__init__(hero, *groups)
         self.event = "Extra life"
-        self.image = hero.life.sheet.image_at((0, 0, 160, 160))
+        self.image = hero.life.sheet.image_at((0, 0, Heart.SIZE, Heart.SIZE))
         self.image = pg.transform.scale(self.image, (32, 32))
         self.rect = self.image.get_rect()
         self.rect.bottomleft = pos
