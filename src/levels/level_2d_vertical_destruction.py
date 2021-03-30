@@ -11,8 +11,8 @@ class Scroller2DVerticalDestruction(Scroller2D):
 
     def check_bullets_hits(self):
         super().check_bullets_hits()
-        pg.sprite.groupcollide(self.h_bullets, self.falling_platforms, True, False)
-        pg.sprite.groupcollide(self.e_bullets, self.falling_platforms, True, False)
+        pg.sprite.groupcollide(self.h_bullets, self.falling_platforms, True, False, collided=collide_mask)
+        pg.sprite.groupcollide(self.e_bullets, self.falling_platforms, True, False, collided=collide_mask)
 
     def update(self, dt):
         self.check_bullets_hits()
