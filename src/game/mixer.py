@@ -88,7 +88,7 @@ class Mixer:
         if self.current_volume < MAX_VOLUME:
             self.current_volume += 0.1
             if self.current_volume > MAX_VOLUME:
-                self.current_volume = 0.0
+                self.current_volume = MAX_VOLUME
             mixer.music.set_volume(self.current_volume)
 
     def music_lower(self):
