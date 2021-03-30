@@ -73,3 +73,9 @@ class Menu:
 
     def music_lower(self):
         self.mixer.music_lower()
+
+    def sound_louder(self):
+        self.mixer.sound_louder()
+
+    def sound_lower(self):
+        self.mixer.sound_lower()
