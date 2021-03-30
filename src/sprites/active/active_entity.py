@@ -15,7 +15,8 @@ class ActiveEntity(pg.sprite.Sprite):
     def __init__(self, container, entity, character, *groups):
         super().__init__(*groups)
         sheet_path = assets.path_to("characters", character.name, character.sheet)
-        sheet = SpriteStripAnim(container, sheet_path, (0, 0, character.height, character.width), character.rows,
+        sheet = container.image_from_path(sheet_path)
+        sheet = SpriteStripAnim(sheet, (0, 0, character.height, character.width), character.rows,
                                 rows=4)
 
         self.scroll = pg.Vector2(0, 0)

@@ -5,8 +5,8 @@
   "cursor": "point-cursor.png",
   "characters": "game_characters.json",
   "levels": [
-    "level3",
     "level1",
+    "level3",
     "level2"
   ],
   "sounds": "game_sounds.json"

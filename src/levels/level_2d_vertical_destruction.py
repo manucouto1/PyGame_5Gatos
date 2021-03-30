@@ -11,8 +11,8 @@ class Scroller2DVerticalDestruction(Scroller2D):
 
     def check_bullets_hits(self):
         super().check_bullets_hits()
-        pg.sprite.groupcollide(self.h_bullets, self.falling_platforms, True, False)
-        pg.sprite.groupcollide(self.e_bullets, self.falling_platforms, True, False)
+        pg.sprite.groupcollide(self.h_bullets, self.falling_platforms, True, False, collided=collide_mask)
+        pg.sprite.groupcollide(self.e_bullets, self.falling_platforms, True, False, collided=collide_mask)
 
     def update(self, dt):
         self.check_bullets_hits()
@@ -25,8 +25,11 @@ class Scroller2DVerticalDestruction(Scroller2D):
 
         self.h_bullets.update(dt)
         self.e_bullets.update(dt)
-        self.enemies.update(self.hero, self.zone_events, self.platforms+self.falling_platforms, dt)
-        self.camera.update(self.platforms, self.dangerous, dt, self.falling_platforms)
+        self.enemies.update(self.hero, self.zone_events, self.platforms.get_actives()+self.falling_platforms, dt)
+        self.camera.update(self.platforms.get_actives(), self.dangerous, dt, self.falling_platforms)
+
+        print(len(self.platforms.get_actives()), " - ", len(self.platforms.get_freezes()))
+        self.platforms.update(self.camera)
         self.zone_events.update(dt)
         self.layers.update()
         self.cursor.update(pg.mouse.get_pos())
