@@ -1,15 +1,24 @@
 from src.levels.level import Level
 import pygame as pg
 import sys
+import parallax as px
+from src.utils import assets
 
 
 class Scroller2D(Level):
 
     def __init__(self, builder):
         super().__init__(builder)
+        self.load_background()
         self.fullscreen = False
         self.last_scroll_x = 0
         self.last_scroll_y = 0
+
+    def load_background(self, n=6):
+        self.bg = px.ParallaxSurface(
+            (self.dto.map_width * self.dto.tile_size, self.dto.map_height * self.dto.tile_size), pg.RLEACCEL)
+        for i in range(1, n):
+            self.bg.add(assets.path_to('levels', self.dto.level_name, self.dto.bg, f"{i}.png"), 6 - i)
 
     def events(self, events):
         for event in events:
