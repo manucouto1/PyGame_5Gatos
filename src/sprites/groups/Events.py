@@ -8,7 +8,8 @@ class EventsBuilder:
         self.container = container
         self.events = level_dto.events
         path = assets.path_to('levels', level_dto.level_name, level_dto.tiles_image)
-        self.sheet = SpriteSheet(container, path)
+        sheet = container.image_from_path(path)
+        self.sheet = SpriteSheet(sheet)
 
     def build(self, level, camera_scroll):
         return Events(camera_scroll, level, self)
