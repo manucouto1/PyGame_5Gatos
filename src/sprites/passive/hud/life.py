@@ -5,7 +5,7 @@ from src.sprites.spritesheet import SpriteSheet
 from math import ceil
 
 LIFE_X = Heart.SIZE + 4
-LIFE_Y = 50
+LIFE_Y = 30
 
 
 class Life(pg.sprite.Group):
@@ -32,6 +32,7 @@ class Life(pg.sprite.Group):
             self.heart_pos(heart, i)
             self.hearts.append(heart)
 
+        self.queue = []
         super().__init__(self.hearts)
 
     @staticmethod
