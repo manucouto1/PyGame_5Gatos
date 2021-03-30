@@ -1,5 +1,5 @@
 {
-  "path": "src.levels.level_2d_vertical_destruction.Scroller2DVerticalDestruction",
+  "path": "src.levels.level_2d_scroller.Scroller2D",
   "background": "background",
   "tiles": {
     "image":  "level3.png",

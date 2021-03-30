@@ -22,7 +22,7 @@ class GameDTO:
                 with open(assets.path_to(game_config["characters"])) as f2:
                     characters = json.load(f2)
                     self.characters = dict(
-                        map(lambda k,v: (k, CharacterDTO(v)), characters.keys(), characters.values()))
+                        map(lambda k, v: (k, CharacterDTO(v)), characters.keys(), characters.values()))
 
                 with open(assets.path_to(game_config["sounds"])) as f3:
                     profiles = json.load(f3)

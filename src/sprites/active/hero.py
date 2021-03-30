@@ -33,12 +33,10 @@ class Hero(ShooterEntity):
             self.image = self.sheet[2].next(dt)
 
     def is_hit_destroy(self, dangerous):
-        #list_e_bullets = pg.sprite.spritecollide(self, dangerous, True, collided=collide_mask)
         its_hit = pg.sprite.spritecollideany(self, dangerous, collided=collide_mask)
         if its_hit:
             new_hit = time.time()
             if self.last_hit + 1 < new_hit:
-                #for its_hit in list_e_bullets:
                 its_hit.kill()
                 self.damage_effect(its_hit)
                 self.jump()
@@ -73,7 +71,7 @@ class Hero(ShooterEntity):
 
         self.apply(platforms, dt)
         if platforms2 is not None:
-            self.collide_ground_falling(0, self.vel.y, platforms2, collide_mask)
+            self.collide_ground_falling(0, self.vel.y, platforms2)
 
         if not self.getting_damage:
             self.reset_movement()
