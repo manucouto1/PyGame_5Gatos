@@ -4,8 +4,6 @@ import pygame as pg
 from src.sprites.active.active_entity import ActiveEntity
 from src.sprites.passive.event import KittyPoint
 
-GRAVITY = pg.Vector2((0, 2.8))
-
 
 class Enemy(ActiveEntity):
     def __init__(self, container, entity, *groups):

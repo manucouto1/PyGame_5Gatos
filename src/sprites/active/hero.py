@@ -50,8 +50,8 @@ class Hero(ShooterEntity):
         its_hit = pg.sprite.spritecollideany(self, dangerous, collided=collide_mask)
         if its_hit:
             new_hit = time.time()
+            self.damage_effect(its_hit)
             if self.last_hit + 2 < new_hit:
-                self.damage_effect(its_hit)
                 self.last_hit = new_hit
                 self.life.decrease()
                 self.mixer.play_hero_hit()

@@ -1,11 +1,7 @@
 import time
-import pygame as pg
-from pygame.sprite import collide_mask
-
-from src.sprites.active.enemy import Enemy
-from src.sprites.active.shooter_entity import ShooterEntity
 import numpy as np
-
+import pygame as pg
+from src.sprites.active.shooter_entity import ShooterEntity
 from src.sprites.passive.event import ExtraLife
 
 
@@ -33,12 +29,18 @@ class EnemyTurretShooter(ShooterEntity):
 
         return np.sqrt(a + b)
 
+    def walk_loop(self, dt):
+        if self.direction == pg.K_LEFT:
+            self.image = self.sheet[1].next(dt)
+        elif self.direction == pg.K_RIGHT:
+            self.image = self.sheet[2].next(dt)
+
     def move(self, hero, dt):
         distance = self.calc_distance(hero)
         self.dt_count += dt
 
         if distance < 300:
-            if self.shots < 5 and len(self.e_bullets.sprites()) < 10:
+            if self.shots < 3 and len(self.e_bullets.sprites()) < 5:
                 if self.dt_count >= self.wait_time:
                     self.wait_time = 450 / 5
                     self.dt_count = 0
@@ -72,8 +74,19 @@ class EnemyTurretShooter(ShooterEntity):
             self.mixer.play_enemy_hit()
 
     def update(self, hero, zone_events, platforms, dt):
+        if not self.getting_damage:
+            self.reset_movement()
+        else:
+            new_time = time.time()
+            if self.damage_time + 1 < new_time:
+                self.getting_damage = False
+                self.reset_movement()
+
         if self.life > 0:
-            self.idle_loop(dt)
+            if self.movement:
+                self.walk_loop(dt)
+            else:
+                self.idle_loop(dt)
             self.move(hero, dt)
             self.apply(platforms, dt)
         else:
