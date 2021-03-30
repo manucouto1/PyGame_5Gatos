@@ -3,6 +3,7 @@ import parallax as px
 from pygame.sprite import collide_mask
 
 from src.sprites.groups.Events import EventsBuilder
+from src.sprites.groups.Platforms import Platforms
 from src.sprites.groups.layers import LayersBuilder
 from src.sprites.active.hero import HeroBuilder
 from src.sprites.groups.camera import CameraBuilder
@@ -30,10 +31,8 @@ class LevelBuilder:
         self.hero_builder = HeroBuilder(container, self.level_dto)
         self.camera_builder = CameraBuilder(container, self.level_dto, SCREEN_SIZE)
         self.zone_events_builder = EventsBuilder(container, self.level_dto)
-        self.platforms = pg.sprite.Group()
-        self.dangerous = pg.sprite.Group()
-        self.h_bullets, self.enemies, self.e_bullets, self.camera = None, None, None, None
-        self.hero, self.a, self.layers, self.zone_events = None, None, None, None
+        self.h_bullets, self.enemies, self.e_bullets, self.camera, self.dangerous = None, None, None, None, None
+        self.hero, self.a, self.layers, self.zone_events, self.platforms = None, None, None, None, None
         self.level_sounds = container.get_object("game").sounds[level_dto.sounds]
         self.level_music = container.get_object("game").music[level_dto.music]
 
@@ -46,7 +45,7 @@ class LevelBuilder:
         self.container.set_object('hero', self.hero)
         self.enemies = self.enemies_builder.build(self.camera.scroll)
         self.layers = self.layers_builder.build(self.camera.scroll)
-        self.platforms = self.layers.get_ground()
+        self.platforms = Platforms(self.layers.get_ground())
         self.dangerous = self.layers.get_dangerous()
         return self.container.object_from_name(self.level_dto.path, self)
 
@@ -92,8 +91,8 @@ class Level:
                not self.dto.map_height * self.dto.tile_size > bll.y > 0
 
     def check_bullets_hits(self):
-        pg.sprite.groupcollide(self.h_bullets, self.platforms, True, False)
-        pg.sprite.groupcollide(self.e_bullets, self.platforms, True, False)
+        pg.sprite.groupcollide(self.h_bullets, self.platforms.get_actives(), True, False)
+        pg.sprite.groupcollide(self.e_bullets, self.platforms.get_actives(), True, False)
 
         self.hero.is_hit_destroy(self.e_bullets)
         self.enemies.are_shot(self.h_bullets)
@@ -121,8 +120,9 @@ class Level:
         self.e_bullets.update(dt)
 
         self.layers.update(dt)
-        self.enemies.update(self.hero, self.zone_events, self.platforms, dt)
-        self.camera.update(self.platforms, self.dangerous, dt)
+        self.enemies.update(self.hero, self.zone_events, self.platforms.get_actives(), dt)
+        self.camera.update(self.platforms.get_actives(), self.dangerous, dt)
+        self.platforms.update(self.camera)
         self.cursor.update(pg.mouse.get_pos())
         self.zone_events.update(dt)
 
