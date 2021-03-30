@@ -7,7 +7,7 @@ class Projectile(pg.sprite.Sprite):
     def __init__(self, image, x, y, radius):
         super().__init__()
         self.born_moment = time.time()
-        self.life_time = 2
+        self.life_time = 1.75
         self.x = x
         self.y = y
         self.image = image
@@ -24,7 +24,6 @@ class Projectile(pg.sprite.Sprite):
     def update(self, dt):
         if time.time() - self.born_moment > self.life_time:
             self.kill()
-
         else:
             self.x += math.cos(self.angle) * self.vel.x / 50 * dt
             self.y += math.sin(self.angle) * self.vel.y / 50 * dt
