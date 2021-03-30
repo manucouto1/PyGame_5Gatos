@@ -3,12 +3,14 @@ from pygame.sprite import Group
 from src.sprites.passive.hud.point_text import PointText
 from src.sprites.passive.hud.points_animation import PointAnim
 
+POINT_Y = 10
+
 
 class Punctuation(Group):
     def __init__(self, container, player):
         self.player = player
-        self.icon = PointAnim(container)
-        self.scorer = PointText(container, player)
+        self.icon = PointAnim(container, POINT_Y)
+        self.scorer = PointText(container, player, POINT_Y)
         super().__init__(self.scorer, self.icon)
 
     def increase(self):

@@ -1,11 +1,9 @@
 import time
-
 import pygame as pg
 
 # Time fo the platform to
 FALL = 3
 VANISH = 10
-
 # Fall speed
 GRAVITY = 5
 

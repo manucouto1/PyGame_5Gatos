@@ -38,7 +38,6 @@ class Menu:
 
     def build(self, _):
         sounds_profile = self.director.container.get_object('game').sounds["menu"]
-        print("sounds:", sounds_profile)
         self.director.container.get_object('mixer').load_music("menu.ogg")
         self.director.container.get_object('mixer').load_new_profile(sounds_profile)
         self.show_initial_screen()

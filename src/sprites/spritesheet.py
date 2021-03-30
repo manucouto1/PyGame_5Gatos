@@ -91,8 +91,8 @@ class SpriteStripAnim(SpriteSheet):
 
         return image
 
-    def next(self, dt):
-        if self._dt_count < 450 / 8:
+    def next(self, dt, interval=450):
+        if self._dt_count < interval / 8:
             image = self.images[self.row][self.idx]
         else:
             self._dt_count = 0

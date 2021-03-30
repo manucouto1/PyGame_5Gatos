@@ -3,11 +3,9 @@ import pygame as pg
 from src.sprites.spritesheet import SpriteStripAnim
 from src.utils import assets
 
-POINT_Y = 50
-
 
 class PointAnim(pg.sprite.Sprite):
-    def __init__(self, container):
+    def __init__(self, container, point_y):
         super().__init__()
         path = assets.path_to("characters", "enemy", "enemy_full.png")
         sheet = container.image_from_path(path)
@@ -18,7 +16,7 @@ class PointAnim(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         game = container.get_object('game')
         self.rect.x = game.screen_width - 64 - 4
-        self.rect.y = POINT_Y
+        self.rect.y = point_y
         self.running = False
         self.begin = False
 
