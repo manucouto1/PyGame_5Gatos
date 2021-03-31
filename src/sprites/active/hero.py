@@ -79,7 +79,7 @@ class Hero(ShooterEntity):
         else:
             self.idle_loop(dt)
 
-        self.apply(platforms, dt, gravity)
+        self.apply(platforms, dt)
         if platforms2 is not None:
             self.collide_ground_falling(0, self.vel.y, platforms2)
 

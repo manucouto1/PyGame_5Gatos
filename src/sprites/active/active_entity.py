@@ -17,7 +17,7 @@ class ActiveEntity(pg.sprite.Sprite):
         sheet_path = assets.path_to("characters", character.name, character.sheet)
         sheet = container.image_from_path(sheet_path)
         sheet = SpriteStripAnim(sheet, (0, 0, character.height, character.width), character.rows,
-                                rows=4)
+                                rows=4, scale=(character.rescale_x, character.rescale_y))
 
         self.scroll = pg.Vector2(0, 0)
         self.sheet = sheet
@@ -29,12 +29,24 @@ class ActiveEntity(pg.sprite.Sprite):
         self.direction = None
         self.onGround = False
         self.getting_damage = False
+        self.falling_mode = False
+        self.gravity_value = pg.Vector2((0, 3.8))
         self.vel = pg.Vector2((0, 0))
         self.speed = 8
         self.jump_strength = 28
         self.num_jumps = 0
         self.damage_time = 0
+        self.falling_velocity = 0
         self.mixer = container.get_object('mixer')
+
+    def shutdown_gravity(self, falling_velocity=1):
+        self.jump_strength = 0
+        self.falling_velocity = falling_velocity
+        self.falling_mode = True
+
+    def on_gravity(self):
+        self.jump_strength = 30
+        self.falling_mode = False
 
     def calc_distance(self, hero):
         a = (self.rect.x - hero.rect.x) ** 2
@@ -54,9 +66,9 @@ class ActiveEntity(pg.sprite.Sprite):
             self.image = self.sheet[1].next(dt)
             self.mask = self.sheet.get_mask()
 
-    def gravity(self, dt, gravity=pg.Vector2((0, 3.8))):
-        if not self.onGround:
-            self.vel += (gravity / 50) * dt
+    def gravity(self, dt):
+        if not self.onGround and not self.falling_mode:
+            self.vel += (self.gravity_value / 50) * dt
             if self.vel.y > 63:
                 self.vel.y = 63
             if self.vel.x > 63:
@@ -82,9 +94,19 @@ class ActiveEntity(pg.sprite.Sprite):
         self.direction = pg.K_RIGHT
         self.movement = True
 
+    def move_up(self):
+        self.vel.y = -self.speed
+        self.movement = True
+
+    def move_down(self):
+        self.vel.y = self.speed
+        self.movement = True
+
     def reset_movement(self):
         self.movement = False
         self.vel.x = 0
+        if self.falling_mode:
+            self.vel.y = self.falling_velocity
 
     def damage_effect(self, its_hit):
         left = its_hit.rect.left > self.rect.left
@@ -132,12 +154,14 @@ class ActiveEntity(pg.sprite.Sprite):
             if xvel < 0:
                 self.rect.left = p.rect.right
 
-    def apply(self, platforms, dt, gravity=pg.Vector2((0, 3.8))):
-        self.gravity(dt, gravity)
+    def apply(self, platforms, dt):
+        self.gravity(dt)
         vel_x = (self.vel.x / 50 * dt)
         self.rect.x += vel_x if (vel_x <= 63) else 63
         self.collide_ground(self.vel.x, 0, platforms, dt)
         vel_y = (self.vel.y / 50 * dt)
+
+
         self.rect.y += vel_y if (vel_y <= 63) else 63
         self.onGround = False
         self.collide_ground(0, self.vel.y, platforms, dt)

@@ -5,7 +5,7 @@ class SpriteSheet(object):
     def __init__(self, sheet):
         self.sheet = sheet
 
-    def image_at(self, rectangle, color_key=None):
+    def image_at(self, rectangle, color_key=None, scale=None):
         rect = pygame.Rect(rectangle)
         image = pygame.Surface(rect.size, pygame.SRCALPHA)
         image.blit(self.sheet, (0, 0), rect)
@@ -15,15 +15,17 @@ class SpriteSheet(object):
                 color_key = image.get_at((0, 0))
             image.set_colorkey(color_key, pygame.RLEACCEL)
 
+        if scale:
+            image = pygame.transform.scale(image, scale)
+
         return image
 
-    def images_at(self, rects, colorkey=None):
-        return [self.image_at(rect, colorkey) for rect in rects]
+    def images_at(self, rects, colorkey=None, scale=None):
+        return [self.image_at(rect, colorkey, scale) for rect in rects]
 
-    def load_strip(self, rect, image_count, colorkey=None):
+    def load_strip(self, rect, image_count, colorkey=None, scale=None):
         tups = [(rect[0] + rect[2] * x, rect[1], rect[2], rect[3]) for x in range(image_count)]
-
-        return self.images_at(tups, colorkey)
+        return self.images_at(tups, colorkey, scale)
 
     def image_mask_at(self, rectangle, color_key=None):
         rect = pygame.Rect(rectangle)
@@ -48,11 +50,11 @@ class SpriteSheet(object):
 
 
 class SpriteStripAnim(SpriteSheet):
-    def __init__(self, sheet, rect, frames, colorkey=None, rows=1):
+    def __init__(self, sheet, rect, frames, colorkey=None, rows=1, scale=None):
         super().__init__(sheet)
         self.frames = frames
         self.images = [
-            SpriteSheet.load_strip(self, pygame.Rect(rect[0], rect[1] + rect[3] * y, rect[2], rect[3]), frames, colorkey)
+            SpriteSheet.load_strip(self, pygame.Rect(rect[0], rect[1] + rect[3] * y, rect[2], rect[3]), frames, colorkey, scale)
             for y in range(rows)
         ]
         self.masks = [

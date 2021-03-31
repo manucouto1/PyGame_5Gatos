@@ -48,6 +48,7 @@ class LevelBuilder:
 class Level:
     def __init__(self, builder: LevelBuilder):
         self.container = builder.container
+        self.container.set_object('level', self)
         self.screen_rect = builder.screen_size
         self.monitor_size = [pg.display.Info().current_w, pg.display.Info().current_h]
         self.screen = pg.display.set_mode((builder.game_dto.screen_width, builder.game_dto.screen_height), pg.HWSURFACE | pg.DOUBLEBUF)
