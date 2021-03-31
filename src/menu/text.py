@@ -38,7 +38,7 @@ class TextControls(TextGUI):
 
     def __init__(self, screen):
         font = pg.font.SysFont('purisa', 26)
-        TextGUI.__init__(self, screen, font, (0, 0, 0), 'How to play', (320, 370))
+        TextGUI.__init__(self, screen, font, (0, 0, 0), 'Controls', (340, 370))
 
     def action(self):
         self.screen.menu.show_controls_screen()
@@ -54,11 +54,21 @@ class TextOptions(TextGUI):
         self.screen.menu.show_options_screen()
 
 
+class TextLevels(TextGUI):
+
+    def __init__(self, screen):
+        font = pg.font.SysFont('purisa', 26)
+        TextGUI.__init__(self, screen, font, (0, 0, 0), 'Levels', (355, 570))
+
+    def action(self):
+        self.screen.menu.show_levels_screen()
+
+
 class TextExit(TextGUI):
 
     def __init__(self, screen):
         font = pg.font.SysFont('purisa', 26)
-        TextGUI.__init__(self, screen, font, (0, 0, 0), 'Exit', (380, 570))
+        TextGUI.__init__(self, screen, font, (0, 0, 0), 'Exit', (380, 670))
 
     def action(self):
         self.screen.menu.exit_program()
@@ -72,3 +82,41 @@ class TextBack(TextGUI):
 
     def action(self):
         self.screen.menu.show_initial_screen()
+
+
+class TextLevel1(TextGUI):
+
+    def __init__(self, screen):
+        font = pg.font.SysFont('purisa', 26)
+        TextGUI.__init__(self, screen, font, (0, 0, 0), 'Level 1', (80, 100))
+
+    def action(self):
+        self.screen.menu.execute_level_1()
+
+
+class TextLevel2(TextGUI):
+
+    def __init__(self, screen):
+        font = pg.font.SysFont('purisa', 26)
+        TextGUI.__init__(self, screen, font, (0, 0, 0), 'Level 2', (80, 200))
+
+    def action(self):
+        self.screen.menu.execute_level_2()
+
+
+class TextLevel3(TextGUI):
+
+    def __init__(self, screen):
+        font = pg.font.SysFont('purisa', 26)
+        TextGUI.__init__(self, screen, font, (0, 0, 0), 'Level 3', (80, 300))
+
+    def action(self):
+        self.screen.menu.execute_level_3()
+
+
+class TextLevel4(TextGUI):
+
+    def __init__(self, screen):
+        font = pg.font.SysFont('purisa', 26)
+        TextGUI.__init__(self, screen, font, (0, 0, 0), 'Level 4', (80, 400))
+
