@@ -25,6 +25,12 @@ class Hero(ShooterEntity):
         self.last_hit = time.time()
         self.life = Life(builder.container, 3, player)
         self.points = Punctuation(builder.container, player)
+        self.container = builder.container
+
+    def shoot(self, target):
+        h_bullets = self.container.get_object('h_bullets')
+        h_bullets.add(super().shoot(target))
+        self.shoot_maniac(h_bullets)
 
     def walk_loop(self, dt):
         if self.direction == pg.K_LEFT:
@@ -62,6 +68,10 @@ class Hero(ShooterEntity):
     def add_point(self):
         self.points.increase()
         self.mixer.play_point()
+
+    def activate_maniac(self):
+        self.maniac = True
+        self.maniac_init = time.time()
 
     def update(self, platforms, _, dt, platforms2=None):
         if self.movement:

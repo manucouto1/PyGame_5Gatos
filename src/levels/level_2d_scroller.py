@@ -37,9 +37,7 @@ class Scroller2D(Level):
             if event.type == pg.MOUSEBUTTONDOWN:
                 if len(self.h_bullets) < 5:
                     x, y = pg.mouse.get_pos()
-                    # bullet = self.hero.shoot((x - 15, y - 15))
-                    bullet = self.hero.shoot((x - self.hero.rect.width / 2, y - self.hero.rect.height / 2))
-                    self.h_bullets.add(bullet)
+                    self.hero.shoot((x - self.hero.rect.width / 2, y - self.hero.rect.height / 2))
 
         pressed = pg.key.get_pressed()
 

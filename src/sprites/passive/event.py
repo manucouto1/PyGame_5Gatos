@@ -3,6 +3,8 @@ import pygame as pg
 
 from sprites.passive.hud.hearts import Heart
 
+from src.utils import assets
+
 
 class Event(Sprite):
     def __init__(self, observer, *groups):
@@ -67,4 +69,18 @@ class KittyPoint(Event):
 
     def kill(self):
         self.observer.add_point()
+        Sprite.kill(self)
+
+
+class ManiacMode(Event):
+    def __init__(self, hero, pos, *groups):
+        super().__init__(hero, *groups)
+        self.event = "Maniac mode active"
+        self.image = assets.load_image("treat.png")
+        self.image = pg.transform.scale(self.image, (32, 32))
+        self.rect = self.image.get_rect()
+        self.rect.bottomleft = pos
+
+    def kill(self):
+        self.observer.activate_maniac()
         Sprite.kill(self)

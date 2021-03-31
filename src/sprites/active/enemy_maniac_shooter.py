@@ -1,14 +1,17 @@
-import math
 import random
 import time
 
-import numpy as np
-
 from src.sprites.active.enemy_turret_shooter import EnemyTurretShooter
-from src.sprites.passive.event import ExtraLife
+from src.sprites.passive.event import ExtraLife, ManiacMode
 
 
 class Maniac(EnemyTurretShooter):
+
+    def __init__(self, container, entity, *groups):
+        super().__init__(container, entity, *groups)
+        self.maniac = True
+        self.maniac_time = 0.25
+
     def damage_effect(self, its_hit):
         left = its_hit.rect.left > self.rect.left
         right = its_hit.rect.left < self.rect.left
@@ -27,25 +30,12 @@ class Maniac(EnemyTurretShooter):
 
     def move(self, hero, dt):
         distance = self.calc_distance(hero)
-        self.dt_count += dt
-
         if distance < 300:
-            if self.shots < 3 and len(self.e_bullets.sprites()) < 5:
-                if self.dt_count >= self.wait_time:
-                    self.wait_time = 450 / 5
-                    self.dt_count = 0
-                    for i in np.arange(0, 2 * math.pi, math.pi / 8):
-                        x = math.cos(i) * 100
-                        y = math.sin(i) * 100
-                        print(i, x, y)
-                        bullet = self.shoot((self.rect.x + x, self.rect.y + y))
-                        self.e_bullets.add(bullet)
-                        self.shots += 1
-            else:
-                self.wait_time = 14400 / 5
-                self.shots = 0
-        else:
-            self.wait_time = 450 / 5
+            if time.time() - self.maniac_init > 2:
+                self.maniac_init = time.time()
+                self.maniac = True
+
+            self.shoot_maniac(self.e_bullets)
 
     def update(self, hero, zone_events, platforms, dt):
         if self.getting_damage:
@@ -66,5 +56,5 @@ class Maniac(EnemyTurretShooter):
             self.apply(platforms, dt)
         else:
             self.vel.x = 0
-            zone_events.add(ExtraLife(hero, (self.rect.x, self.rect.y)))
+            zone_events.add(ManiacMode(hero, self.rect.bottomleft))
             self.kill()
