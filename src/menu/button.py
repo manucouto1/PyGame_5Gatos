@@ -66,7 +66,7 @@ class ButtonBack(Button):
 class ButtonMusicLouder(Button):
 
     def __init__(self, screen):
-        Button.__init__(self, screen, 'menu/volume-up.png', (450, 140), 50, 50)
+        Button.__init__(self, screen, 'menu/volume-up.png', (490, 140), 50, 50)
 
     def action(self):
         self.screen.menu.music_louder()
@@ -84,10 +84,11 @@ class ButtonMusicLower(Button):
 class ButtonSoundLouder(Button):
 
     def __init__(self, screen):
-        Button.__init__(self, screen, 'menu/volume-up.png', (450, 240), 50, 50)
+        Button.__init__(self, screen, 'menu/volume-up.png', (490, 240), 50, 50)
 
     def action(self):
         self.screen.menu.sound_louder()
+
 
 class ButtonSoundLower(Button):
 
