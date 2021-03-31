@@ -40,12 +40,13 @@ class Maniac(EnemyTurretShooter):
 
     def update(self, hero, zone_events, platforms, dt, gravity=pg.Vector2((0, 3.8))):
         if self.getting_damage:
-            right = self.rect.left > hero.rect.left
-            left = self.rect.left < hero.rect.right
-            if left:
+            left = self.rect.left > hero.rect.right + 20
+            right = self.rect.right < hero.rect.left - 20
+            if right:
                 self.move_right()
-            elif right:
+            elif left:
                 self.move_left()
+
             self.jump()
 
         if self.life > 0:
