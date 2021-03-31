@@ -1,0 +1,14 @@
+{
+  "name": "src.sprites.groups.camera.CameraHorizontalGap",
+  "scale": 32,
+  "gaps": [
+    {
+      "init": 0,
+      "end": 22
+    },
+    {
+      "init": 25,
+      "end": 50
+    }
+  ]
+}

@@ -73,13 +73,13 @@ class Hero(ShooterEntity):
         self.maniac = True
         self.maniac_init = time.time()
 
-    def update(self, platforms, _, dt, platforms2=None):
+    def update(self, platforms, _, dt, platforms2=None, gravity=pg.Vector2((0, 3.8))):
         if self.movement:
             self.walk_loop(dt)
         else:
             self.idle_loop(dt)
 
-        self.apply(platforms, dt)
+        self.apply(platforms, dt, gravity)
         if platforms2 is not None:
             self.collide_ground_falling(0, self.vel.y, platforms2)
 

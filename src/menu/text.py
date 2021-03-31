@@ -21,7 +21,7 @@ class TextTitle(TextGUI):
     def __init__(self, screen):
         # font = pg.font.Font('Mikodacs.otf', 78)
         font = pg.font.Font('../assets/fonts/yukari.ttf', 78)
-        TextGUI.__init__(self, screen, font, (0, 0, 0), '5Gatos', (SCREEN_WIDTH / 2 - 120, 150))
+        TextGUI.__init__(self, screen, font, (255, 255, 255), '5Gatos', (SCREEN_WIDTH / 2 - 120, 150))
 
 
 class TextPlay(TextGUI):
