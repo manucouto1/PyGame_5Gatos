@@ -109,3 +109,12 @@ class ScreenGUILevels(ScreenGUI):
         self.elementGUI.append(TextLevel2(self))
         self.elementGUI.append(TextLevel3(self))
         self.elementGUI.append(TextLevel4(self))
+
+class ScreenGUIGameOver(ScreenGUI):
+
+    def __init__(self, menu, image):
+        ScreenGUI.__init__(self, menu, image)
+        self.elementGUI.append(ButtonPlay(self))
+        self.elementGUI.append(ButtonExit(self))
+        self.elementGUI.append(TextReplay(self))
+        self.elementGUI.append(TextExit(self))

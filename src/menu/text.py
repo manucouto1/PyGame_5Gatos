@@ -33,6 +33,14 @@ class TextPlay(TextGUI):
     def action(self):
         self.screen.menu.execute_game()
 
+class TextReplay(TextGUI):
+
+    def __init__(self, screen):
+        font = pg.font.SysFont('purisa', 26)
+        TextGUI.__init__(self, screen, font, (0, 0, 0), 'Play again', (380, 270))
+
+    def action(self):
+        self.screen.menu.execute_game()
 
 class TextControls(TextGUI):
 
