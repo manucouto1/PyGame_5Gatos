@@ -108,21 +108,29 @@ class ActiveEntity(pg.sprite.Sprite):
         if self.falling_mode:
             self.vel.y = self.falling_velocity
 
-    def damage_effect(self, its_hit):
-        left = its_hit.rect.left > self.rect.left
-        right = its_hit.rect.right > self.rect.right
+    def damage_effect(self, hit):
+        left, right = self.after_hit_direction(hit)
 
-        if left:
-            self.move_right()
-        elif right:
-            self.move_left()
-        else:
-            random.choice([self.move_right, self.move_left])()
+        self.choose_mov(left, right)
 
         self.getting_damage = True
         self.damage_time = time.time()
         self.jump()
         self.num_jumps = 0
+
+    def after_hit_direction(self, hit):
+        right = hit.rect.left < self.rect.right
+        left = hit.rect.right > self.rect.left
+
+        return left, right
+
+    def choose_mov(self, left, right):
+        if left:
+            self.move_left()
+        elif right:
+            self.move_right()
+        else:
+            random.choice([self.move_right, self.move_left])()
 
     def collide_ground(self, xvel, yvel, platforms, dt, fun=collide_rect):
         collide_l = pg.sprite.spritecollide(self, platforms, False, collided=fun)

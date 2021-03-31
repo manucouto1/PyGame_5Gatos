@@ -43,11 +43,13 @@ class ScreenGUIInitial(ScreenGUI):
         self.elementGUI.append(ButtonExit(self))
         self.elementGUI.append(ButtonControls(self))
         self.elementGUI.append(ButtonOptions(self))
+        self.elementGUI.append(ButtonLevels(self))
         self.elementGUI.append(TextTitle(self))
         self.elementGUI.append(TextPlay(self))
         self.elementGUI.append(TextExit(self))
         self.elementGUI.append(TextOptions(self))
         self.elementGUI.append(TextControls(self))
+        self.elementGUI.append(TextLevels(self))
 
 
 class ScreenGUIControls(ScreenGUI):
@@ -89,5 +91,21 @@ class ScreenGUIOptions(ScreenGUI):
         font = pg.font.SysFont('purisa', 26)
         text1 = font.render('Volume settings:', True, (0, 0, 0))
         text2 = font.render('Sounds settings:', True, (0, 0, 0))
+        text3 = font.render(str(int(self.menu.mixer.get_music_volume() * 10)), True, (0, 0, 0))
+        text4 = font.render(str(int(self.menu.mixer.get_sound_volume() * 10)), True, (0, 0, 0))
         self.screen.blit(text1, (80, 100))
         self.screen.blit(text2, (80, 200))
+        self.screen.blit(text3, (450, 100))
+        self.screen.blit(text4, (450, 200))
+
+
+class ScreenGUILevels(ScreenGUI):
+
+    def __init__(self, menu, image):
+        ScreenGUI.__init__(self, menu, image)
+        self.elementGUI.append(ButtonBack(self))
+        self.elementGUI.append(TextBack(self))
+        self.elementGUI.append(TextLevel1(self))
+        self.elementGUI.append(TextLevel2(self))
+        self.elementGUI.append(TextLevel3(self))
+        self.elementGUI.append(TextLevel4(self))

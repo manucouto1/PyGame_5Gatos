@@ -3,6 +3,7 @@ from src.levels.level import LevelBuilder
 from src.menu.screen import ScreenGUIInitial
 from src.menu.screen import ScreenGUIControls
 from src.menu.screen import ScreenGUIOptions
+from src.menu.screen import ScreenGUILevels
 from src.sprites.passive.cursor import Cursor
 
 MAX_VOLUME = 0.8
@@ -18,6 +19,7 @@ class Menu:
         self.scenes_list.append(ScreenGUIInitial(self, "menu/menu_background.png"))
         self.scenes_list.append(ScreenGUIControls(self, "menu/menu_background.png"))
         self.scenes_list.append(ScreenGUIOptions(self, "menu/menu_background.png"))
+        self.scenes_list.append(ScreenGUILevels(self, "menu/menu_background.png"))
         self.cursor = Cursor(director.container, pg.mouse.get_pos())
         self.show_initial_screen()
 
@@ -59,6 +61,30 @@ class Menu:
         for level in game.levels:
             self.director.stack_scene(LevelBuilder(container, level))
 
+    def execute_level_1(self):
+        container = self.director.container
+        self.mixer.play_button_click()
+
+        game = self.director.game
+
+        self.director.stack_scene(LevelBuilder(container, game.levels[2]))
+
+    def execute_level_2(self):
+        container = self.director.container
+        self.mixer.play_button_click()
+
+        game = self.director.game
+
+        self.director.stack_scene(LevelBuilder(container, game.levels[1]))
+
+    def execute_level_3(self):
+        container = self.director.container
+        self.mixer.play_button_click()
+
+        game = self.director.game
+
+        self.director.stack_scene(LevelBuilder(container, game.levels[0]))
+
     def show_initial_screen(self):
         self.current_screen = 0
 
@@ -67,6 +93,9 @@ class Menu:
 
     def show_options_screen(self):
         self.current_screen = 2
+
+    def show_levels_screen(self):
+        self.current_screen = 3
 
     def music_louder(self):
         self.mixer.music_louder()

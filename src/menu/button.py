@@ -45,10 +45,19 @@ class ButtonOptions(Button):
         self.screen.menu.show_options_screen()
 
 
+class ButtonLevels(Button):
+
+    def __init__(self, screen):
+        Button.__init__(self, screen, 'menu/button1.png', (305, 570), 200, 50)
+
+    def action(self):
+        self.screen.menu.show_levels_screen()
+
+
 class ButtonExit(Button):
 
     def __init__(self, screen):
-        Button.__init__(self, screen, 'menu/button2.png', (305, 570), 200, 50)
+        Button.__init__(self, screen, 'menu/button2.png', (305, 670), 200, 50)
 
     def action(self):
         self.screen.menu.exit_program()
@@ -66,7 +75,7 @@ class ButtonBack(Button):
 class ButtonMusicLouder(Button):
 
     def __init__(self, screen):
-        Button.__init__(self, screen, 'menu/volume-up.png', (450, 140), 50, 50)
+        Button.__init__(self, screen, 'menu/volume-up.png', (490, 140), 50, 50)
 
     def action(self):
         self.screen.menu.music_louder()
@@ -84,10 +93,11 @@ class ButtonMusicLower(Button):
 class ButtonSoundLouder(Button):
 
     def __init__(self, screen):
-        Button.__init__(self, screen, 'menu/volume-up.png', (450, 240), 50, 50)
+        Button.__init__(self, screen, 'menu/volume-up.png', (490, 240), 50, 50)
 
     def action(self):
         self.screen.menu.sound_louder()
+
 
 class ButtonSoundLower(Button):
 

@@ -27,9 +27,11 @@ class Mixer:
     def load_sound(sound_file):
         return mixer.Sound(assets.path_to("sounds", sound_file)) if sound_file else None
 
-    @staticmethod
-    def get_volume():
-        return mixer.music.get_volume()
+    def get_music_volume(self):
+        return self.current_music_volume
+
+    def get_sound_volume(self):
+        return self.current_sound_volume
 
     def load_new_profile(self, sound_dto):
         self.jump_sound = self.load_sound(sound_dto.jump)
