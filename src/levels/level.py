@@ -35,6 +35,7 @@ class LevelBuilder:
         self.h_bullets = ScrollAdjustedGroup(self.camera.scroll)
         self.e_bullets = ScrollAdjustedGroup(self.camera.scroll)
         self.container.set_object('e_bullets', self.e_bullets)
+        self.container.set_object('h_bullets', self.h_bullets)
         self.container.set_object('hero', self.hero)
         self.enemies = self.enemies_builder.build(self.camera.scroll)
         self.layers = self.layers_builder.build(self.camera.scroll)
