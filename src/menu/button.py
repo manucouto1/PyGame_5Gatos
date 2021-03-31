@@ -19,7 +19,6 @@ class Button(ElementGUI):
 
 
 class ButtonPlay(Button):
-
     def __init__(self, screen):
         Button.__init__(self, screen, 'menu/button1.png', (305, 270), 200, 50)
 
