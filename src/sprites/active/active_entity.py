@@ -54,9 +54,9 @@ class ActiveEntity(pg.sprite.Sprite):
             self.image = self.sheet[1].next(dt)
             self.mask = self.sheet.get_mask()
 
-    def gravity(self, dt):
+    def gravity(self, dt, gravity=pg.Vector2((0, 3.8))):
         if not self.onGround:
-            self.vel += (GRAVITY / 50) * dt
+            self.vel += (gravity / 50) * dt
             if self.vel.y > 63:
                 self.vel.y = 63
             if self.vel.x > 63:
@@ -132,8 +132,8 @@ class ActiveEntity(pg.sprite.Sprite):
             if xvel < 0:
                 self.rect.left = p.rect.right
 
-    def apply(self, platforms, dt):
-        self.gravity(dt)
+    def apply(self, platforms, dt, gravity=pg.Vector2((0, 3.8))):
+        self.gravity(dt, gravity)
         vel_x = (self.vel.x / 50 * dt)
         self.rect.x += vel_x if (vel_x <= 63) else 63
         self.collide_ground(self.vel.x, 0, platforms, dt)

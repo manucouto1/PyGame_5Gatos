@@ -3,6 +3,7 @@ import time
 
 from src.sprites.active.enemy_turret_shooter import EnemyTurretShooter
 from src.sprites.passive.event import ExtraLife, ManiacMode
+import pygame as pg
 
 
 class Maniac(EnemyTurretShooter):
@@ -37,7 +38,7 @@ class Maniac(EnemyTurretShooter):
 
             self.shoot_maniac(self.e_bullets)
 
-    def update(self, hero, zone_events, platforms, dt):
+    def update(self, hero, zone_events, platforms, dt, gravity=pg.Vector2((0, 3.8))):
         if self.getting_damage:
             right = self.rect.left > hero.rect.left
             left = self.rect.left < hero.rect.right
@@ -53,7 +54,7 @@ class Maniac(EnemyTurretShooter):
             else:
                 self.idle_loop(dt)
             self.move(hero, dt)
-            self.apply(platforms, dt)
+            self.apply(platforms, dt, gravity)
         else:
             self.vel.x = 0
             zone_events.add(ManiacMode(hero, self.rect.bottomleft))

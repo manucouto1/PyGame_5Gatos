@@ -33,11 +33,11 @@ class EnemyDummy(ActiveEntity):
     def dead_loop(self, dt):
         self.image = self.sheet[3].next(dt)
 
-    def update(self, hero, zone_events, platforms, dt):
+    def update(self, hero, zone_events, platforms, dt, gravity=pg.Vector2((0, 3.8))):
         if self.life > 0:
             self.move(dt)
             self.walk_loop(dt)
-            self.apply(platforms, dt)
+            self.apply(platforms, dt, gravity)
         else:
             self.vel.x = 0
             zone_events.add(KittyPoint(hero, self.sheet, self.rect.bottomleft))

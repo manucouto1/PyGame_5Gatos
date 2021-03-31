@@ -45,5 +45,17 @@
     "projectile": "wool.png",
     "rows": 3,
     "path": "src.sprites.active.enemy_maniac_shooter.Maniac"
+  },
+
+  "boss": {
+    "name": "kidd_cat",
+    "height": 64,
+    "width": 64,
+    "rescale_x": 32,
+    "rescale_y": 32,
+    "sheet": "kidd_full.png",
+    "projectile": "wool.png",
+    "rows": 3,
+    "path": "src.sprites.active.enemy_maniac_shooter.Maniac"
   }
 }

@@ -1,5 +1,3 @@
-import math
-import random
 import time
 import numpy as np
 import pygame as pg
@@ -75,7 +73,7 @@ class EnemyTurretShooter(ShooterEntity):
             self.damage_effect(bullet)
             self.mixer.play_enemy_hit()
 
-    def update(self, hero, zone_events, platforms, dt):
+    def update(self, hero, zone_events, platforms, dt, gravity=pg.Vector2((0, 3.8))):
         if not self.getting_damage:
             self.reset_movement()
         else:
@@ -90,7 +88,7 @@ class EnemyTurretShooter(ShooterEntity):
             else:
                 self.idle_loop(dt)
             self.move(hero, dt)
-            self.apply(platforms, dt)
+            self.apply(platforms, dt, gravity)
         else:
             self.vel.x = 0
             zone_events.add(ExtraLife(hero, (self.rect.x, self.rect.y)))
