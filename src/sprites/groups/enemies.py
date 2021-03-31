@@ -43,3 +43,11 @@ class Enemies(ScrollAdjustedLayeredGroup):
         for enemy in self.sprites():
             if self.calc_distance(enemy, self.camera_rect) <= self.max_distance:
                 enemy.update(hero, *args)
+
+    def shutdown_gravity(self, vel):
+        for enemy in self.sprites():
+            enemy.shutdown_gravity(vel)
+
+    def on_gravity(self):
+        for enemy in self.sprites():
+            enemy.on_gravity()

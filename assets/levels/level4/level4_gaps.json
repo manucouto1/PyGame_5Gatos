@@ -1,14 +1,26 @@
 {
-  "name": "src.sprites.groups.camera.CameraHorizontalGap",
+  "name": "src.sprites.groups.camera.FallingCamera",
   "scale": 32,
-  "gaps": [
+  "h_gaps": [
     {
       "init": 0,
-      "end": 22
+      "end": 24
     },
     {
+      "action": "falling_mode",
       "init": 25,
       "end": 50
+    }
+  ],
+  "v_gaps": [
+    {
+      "init": 0,
+      "end": 25
+    },
+    {
+      "action": "normal_mode",
+      "init": 169,
+      "end": 194
     }
   ]
 }

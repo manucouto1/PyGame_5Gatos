@@ -1,6 +1,8 @@
 {
   "name": "src.sprites.groups.camera.Camera",
   "scale": 32,
-  "gaps": [
+  "v_gaps": [
+  ],
+  "h_gaps": [
   ]
 }

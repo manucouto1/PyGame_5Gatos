@@ -88,7 +88,7 @@ class EnemyTurretShooter(ShooterEntity):
             else:
                 self.idle_loop(dt)
             self.move(hero, dt)
-            self.apply(platforms, dt, gravity)
+            self.apply(platforms, dt)
         else:
             self.vel.x = 0
             zone_events.add(ExtraLife(hero, (self.rect.x, self.rect.y)))

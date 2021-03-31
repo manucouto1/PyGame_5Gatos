@@ -37,7 +37,7 @@ class EnemyDummy(ActiveEntity):
         if self.life > 0:
             self.move(dt)
             self.walk_loop(dt)
-            self.apply(platforms, dt, gravity)
+            self.apply(platforms, dt)
         else:
             self.vel.x = 0
             zone_events.add(KittyPoint(hero, self.sheet, self.rect.bottomleft))
