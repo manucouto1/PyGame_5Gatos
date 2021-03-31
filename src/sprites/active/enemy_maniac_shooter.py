@@ -13,21 +13,11 @@ class Maniac(EnemyTurretShooter):
         self.maniac = True
         self.maniac_time = 0.25
 
-    def damage_effect(self, its_hit):
-        left = its_hit.rect.left > self.rect.left
-        right = its_hit.rect.left < self.rect.left
+    def after_hit_direction(self, hit):
+        left = hit.rect.left < self.rect.right
+        right = hit.rect.right > self.rect.left
 
-        if left:
-            self.move_right()
-        elif right:
-            self.move_left()
-        else:
-            random.choice([self.move_right, self.move_left])()
-
-        self.getting_damage = True
-        self.damage_time = time.time()
-        self.jump()
-        self.num_jumps = 0
+        return left, right
 
     def move(self, hero, dt):
         distance = self.calc_distance(hero)
@@ -42,10 +32,8 @@ class Maniac(EnemyTurretShooter):
         if self.getting_damage:
             left = self.rect.left > hero.rect.right + 20
             right = self.rect.right < hero.rect.left - 20
-            if right:
-                self.move_right()
-            elif left:
-                self.move_left()
+            if left or right:
+                self.choose_mov(left, right)
 
             self.jump()
 
