@@ -14,6 +14,12 @@ class CameraBuilder:
 
 
 class Camera(ScrollAdjustedGroup):
+    """
+    Class to manage camera scrolling
+
+    :param target: pygame.Sprite to follow
+    :param builder: Camera builder
+    """
     def __init__(self, target, builder: CameraBuilder):
         self.scroll = pg.Vector2(0, 0)
         ScrollAdjustedGroup.__init__(self, self.scroll, target)
@@ -22,13 +28,16 @@ class Camera(ScrollAdjustedGroup):
         self.screen_size = builder.screen_size
         x = -self.target.rect.center[0] + self.screen_size.width / 2
         y = -self.target.rect.center[1] + self.screen_size.height / 2
-        self.do_scroll(x, y, 1, 1)
+        self._do_scroll(x, y, 1, 1)
         self.active_id = -1
         print("Cargamos Normal camera")
 
-    def do_scroll(self, x, y, smooth_x, smooth_y):
+    def _do_scroll(self, x, y, smooth_x, smooth_y):
         (aux_x, aux_y) = (pg.Vector2((x, y)) - self.scroll)
         self.scroll += pg.Vector2((aux_x*smooth_x, aux_y*smooth_y))
+        self._adjust()
+
+    def _adjust(self):
         self.scroll.x = max(-(self.world_size.width - self.screen_size.width), min(0, round(self.scroll.x)))
         self.scroll.y = max(-(self.world_size.height - self.screen_size.height), min(0, round(self.scroll.y)))
 
@@ -37,7 +46,7 @@ class Camera(ScrollAdjustedGroup):
         if self.target:
             x = -self.target.rect.center[0] + self.screen_size.width / 2
             y = -self.target.rect.center[1] + self.screen_size.height / 2
-            self.do_scroll(x, y, 0.05, 0.01)
+            self._do_scroll(x, y, 0.05, 0.01)
 
 
 class CameraVerticalGap(Camera):
@@ -55,13 +64,19 @@ class CameraVerticalGap(Camera):
             for gap in self.gaps:
                 if gap["y_init"] < self.target.rect.center[1] < gap["y_end"]:
                     y = -(gap["y_init"]+gap['y_end'])/2 + self.screen_size.height / 2
-                    self.do_scroll(x, y, 0.05, 0.05)
+                    self._do_scroll(x, y, 0.05, 0.05)
                     return
 
-            self.do_scroll(x, y, 0.05, 0.05)
+            self._do_scroll(x, y, 0.05, 0.05)
 
 
 class CameraHorizontalGap(Camera):
+    """
+    Class to manage camera horizontal scrolling at level gaps
+
+    :param target: pygame.Sprite to follow
+    :param builder: Camera builder
+    """
     def __init__(self, target, builder: CameraBuilder):
         super().__init__(target, builder)
         self.gaps = builder.gaps.gaps
@@ -80,13 +95,19 @@ class CameraHorizontalGap(Camera):
                         o = self.container.get_object('level')
                         getattr(o, gap["action"])()
                     x = -(gap["x_init"]+gap['x_end'])/2 + self.screen_size.width / 2
-                    self.do_scroll(x, y, 0.1, 0.1)
+                    self._do_scroll(x, y, 0.1, 0.1)
                     return
 
-            self.do_scroll(x, y, 0.1, 0.1)
+            self._do_scroll(x, y, 0.1, 0.1)
 
 
 class FallingCamera(Camera):
+    """
+    Class to manage camera scroll in the free fall level
+
+    :param target: pygame.Sprite to follow
+    :param builder: Camera class builder
+    """
     def __init__(self, target, builder: CameraBuilder):
         super().__init__(target, builder)
         self.container = builder.container
@@ -147,11 +168,10 @@ class FallingCamera(Camera):
             if self.falling:
                 (aux_x, aux_y) = (x - self.scroll.x, -3/50*dt)
                 self.scroll += pg.Vector2((aux_x*0.5, aux_y))
-                self.scroll.x = max(-(self.world_size.width - self.screen_size.width), min(0, round(self.scroll.x)))
-                self.scroll.y = max(-(self.world_size.height - self.screen_size.height), min(0, round(self.scroll.y)))
+                self._adjust()
                 print("Falling_mode > ", y)
             else:
-                self.do_scroll(x, y, 0.1, 0.1)
+                self._do_scroll(x, y, 0.1, 0.1)
 
 
 

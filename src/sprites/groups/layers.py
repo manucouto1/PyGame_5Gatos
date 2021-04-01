@@ -16,6 +16,11 @@ class LayersBuilder:
 
 
 class Layers(ScrollAdjustedLayeredGroup):
+    """
+    Class to manage the layered groups of platforms
+
+    :param camera_scroll: Current scroll pointer [x, y]
+    """
     def __init__(self, camera_scroll, builder: LayersBuilder):
         super().__init__(camera_scroll)
         self.layers_id = builder.level_dto.layers_id
@@ -25,10 +30,25 @@ class Layers(ScrollAdjustedLayeredGroup):
                     layer.path, builder.sheet, builder.level_dto.tile_size, platform), layer=layer.id)
 
     def get_ground(self):
+        """
+        Get normal platforms
+
+        :rtype: list[Platform]
+        """
         return self.get_sprites_from_layer(self.layers_id["ground"])
 
     def get_dangerous(self):
+        """
+        Get dangerous platforms
+
+        :rtype: list[Platform]
+        """
         return self.get_sprites_from_layer(self.layers_id["danger"])
 
     def get_falling(self):
+        """
+        Get falling platforms
+
+        :rtype: list[Platform]
+        """
         return self.get_sprites_from_layer(self.layers_id["falling"])
