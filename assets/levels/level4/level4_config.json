@@ -14,5 +14,5 @@
   "events": "level4_events.json",
   "gaps": "level4_gaps.json",
   "sounds_profile": "common",
-  "music_profile": "game"
+  "music_profile": "final_level"
 }

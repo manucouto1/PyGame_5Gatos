@@ -103,6 +103,7 @@ class Hero(ShooterEntity):
         """
         self.maniac = True
         self.maniac_init = time.time()
+        self.mixer.play_cookie()
 
     def update(self, platforms, _, dt, platforms2=None, gravity=pg.Vector2((0, 3.8))):
         if self.movement:
