@@ -33,7 +33,6 @@ class LevelDTO:
                     self.map_width = tiles_config["map_width"]
                     self.map_height = tiles_config["map_height"]
 
-
                     layers = tiles_config["layers"]
 
                     self.layers = []

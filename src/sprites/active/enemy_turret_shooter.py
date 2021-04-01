@@ -44,7 +44,7 @@ class EnemyTurretShooter(ShooterEntity):
                 if self.dt_count >= self.wait_time:
                     self.wait_time = 450 / 5
                     self.dt_count = 0
-                    if self.onGround:
+                    if self.onGround or self.falling_mode:
                         bullet = self.shoot((hero.rect.x, hero.rect.y))
                         self.e_bullets.add(bullet)
                         self.shots += 1

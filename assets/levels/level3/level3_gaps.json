@@ -1,8 +1,7 @@
 {
   "name": "src.sprites.groups.camera.CameraVerticalGap",
   "scale": 32,
-  "h_gaps": [
-  ],
-  "v_gaps": [
+  "gaps": [
   ]
+
 }
