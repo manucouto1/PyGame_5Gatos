@@ -1,11 +1,16 @@
 import time
-import numpy as np
 import pygame as pg
 from src.sprites.active.shooter_entity import ShooterEntity
 from src.sprites.passive.event import ExtraLife
 
 
 class EnemyTurretShooter(ShooterEntity):
+    """
+    Class implementing the maniac shooting enemies
+
+    :param container: Application container
+    :param entity: Enemy map DTO
+    """
     def __init__(self, container, entity, *groups):
         ShooterEntity.__init__(self, container, entity, *groups)
         self.last_hit = time.time()
@@ -23,20 +28,20 @@ class EnemyTurretShooter(ShooterEntity):
         self.sheet[2].set_frames_skip(2)
         self.sheet[3].set_frames_skip(2)
 
-    def calc_distance(self, hero):
-        a = (self.rect.x - hero.rect.x) ** 2
-        b = (self.rect.y - hero.rect.y) ** 2
-
-        return np.sqrt(a + b)
-
     def walk_loop(self, dt):
         if self.direction == pg.K_LEFT:
             self.image = self.sheet[1].next(dt)
         elif self.direction == pg.K_RIGHT:
             self.image = self.sheet[2].next(dt)
 
-    def move(self, hero, dt):
-        distance = self.calc_distance(hero)
+    def shoot_hero(self, target, dt):
+        """
+        Tries to shoot to the target
+
+        :param target: pygame.Sprite
+        :param dt: Elapsed clock time
+        """
+        distance = self.calc_distance(target)
         self.dt_count += dt
 
         if distance < 300:
@@ -45,7 +50,7 @@ class EnemyTurretShooter(ShooterEntity):
                     self.wait_time = 450 / 5
                     self.dt_count = 0
                     if self.onGround or self.falling_mode:
-                        bullet = self.shoot((hero.rect.x, hero.rect.y))
+                        bullet = self.shoot((target.rect.x, target.rect.y))
                         self.e_bullets.add(bullet)
                         self.shots += 1
             else:
@@ -87,11 +92,9 @@ class EnemyTurretShooter(ShooterEntity):
                 self.walk_loop(dt)
             else:
                 self.idle_loop(dt)
-            self.move(hero, dt)
+            self.shoot_hero(hero, dt)
             self.apply(platforms, dt)
         else:
             self.vel.x = 0
             zone_events.add(ExtraLife(hero, (self.rect.x, self.rect.y)))
             self.kill()
-
-
