@@ -30,6 +30,7 @@ class ActiveEntity(pg.sprite.Sprite):
         self.onGround = False
         self.getting_damage = False
         self.falling_mode = False
+        self.y_movement = False
         self.gravity_value = pg.Vector2((0, 3.8))
         self.vel = pg.Vector2((0, 0))
         self.speed = 8
@@ -45,7 +46,7 @@ class ActiveEntity(pg.sprite.Sprite):
         self.falling_mode = True
 
     def on_gravity(self):
-        self.jump_strength = 30
+        self.jump_strength = 28
         self.falling_mode = False
 
     def calc_distance(self, hero):
@@ -67,7 +68,9 @@ class ActiveEntity(pg.sprite.Sprite):
             self.mask = self.sheet.get_mask()
 
     def gravity(self, dt):
-        if not self.onGround and not self.falling_mode:
+        if self.falling_mode and not self.y_movement:
+            self.vel.y = (self.falling_velocity / 50) * dt
+        elif not self.onGround:
             self.vel += (self.gravity_value / 50) * dt
             if self.vel.y > 63:
                 self.vel.y = 63
@@ -96,23 +99,20 @@ class ActiveEntity(pg.sprite.Sprite):
 
     def move_up(self):
         self.vel.y = -self.speed
-        self.movement = True
+        self.y_movement = True
 
     def move_down(self):
         self.vel.y = self.speed
-        self.movement = True
+        self.y_movement = True
 
     def reset_movement(self):
         self.movement = False
+        self.y_movement = False
         self.vel.x = 0
-        if self.falling_mode:
-            self.vel.y = self.falling_velocity
 
     def damage_effect(self, hit):
         left, right = self.after_hit_direction(hit)
-
         self.choose_mov(left, right)
-
         self.getting_damage = True
         self.damage_time = time.time()
         self.jump()
@@ -168,8 +168,6 @@ class ActiveEntity(pg.sprite.Sprite):
         self.rect.x += vel_x if (vel_x <= 63) else 63
         self.collide_ground(self.vel.x, 0, platforms, dt)
         vel_y = (self.vel.y / 50 * dt)
-
-
         self.rect.y += vel_y if (vel_y <= 63) else 63
         self.onGround = False
         self.collide_ground(0, self.vel.y, platforms, dt)

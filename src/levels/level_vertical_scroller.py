@@ -27,8 +27,8 @@ class VerticalScroller(Level):
         self.falling = False
 
     def falling_mode(self):
-        self.enemies.shutdown_gravity(2)
-        self.hero.shutdown_gravity(0)
+        self.enemies.shutdown_gravity(1.5)
+        self.hero.shutdown_gravity(2.5)
         self.camera.falling_mode()
         self.falling = True
 

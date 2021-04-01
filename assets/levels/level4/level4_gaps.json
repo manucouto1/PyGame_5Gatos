@@ -1,26 +1,32 @@
 {
   "name": "src.sprites.groups.camera.FallingCamera",
   "scale": 32,
-  "h_gaps": [
+  "gaps": [
     {
-      "init": 0,
-      "end": 24
+      "id": 1,
+      "center": "xy",
+      "x_init": 0,
+      "x_end": 24,
+      "y_init": 0,
+      "y_end": 25
     },
     {
+      "id": 2,
       "action": "falling_mode",
-      "init": 25,
-      "end": 50
-    }
-  ],
-  "v_gaps": [
-    {
-      "init": 0,
-      "end": 25
+      "center": "x",
+      "x_init": 25,
+      "x_end": 50,
+      "y_init": 0,
+      "y_end": 166
     },
     {
+      "id": 3,
       "action": "normal_mode",
-      "init": 169,
-      "end": 194
+      "center": "x",
+      "x_init": 25,
+      "x_end": 50,
+      "y_init": 166,
+      "y_end": 194
     }
   ]
 }
