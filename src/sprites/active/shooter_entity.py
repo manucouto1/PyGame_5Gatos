@@ -10,6 +10,13 @@ import src.utils.assets as assets
 
 
 class ShooterEntity(ActiveEntity):
+    """
+    Class for the sprites that can shoot
+
+    :param container: Application container
+    :param entity: Enemy map DTO
+    :param character: Character DTO
+    """
     def __init__(self, container, entity, character, *groups):
         path = assets.path_to('projectiles', character.projectile)
         image = container.image_from_path(path)
@@ -20,6 +27,11 @@ class ShooterEntity(ActiveEntity):
         self.maniac = False
 
     def shoot(self, target):
+        """
+        Shoot a bullet aimed towards a target
+
+        :param target: Target position (x, y)
+        """
         (m_x, m_y) = target
         m_pos = (t_x, _) = (m_x - self.scroll.x, m_y - self.scroll.y)
 
@@ -44,6 +56,11 @@ class ShooterEntity(ActiveEntity):
         return bullet
 
     def shoot_maniac(self, bullet_group):
+        """
+        Shoots bullets all around the sprite
+
+        :param bullet_group: Group to add the bullets
+        """
         shots_count = 0
         if self.maniac:
             if time.time() - self.maniac_init <= self.maniac_time:
@@ -51,7 +68,8 @@ class ShooterEntity(ActiveEntity):
                     for i in np.arange(0, 2 * math.pi, math.pi / 8):
                         x = math.cos(i) * 100
                         y = math.sin(i) * 100
-                        bullet = ShooterEntity.shoot(self, (self.rect.x + self.scroll.x + x, self.rect.y + self.scroll.y + y))
+                        bullet = ShooterEntity.shoot(self, (self.rect.x + self.scroll.x + x,
+                                                            self.rect.y + self.scroll.y + y))
                         bullet_group.add(bullet)
 
                         shots_count += 1

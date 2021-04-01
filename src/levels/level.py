@@ -13,6 +13,7 @@ from src.sprites.passive.cursor import Cursor
 
 white = (255, 255, 255)
 
+
 class LevelBuilder:
     def __init__(self, container, level_dto):
         self.container = container
@@ -90,9 +91,6 @@ class Level:
 
         self.hero.is_hit_destroy(self.e_bullets)
         self.enemies.are_shot(self.h_bullets)
-
-    def notify(self, event):
-        print(event)
 
     def next_level(self):
         director = self.container.get_object('director')

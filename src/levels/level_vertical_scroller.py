@@ -82,26 +82,3 @@ class VerticalScroller(Level):
 
         self.last_scroll_x = scroll_x
         self.last_scroll_y = scroll_y
-
-    def update(self, dt):
-        self.check_bullets_hits()
-        self.check_event_reached()
-
-        self.hero.is_hit(self.dangerous.get_actives())
-        self.hero.is_hit(self.enemies)
-        self.hero.is_hit(self.e_bullets)
-        self.enemies.are_hit(self.dangerous.get_actives())
-
-        self.h_bullets.update(dt)
-        self.e_bullets.update(dt)
-        self.enemies.update(self.hero, self.zone_events, self.platforms.get_actives()
-                            + self.falling_platforms.get_actives(), dt)
-        self.camera.update(self.platforms.get_actives(), self.dangerous.get_actives(), dt,
-                           self.falling_platforms.get_actives())
-
-        self.platforms.update(self.camera)
-        self.dangerous.update(self.camera)
-        self.falling_platforms.update(self.camera)
-        self.zone_events.update(dt)
-        self.layers.update()
-        self.cursor.update(pg.mouse.get_pos())
