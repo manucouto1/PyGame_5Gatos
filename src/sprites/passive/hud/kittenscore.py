@@ -6,7 +6,13 @@ from src.sprites.passive.hud.points_animation import PointAnim
 POINT_Y = 10
 
 
-class Punctuation(Group):
+class KittenScore(Group):
+    """
+    Class to manage kitten score
+
+    :param container: Application container
+    :param player: Player instance
+    """
     def __init__(self, container, player):
         self.player = player
         self.icon = PointAnim(container, POINT_Y)
@@ -14,6 +20,9 @@ class Punctuation(Group):
         super().__init__(self.scorer, self.icon)
 
     def increase(self):
+        """
+        Increments the score one point
+        """
         self.icon.run_animation()
         self.scorer.increase()
 

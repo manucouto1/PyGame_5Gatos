@@ -141,3 +141,7 @@ class Level:
         self.hero.life.draw(self.screen)
         self.hero.points.draw(self.screen)
         self.zone_events.draw(self.screen)
+
+        # director = self.container.get_object('director')
+        # if director.player.life == 0:
+        #     director.chage_scene(GameOverMenu(self))

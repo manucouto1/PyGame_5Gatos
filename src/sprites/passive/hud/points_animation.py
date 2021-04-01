@@ -5,6 +5,12 @@ from src.utils import assets
 
 
 class PointAnim(pg.sprite.Sprite):
+    """
+    Class to manage kitten score animation
+
+    :param container: Application container
+    :param point_y: Score height
+    """
     def __init__(self, container, point_y):
         super().__init__()
         path = assets.path_to("characters", "enemy", "enemy_full.png")
@@ -21,6 +27,9 @@ class PointAnim(pg.sprite.Sprite):
         self.begin = False
 
     def run_animation(self):
+        """
+        Runs one time the point increase animation
+        """
         self.sheet.reset()
 
     def update(self, dt):

@@ -4,7 +4,12 @@ from src.sprites.spritesheet import SpriteSheet
 
 
 class Cursor(pg.sprite.Sprite):
+    """
+    Manages mouse aiming cursor
 
+    :param container: Application container
+    :param mouse_pos: Mouse position (x, y)
+    """
     def __init__(self, container, mouse_pos):
         super().__init__()
         game = container.get_object('game')

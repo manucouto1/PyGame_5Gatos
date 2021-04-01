@@ -70,6 +70,3 @@ class Director:
             scene.draw()
 
             pg.display.flip()
-
-            if self.player.life == 0:
-                self.change_scene(GameOverMenu(self))

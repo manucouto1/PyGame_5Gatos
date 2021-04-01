@@ -3,6 +3,13 @@ import math
 
 
 class PointText(pg.sprite.Sprite):
+    """
+    Class to manage score numbering
+
+    :param container: Application container
+    :param player: Player instance
+    :param point_y: Score height
+    """
     def __init__(self, container, player, point_y):
         super().__init__()
         self.font = pg.font.SysFont('purisa', 48)
@@ -16,6 +23,9 @@ class PointText(pg.sprite.Sprite):
         self.increasing = False
 
     def increase(self):
+        """
+        Increase the score number in one
+        """
         self.increasing = True
 
     def update(self, _):

@@ -5,6 +5,15 @@ INCREASE = 1
 
 
 class Heart(pg.sprite.Sprite):
+    """
+    Manages mouse aiming cursor
+
+    :param sheet: Heart sprite sheet
+    :param state: Current state of heart
+        0: Complete
+        1: Half
+        2: Empty
+    """
     SIZE = 50
 
     def __init__(self, sheet, state):
