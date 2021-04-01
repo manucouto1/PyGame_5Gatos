@@ -19,11 +19,22 @@
       "button_click": "button_click.ogg",
       "point": null,
       "one_up": null
+    },
+    "game_over": {
+      "jump": null,
+      "shoot": null,
+      "hero_hit": null,
+      "enemy_hit": null,
+      "destroy_enemy": null,
+      "button_click": "button_click.ogg",
+      "point": null,
+      "one_up": null
     }
   },
   "music": {
     "menu": "menu.ogg",
     "game": "game.ogg",
+    "game_over": "menu.ogg",
     "credits": "credits.ogg"
   }
 }
