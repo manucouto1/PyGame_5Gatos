@@ -33,11 +33,12 @@ class ShooterEntity(ActiveEntity):
             correct = 0
 
         if self.rect.width > 32:
-            bullet = Projectile(self.projectile, round(self.rect.x), round(self.rect.y + (self.rect.height / 2)), 6)
+            orig = round(self.rect.x), round(self.rect.y + (self.rect.height / 2))
+            bullet = Projectile(self.projectile, orig, m_pos, 6)
         else:
-            bullet = Projectile(self.projectile, round(self.rect.x + correct), round(self.rect.y), 6)
+            orig = round(self.rect.x + correct), round(self.rect.y)
+            bullet = Projectile(self.projectile, orig, m_pos, 6)
 
-        bullet.trajectory(m_pos)
         self.mixer.play_shoot()
 
         return bullet

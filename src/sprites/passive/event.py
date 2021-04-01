@@ -7,24 +7,17 @@ from src.utils import assets
 
 
 class Event(Sprite):
+    """
+    Abstract class to manage zone triggered events
+
+    :param observer: Observer to be notified on event
+    """
     def __init__(self, observer, *groups):
         self.observer = observer
         super().__init__(*groups)
 
     def update(self, dt):
         return NotImplemented
-
-
-class Item(Event):
-    def __init__(self, sheet, event_dto, observer, *groups):
-        super().__init__(observer, *groups)
-        self.event = "Got pow up"
-        self.image = sheet.image_at((0, 0, 32, 32))
-        self.rect = self.image.get_rect()
-        self.rect.bottomleft = event_dto.pos
-
-    def kill(self):
-        Sprite.kill(self)
 
 
 class EndGame(Event):

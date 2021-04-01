@@ -9,6 +9,13 @@ LIFE_Y = 30
 
 
 class Life(pg.sprite.Group):
+    """
+    Class to manage player life HUD indicator
+
+    :param container: Application container
+    :param n_hearts: Number of hearts
+    :param player: Player instance
+    """
     def __init__(self, container, n_hearts, player):
         path = assets.path_to("player", "Corazon-Sheet.png")
         sheet = container.image_from_path(path)
@@ -24,7 +31,7 @@ class Life(pg.sprite.Group):
             self.heart_pos(heart, i)
             self.hearts.append(heart)
 
-        # Check actual player life
+        # Half hearts
         heart = Heart(self.sheet, self.player.life % 2)
         self.heart_pos(heart, pos)
         self.hearts.append(heart)

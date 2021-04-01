@@ -4,7 +4,7 @@ from pygame.sprite import collide_mask
 from src.sprites.active.shooter_entity import ShooterEntity
 from src.sprites.passive.hud.life import Life
 import time
-from src.sprites.passive.hud.punctuation import Punctuation
+from src.sprites.passive.hud.kittenscore import KittenScore
 
 
 class HeroBuilder:
@@ -24,7 +24,7 @@ class Hero(ShooterEntity):
 
         self.last_hit = time.time()
         self.life = Life(builder.container, 3, player)
-        self.points = Punctuation(builder.container, player)
+        self.points = KittenScore(builder.container, player)
         self.container = builder.container
 
     def shoot(self, target):

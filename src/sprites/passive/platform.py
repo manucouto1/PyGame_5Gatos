@@ -24,6 +24,9 @@ class Platform(pg.sprite.Sprite):
 
 
 class FallingPlatform(Platform):
+    """
+    Class to manage falling platforms
+    """
     def __init__(self, sheet, tile_size, plat_dto, *groups):
         super().__init__(sheet, tile_size, plat_dto, *groups)
         self.row = self.rect.y // 32
@@ -31,7 +34,6 @@ class FallingPlatform(Platform):
 
         self.stepped_at = None
         self.falling_at = None
-        self.last_level = None
         self.forth = True
 
     def update(self, collided=False):
@@ -50,6 +52,9 @@ class FallingPlatform(Platform):
             self.kill()
 
     def shake(self):
+        """
+        Makes the platform to move side to side
+        """
         mov = 5 if self.forth else -5
         self.forth = not self.forth
         self.rect.x += mov
