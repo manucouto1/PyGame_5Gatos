@@ -2,8 +2,8 @@ import pygame as pg
 
 from pygame.sprite import collide_mask
 
-from src.sprites.groups.Events import EventsBuilder
-from src.sprites.groups.Platforms import Platforms
+from src.sprites.groups.events import EventsBuilder
+from src.sprites.groups.platforms import Platforms
 from src.sprites.groups.layers import LayersBuilder
 from src.sprites.active.hero import HeroBuilder
 from src.sprites.groups.camera import CameraBuilder

@@ -43,7 +43,7 @@ class FallingPlatform(Platform):
         else:
             now = time.time()
             if self.stepped_at + FALL > now:
-                self.shake()
+                self._shake()
             else:
                 self.falling_at = time.time()
                 self.rect.y += GRAVITY
@@ -51,7 +51,7 @@ class FallingPlatform(Platform):
         if self.falling_at is not None and time.time() - self.falling_at > VANISH:
             self.kill()
 
-    def shake(self):
+    def _shake(self):
         """
         Makes the platform to move side to side
         """
