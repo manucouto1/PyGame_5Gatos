@@ -11,6 +11,7 @@ class ScreenGUI:
         self.menu = menu
         self.element_click = None
         self.bg = assets.load_image(image)
+        self.font = pg.font.Font('../assets/fonts/Purisa Bold.ttf', 26)
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         # list of elementGUI
         self.elementGUI = []
@@ -44,12 +45,17 @@ class ScreenGUIInitial(ScreenGUI):
         self.elementGUI.append(ButtonControls(self))
         self.elementGUI.append(ButtonOptions(self))
         self.elementGUI.append(ButtonLevels(self))
-        self.elementGUI.append(TextTitle(self))
         self.elementGUI.append(TextPlay(self))
         self.elementGUI.append(TextExit(self))
         self.elementGUI.append(TextOptions(self))
         self.elementGUI.append(TextControls(self))
         self.elementGUI.append(TextLevels(self))
+
+    def draw(self):
+        ScreenGUI.draw(self)
+        font = pg.font.Font('../assets/fonts/yukari.ttf', 78)
+        title = font.render('5Gatos', True, (255, 255, 255))
+        self.screen.blit(title, (280, 60))
 
 
 class ScreenGUIControls(ScreenGUI):
@@ -61,11 +67,10 @@ class ScreenGUIControls(ScreenGUI):
 
     def draw(self):
         ScreenGUI.draw(self)
-        font = pg.font.SysFont('purisa', 26)
-        text1 = font.render('Move: use the WASD keys or the arrow keys', True, (0, 0, 0))
-        text2 = font.render('Aim and Shoot: use the mouse', True, (0, 0, 0))
-        text3 = font.render('Jump: use UP arrow, W key or SPACE BAR', True, (0, 0, 0))
-        text4 = font.render('Double Jump: press for jump while in the air', True, (0, 0, 0))
+        text1 = self.font.render('Move: use the WASD keys or the arrow keys', True, (0, 0, 0))
+        text2 = self.font.render('Aim and Shoot: use the mouse', True, (0, 0, 0))
+        text3 = self.font.render('Jump: use UP arrow, W key or SPACE BAR', True, (0, 0, 0))
+        text4 = self.font.render('Double Jump: press for jump while in the air', True, (0, 0, 0))
         self.screen.blit(text1, (80, 70))
         self.screen.blit(text2, (80, 260))
         self.screen.blit(text3, (80, 460))
@@ -88,11 +93,10 @@ class ScreenGUIOptions(ScreenGUI):
 
     def draw(self):
         ScreenGUI.draw(self)
-        font = pg.font.SysFont('purisa', 26)
-        text1 = font.render('Volume settings:', True, (0, 0, 0))
-        text2 = font.render('Sounds settings:', True, (0, 0, 0))
-        text3 = font.render(str(int(self.menu.mixer.get_music_volume() * 10)), True, (0, 0, 0))
-        text4 = font.render(str(int(self.menu.mixer.get_sound_volume() * 10)), True, (0, 0, 0))
+        text1 = self.font.render('Volume settings:', True, (0, 0, 0))
+        text2 = self.font.render('Sounds settings:', True, (0, 0, 0))
+        text3 = self.font.render(str(int(self.menu.mixer.get_music_volume() * 10)), True, (0, 0, 0))
+        text4 = self.font.render(str(int(self.menu.mixer.get_sound_volume() * 10)), True, (0, 0, 0))
         self.screen.blit(text1, (80, 100))
         self.screen.blit(text2, (80, 200))
         self.screen.blit(text3, (450, 100))
@@ -109,6 +113,7 @@ class ScreenGUILevels(ScreenGUI):
         self.elementGUI.append(TextLevel2(self))
         self.elementGUI.append(TextLevel3(self))
         self.elementGUI.append(TextLevel4(self))
+
 
 class ScreenGUIGameOver(ScreenGUI):
 

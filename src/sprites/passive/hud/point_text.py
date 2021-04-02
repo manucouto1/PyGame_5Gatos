@@ -12,7 +12,7 @@ class PointText(pg.sprite.Sprite):
     """
     def __init__(self, container, player, point_y):
         super().__init__()
-        self.font = pg.font.SysFont('purisa', 48)
+        self.font = pg.font.Font('../assets/fonts/Purisa Bold.ttf', 48)
         self.player = player
         self.image = self.font.render(f'x{player.punctuation}', True, (0, 0, 0))
         self.rect = self.image.get_rect()
