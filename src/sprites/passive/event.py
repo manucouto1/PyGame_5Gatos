@@ -1,17 +1,10 @@
 from pygame.sprite import Sprite
-import pygame as pg
-
-from sprites.passive.hud.hearts import Heart
-
+from src.sprites.passive.hud.hearts import Heart
 from src.utils import assets
+import pygame as pg
 
 
 class Event(Sprite):
-    """
-    Abstract class to manage zone triggered events
-
-    :param observer: Observer to be notified on event
-    """
     def __init__(self, observer, *groups):
         self.observer = observer
         super().__init__(*groups)
@@ -20,7 +13,7 @@ class Event(Sprite):
         return NotImplemented
 
 
-class EndGame(Event):
+class EndLevel(Event):
     def __init__(self, sheet, event_dto, observer, *groups):
         super().__init__(observer, *groups)
         column = event_dto.id % 8
@@ -77,3 +70,16 @@ class ManiacMode(Event):
     def kill(self):
         self.observer.activate_maniac()
         Sprite.kill(self)
+
+
+class EndGame(Event):
+    def __init__(self, observer, pos, *groups):
+        super().__init__(observer, *groups)
+        self.event = "End Game"
+        self.image = assets.load_image("foil_hat.png")
+        self.image = pg.transform.scale(self.image, (32, 32))
+        self.rect = self.image.get_rect()
+        self.rect.bottomleft = pos
+
+    def kill(self):
+        self.observer.next_level()

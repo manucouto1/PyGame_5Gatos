@@ -5,7 +5,7 @@ from src.sprites.groups.scroll_adjusted import ScrollAdjustedGroup
 class CameraBuilder:
     def __init__(self, container, level_dto, screen_size):
         self.container = container
-        self.world_size = pg.Rect(0, 0, level_dto.map_width * 32, level_dto.map_height * 32)
+        self.world_size = pg.Rect(0, 0, level_dto.map_width * level_dto.tile_size, level_dto.map_height * level_dto.tile_size)
         self.screen_size = screen_size
         self.gaps = level_dto.gaps
 
