@@ -19,16 +19,10 @@ class FinalBoss(EnemyTurretShooter):
                                   level_dto.map_height * level_dto.tile_size)
         self.screen_size = pg.Rect((0, 0, game.screen_width, game.screen_height))
 
-    def damage_effect(self, hit):
-        left, right = self.after_hit_direction(hit)
-        self.choose_mov(left, right)
-        self.getting_damage = True
-        self.damage_time = time.time()
-
     def shutdown_gravity(self, _):
         self.boss_mode = 2
         self.life = 36
-        ActiveEntity.shutdown_gravity(self, falling_velocity=2.5)
+        ActiveEntity.shutdown_gravity(self, falling_velocity=3)
 
     def on_gravity(self):
         self.boss_mode = 3
@@ -36,11 +30,8 @@ class FinalBoss(EnemyTurretShooter):
         ActiveEntity.on_gravity(self)
 
     def follow(self, hero):
-        x = hero.rect.center[0] - self.rect.center[0]
         y = hero.rect.center[1] - self.rect.center[1]
-
-        self.rect.x += x * 0.0001
-        self.rect.y += y * 0.0001
+        self.rect.y += y * 0.01
 
     def move(self, hero, dt):
         distance = self.calc_distance(hero)
