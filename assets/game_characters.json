@@ -56,6 +56,6 @@
     "sheet": "kidd_full.png",
     "projectile": "wool.png",
     "rows": 3,
-    "path": "src.sprites.active.enemy_maniac_shooter.Maniac"
+    "path": "src.sprites.active.final_boss.FinalBoss"
   }
 }

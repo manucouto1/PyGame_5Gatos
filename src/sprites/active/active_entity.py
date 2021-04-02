@@ -19,8 +19,8 @@ class ActiveEntity(pg.sprite.Sprite):
         sheet = SpriteStripAnim(sheet, (0, 0, character.height, character.width), character.rows,
                                 rows=4, scale=(character.rescale_x, character.rescale_y))
 
-        self.scroll = pg.Vector2(0, 0)
         self.sheet = sheet
+        self.scroll = pg.Vector2(0, 0)
         self.image = self.sheet.images[0][0]
         self.mask = self.sheet.masks[0][0]
         self.rect = self.image.get_rect()
@@ -88,21 +88,33 @@ class ActiveEntity(pg.sprite.Sprite):
             self.mixer.play_jump()
 
     def move_left(self):
-        self.vel.x = -self.speed
+        if self.falling_mode:
+            self.vel.x = -self.speed - self.falling_velocity
+        else:
+            self.vel.x = -self.speed
         self.direction = pg.K_LEFT
         self.movement = True
 
     def move_right(self):
-        self.vel.x = self.speed
+        if self.falling_mode:
+            self.vel.x = self.speed + self.falling_velocity
+        else:
+            self.vel.x = self.speed
         self.direction = pg.K_RIGHT
         self.movement = True
 
     def move_up(self):
-        self.vel.y = -self.speed
+        if self.falling_mode:
+            self.vel.y = -self.speed - self.falling_mode
+        else:
+            self.vel.y = -self.speed
         self.y_movement = True
 
     def move_down(self):
-        self.vel.y = self.speed
+        if self.falling_mode:
+            self.vel.y = +self.speed + self.falling_mode
+        else:
+            self.vel.y = +self.speed
         self.y_movement = True
 
     def reset_movement(self):

@@ -2,7 +2,7 @@ import random
 import time
 
 from src.sprites.active.enemy_turret_shooter import EnemyTurretShooter
-from src.sprites.passive.event import ExtraLife, ManiacMode
+from src.sprites.passive.event import ManiacMode
 import pygame as pg
 
 

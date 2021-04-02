@@ -15,6 +15,7 @@ white = (255, 255, 255)
 
 class LevelBuilder:
     def __init__(self, container, level_dto):
+        container.set_object('level_dto', level_dto)
         self.container = container
         self.game_dto = container.get_object("game")
         self.screen_size = pg.Rect((0, 0, self.game_dto.screen_width, self.game_dto.screen_height))
