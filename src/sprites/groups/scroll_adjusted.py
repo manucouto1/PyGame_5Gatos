@@ -3,6 +3,11 @@ from pygame.sprite import Group, LayeredUpdates
 
 
 class ScrollAdjustedGroup(Group):
+    """
+    Class to manage sprite groups that should be displaced with respect to the scroll
+
+    :param camera_scroll: Current scroll pointer [x, y]
+    """
     def __init__(self, camera_scroll, *sprites):
         for sprite in sprites:
             sprite.scroll = camera_scroll

@@ -1,131 +1,146 @@
-import json
-import src.utils.assets as assets
 import pygame as pg
 
-from sprites.pasive.arrows import Arrows
-from sprites.pasive.event import Item
-from src.sprites.pasive.life import Life
-from src.sprites.active.enemy import Enemy
-from src.sprites.active.hero import Hero
+from pygame.sprite import collide_mask
+
+from src.sprites.groups.events import EventsBuilder
+from src.sprites.groups.platforms import Platforms
+from src.sprites.groups.layers import LayersBuilder
+from src.sprites.active.hero import HeroBuilder
+from src.sprites.groups.camera import CameraBuilder
+from src.sprites.groups.enemies import EnemiesBuilder
 from src.sprites.groups.scroll_adjusted import ScrollAdjustedGroup
-from src.sprites.groups.camera import Camera
-from src.sprites.pasive.cursor import Cursor
-
-from src.sprites.spritesheet import Spritesheet
-from src.sprites.pasive.layers import Layers
-import numpy as np
-
-
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 800
+from src.sprites.passive.cursor import Cursor
 
 white = (255, 255, 255)
 
-SCREEN_SIZE = pg.Rect((0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
+
+class LevelBuilder:
+    def __init__(self, container, level_dto):
+        container.set_object('level_dto', level_dto)
+        self.container = container
+        self.game_dto = container.get_object("game")
+        self.screen_size = pg.Rect((0, 0, self.game_dto.screen_width, self.game_dto.screen_height))
+        self.level_dto = level_dto
+        self.layers_builder = LayersBuilder(container, self.level_dto)
+        self.enemies_builder = EnemiesBuilder(container, self.level_dto)
+        self.hero_builder = HeroBuilder(container, self.level_dto)
+        self.camera_builder = CameraBuilder(container, self.level_dto, self.screen_size)
+        self.zone_events_builder = EventsBuilder(container, self.level_dto)
+        self.h_bullets, self.enemies, self.e_bullets, self.camera, self.dangerous = None, None, None, None, None
+        self.hero, self.layers, self.zone_events, self.platforms, self.falling_platforms = None, None, None, None, None
+        self.level_sounds = self.game_dto.sounds[level_dto.sounds]
+        self.level_music = self.game_dto.music[level_dto.music]
+
+    def build(self, player):
+        self.hero = self.hero_builder.build(player)
+        self.camera = self.camera_builder.build(self.hero)
+        self.h_bullets = ScrollAdjustedGroup(self.camera.scroll)
+        self.e_bullets = ScrollAdjustedGroup(self.camera.scroll)
+        self.container.set_object('e_bullets', self.e_bullets)
+        self.container.set_object('h_bullets', self.h_bullets)
+        self.container.set_object('hero', self.hero)
+        self.enemies = self.enemies_builder.build(self.camera.scroll)
+        self.layers = self.layers_builder.build(self.camera.scroll)
+        self.platforms = Platforms(self.game_dto, self.layers.get_ground())
+        self.dangerous = Platforms(self.game_dto, self.layers.get_dangerous())
+        self.falling_platforms = Platforms(self.game_dto, self.layers.get_falling())
+        return self.container.object_from_name(self.level_dto.path, self)
 
 
 class Level:
-    def __init__(self, level_name):
-        self.arrows = Arrows()
-        with open(assets.path_to('levels', level_name, level_name + '.txt')) as f:
-            config = json.load(f)
-            if config is not None:
-                self.bg = None
-                self.screen_rect = pg.Rect(SCREEN_SIZE)
-                self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-                self.sheet = Spritesheet(assets.path_to('levels', level_name, f"{level_name}.png"))
-                self.tile_size = config["tile_size"]
-                self.map_width = config["map_width"]
-                self.map_height = config["map_height"]
-                self.layers_config = config["layers"]
-                self.cursor = Cursor(pg.mouse.get_pos())
-                self.zone_events = None
-                self.hero = None
-                self.camera = None
-                self.life = None
-                self.layers = None
-                self.enemies = None
-                self.bullets = None
-                self.platforms = pg.sprite.Group()
-                self.dangerous = pg.sprite.Group()
-            else:
-                raise ValueError("Problems with level config file")
+    def __init__(self, builder: LevelBuilder):
+        self.container = builder.container
+        self.container.set_object('level', self)
+        self.screen_rect = builder.screen_size
+        self.monitor_size = [pg.display.Info().current_w, pg.display.Info().current_h]
+        self.screen = pg.display.set_mode((builder.game_dto.screen_width, builder.game_dto.screen_height), pg.HWSURFACE | pg.DOUBLEBUF)
+        self.cursor = Cursor(self.container, pg.mouse.get_pos())
+        pg.mouse.set_visible(False)
+        self.screen.set_alpha(None)
 
-    def init_level(self, player):
-        self.load_hero(player)
-        self.load_platforms()
-        self.load_enemies()
-        self.load_dangerous()
-        self.load_events()
+        try:
+            self.bg = None
+            self.dto = builder.level_dto
+            self.limit = self.dto.map_height * self.dto.tile_size
+            self.layers = builder.layers
+            self.enemies = builder.enemies
+            self.hero = builder.hero
+            self.camera = builder.camera
+            self.platforms = builder.platforms
+            self.dangerous = builder.dangerous
+            self.falling_platforms = builder.falling_platforms
+            self.h_bullets = builder.h_bullets
+            self.e_bullets = builder.e_bullets
 
-    def load_hero(self, player):
-        self.life = Life(3, player)
-        self.hero = Hero((0, 0), self.life)
-        self.camera = Camera(self.hero, pg.Rect(0, 0, self.map_width * 32, self.map_height * 32), SCREEN_SIZE)
-        self.bullets = ScrollAdjustedGroup(self.camera.scroll)
+            self.zone_events = builder.zone_events_builder.build(self, self.camera.scroll)
+            self.container.get_object('mixer').load_new_profile(builder.level_sounds)
+            self.container.get_object('mixer').load_music(builder.level_music)
 
-    def load_platforms(self):
-        self.layers = Layers(self.layers_config, self.sheet, self.tile_size, self.camera.scroll)
-        self.platforms.add(self.layers.get_ground())
+        except IOError as ex:
+            print("Level Error > ", ex)
 
-    def load_dangerous(self):
-        self.dangerous.add(self.layers.get_dangerous())
-
-    def load_enemies(self):
-        # todo Cargar enemigos desde json
-        self.enemies = ScrollAdjustedGroup(self.camera.scroll)
-        Enemy((700, 320), 50, self.enemies)
-
-    def load_events(self):
-        self.zone_events = ScrollAdjustedGroup(self.camera.scroll)
-        self.zone_events.add(Item(self))
+    def check_limits(self, bll):
+        return not self.dto.map_width * self.dto.tile_size > bll.x > 0 or \
+               not self.dto.map_height * self.dto.tile_size > bll.y > 0
 
     def check_bullets_hits(self):
-        pg.sprite.groupcollide(self.bullets, self.platforms, True, False)
-        enemies_damaged = list(pg.sprite.groupcollide(self.bullets, self.enemies, True, False).values())
-        enemies_damaged = np.array(enemies_damaged).flatten()
-        for enemy_hit in enemies_damaged:
-            enemy_hit.is_hit()
+        pg.sprite.groupcollide(self.h_bullets, self.platforms.get_actives(), True, False)
+        pg.sprite.groupcollide(self.e_bullets, self.platforms.get_actives(), True, False)
 
-        list_remove = list(
-            filter(lambda bll: not self.map_width * 32 > bll.x > 0 or not self.map_height * 32 > bll.y > 0,
-                   self.bullets.sprites()))
-        self.bullets.remove(list_remove)
+        pg.sprite.groupcollide(self.h_bullets, self.falling_platforms.get_actives(), True, False, collided=collide_mask)
+        pg.sprite.groupcollide(self.e_bullets, self.falling_platforms.get_actives(), True, False, collided=collide_mask)
 
-    def notify(self, event):
-        print(event)
+        self.hero.is_hit_destroy(self.e_bullets)
+        self.enemies.are_shot(self.h_bullets)
+
+    def next_level(self):
+        director = self.container.get_object('director')
+        director.exit_scene()
 
     def check_event_reached(self):
         pg.sprite.spritecollide(self.hero, self.zone_events, dokill=True)
 
-    def update(self):
+    def update(self, dt):
         self.check_bullets_hits()
         self.check_event_reached()
-        # Para los enemigos algo parecido
-        self.hero.is_hit(self.dangerous)
-        self.hero.is_hit(self.enemies)
 
-        self.bullets.update()
+        self.hero.is_hit(self.dangerous.get_actives())
+        self.hero.is_hit(self.enemies)
+        self.hero.is_hit(self.e_bullets)
+        self.enemies.are_hit(self.dangerous.get_actives())
+
+        self.h_bullets.update(dt)
+        self.e_bullets.update(dt)
+        self.enemies.update(self.hero, self.zone_events, self.platforms.get_actives()+self.falling_platforms.get_actives(), dt)
+        self.camera.update(self.platforms.get_actives(), self.dangerous.get_actives(), dt, self.falling_platforms.get_actives())
+
+        self.platforms.update(self.camera)
+        self.dangerous.update(self.camera)
+        self.falling_platforms.update(self.camera)
+        self.zone_events.update(dt)
         self.layers.update()
-        self.enemies.update(self.platforms)
-        self.camera.update(self.platforms, self.dangerous)
         self.cursor.update(pg.mouse.get_pos())
-        self.arrows.update()
 
     def map_limit(self):
-        screen_rect = self.screen.get_rect()
-        screen_rect[2] += self.map_width * self.tile_size - SCREEN_SIZE.x
-        self.hero.rect.clamp_ip(screen_rect)
+        (x, y, h, w) = self.screen.get_rect()
+        (cam_x, cam_y) = self.camera.camera_rect
+        y -= cam_y
+        x -= cam_x
+        self.hero.rect.clamp_ip((x, y, h, w))
 
     def draw(self):
-        self.screen.blit(self.bg, (0, 0))
+        self.bg.draw(self.screen)
         self.map_limit()
-
         self.layers.draw(self.screen)
         self.enemies.draw(self.screen)
         self.camera.draw(self.screen)
         self.cursor.draw(self.screen)
-        self.bullets.draw(self.screen)
-        self.life.draw(self.screen)
-        self.arrows.draw(self.screen)
+        self.h_bullets.draw(self.screen)
+        self.e_bullets.draw(self.screen)
+        self.hero.life.draw(self.screen)
+        self.hero.points.draw(self.screen)
         self.zone_events.draw(self.screen)
+
+        # director = self.container.get_object('director')
+        # if director.player.life == 0:
+        #     director.chage_scene(GameOverMenu(self))
