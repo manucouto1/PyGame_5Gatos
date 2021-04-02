@@ -1,9 +1,11 @@
 import pygame as pg
 
+from levels.level import LevelBuilder
 from src.game.dto.game_dto import GameDTO
 from src.game.mixer import Mixer
 from src.game.player import Player
 from src.game.container import Container
+from src.menu.menu import GameOverMenu
 
 FPS = 30
 
@@ -26,6 +28,9 @@ class Director:
         self.container.set_object('mixer', self.mixer)
         self.container.set_object('game', self.game)
         self.container.set_object('director', self)
+        self.levels = [LevelBuilder(self.container, self.game.levels[x])
+                       for x in range(len(self.game.levels))]
+        self.container.set_object('levels', self.levels)
 
     def __new__(cls):
         if Director._instance is None:
@@ -58,7 +63,11 @@ class Director:
     def loop(self, scene):
         self.exit = False
         pg.event.clear()
-        scene = scene.build(self.player)
+
+        if isinstance(scene, LevelBuilder):
+            scene = scene.build(self.player)
+            self.scenes.pop()
+            self.scenes.append(scene)
 
         while not self.exit:
             dt = self.clock.tick(self.game.fps)
