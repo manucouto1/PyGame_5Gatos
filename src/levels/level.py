@@ -3,6 +3,7 @@ import pygame as pg
 from pygame.sprite import collide_mask
 
 from src.menu.button import ButtonPause
+from menu.menu import GameOverMenu
 from src.sprites.groups.events import EventsBuilder
 from src.sprites.groups.platforms import Platforms
 from src.sprites.groups.layers import LayersBuilder
@@ -139,6 +140,7 @@ class Level:
         self.hero.points.draw(self.screen)
         self.zone_events.draw(self.screen)
 
-        # director = self.container.get_object('director')
-        # if director.player.life == 0:
-        #     director.chage_scene(GameOverMenu(self))
+        director = self.container.get_object('director')
+        if director.player.life == 0:
+            director.player.reset()
+            director.change_scene(GameOverMenu(director).build(None))

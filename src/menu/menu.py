@@ -1,5 +1,4 @@
 import pygame as pg
-from src.levels.level import LevelBuilder
 from src.menu.screen import ScreenGUIInitial, ScreenGUIGameOver, ScreenGUIPause
 from src.menu.screen import ScreenGUIControls
 from src.menu.screen import ScreenGUIOptions
@@ -54,8 +53,8 @@ class Menu:
 
         game = self.director.game
 
-        for level in game.levels:
-            self.director.stack_scene(LevelBuilder(container, level))
+        for level in range(len(game.levels)):
+            self.director.stack_scene(container.get_object('levels')[level])
 
     def execute_level(self, level):
         container = self.director.container
@@ -63,7 +62,7 @@ class Menu:
 
         game = self.director.game
 
-        self.director.stack_scene(LevelBuilder(container, game.levels[level]))
+        self.director.stack_scene(container.get_object('levels')[level])
 
     def show_initial_screen(self):
         self.current_screen = 0
@@ -105,9 +104,8 @@ class GameOverMenu:
     def execute_game(self):
         container = self.director.container
         self.mixer.play_button_click()
-        game = self.director.game
-        for level in game.levels:
-            self.director.stack_scene(LevelBuilder(container, level))
+        for level in container.get_object('levels'):
+            self.director.stack_scene(level)
 
     def build(self, _):
         game = self.director.container.get_object('game')
