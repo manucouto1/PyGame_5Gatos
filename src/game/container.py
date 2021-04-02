@@ -41,6 +41,7 @@ class Container:
         return self.image_from_path(path)
 
     def object_from_name(self, path, *args):
+
         key = path.__hash__()
         if key in self.clazz:
             m = self.clazz[key]
