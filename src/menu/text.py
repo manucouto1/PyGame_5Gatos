@@ -99,7 +99,7 @@ class TextLevel1(TextGUI):
         TextGUI.__init__(self, screen, font, (0, 0, 0), 'Level 1', (80, 100))
 
     def action(self):
-        self.screen.menu.execute_level_1()
+        self.screen.menu.execute_level(3)
 
 
 class TextLevel2(TextGUI):
@@ -109,7 +109,7 @@ class TextLevel2(TextGUI):
         TextGUI.__init__(self, screen, font, (0, 0, 0), 'Level 2', (80, 200))
 
     def action(self):
-        self.screen.menu.execute_level_2()
+        self.screen.menu.execute_level(2)
 
 
 class TextLevel3(TextGUI):
@@ -119,7 +119,7 @@ class TextLevel3(TextGUI):
         TextGUI.__init__(self, screen, font, (0, 0, 0), 'Level 3', (80, 300))
 
     def action(self):
-        self.screen.menu.execute_level_3()
+        self.screen.menu.execute_level(1)
 
 
 class TextLevel4(TextGUI):
@@ -128,3 +128,5 @@ class TextLevel4(TextGUI):
         font = pg.font.SysFont('purisa', 26)
         TextGUI.__init__(self, screen, font, (0, 0, 0), 'Level 4', (80, 400))
 
+    def action(self):
+        self.screen.menu.execute_level(0)
