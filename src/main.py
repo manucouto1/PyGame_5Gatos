@@ -6,7 +6,7 @@ from src.menu.menu import Menu
 
 def main():
     game = Director()
-    game.stack_scene(Menu(game))
+    game.stack_scene(Menu(game).build(None))
     game.run()
 
 
