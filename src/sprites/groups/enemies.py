@@ -18,7 +18,7 @@ class Enemies(ScrollAdjustedLayeredGroup):
     Class to manage the enemies group
 
     :param camera_scroll: Current scroll pointer [x, y]
-    :param builder: class builder
+    :param builder: Enemies builder
     """
     def __init__(self, camera_scroll, builder: EnemiesBuilder):
         super().__init__(camera_scroll)

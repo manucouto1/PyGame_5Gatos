@@ -17,6 +17,12 @@ class HeroBuilder:
 
 
 class Hero(ShooterEntity):
+    """
+    Class for the main character sprite
+
+    :param player: Player instance
+    :param builder: Class builder
+    """
     def __init__(self, player, builder: HeroBuilder):
         game = builder.container.get_object('game')
         character = game.characters[builder.entity_dto.name]
@@ -28,6 +34,11 @@ class Hero(ShooterEntity):
         self.container = builder.container
 
     def shoot(self, target):
+        """
+        Shoots a bullet aiming a target
+
+        :param target: Position (x, y)
+        """
         h_bullets = self.container.get_object('h_bullets')
         h_bullets.add(super().shoot(target))
         self.shoot_maniac(h_bullets)
@@ -39,7 +50,12 @@ class Hero(ShooterEntity):
             self.image = self.sheet[2].next(dt)
 
     def is_hit_destroy(self, dangerous):
-        its_hit = pg.sprite.spritecollideany(self, dangerous, collided=collide_mask)
+        """
+        Checks if its hit by a platform and takes damage and play effects if so
+
+        :param dangerous: list[Platform]
+        """
+        its_hit = pg.sprite.spritecollideany(self, dangerous)
         if its_hit:
             new_hit = time.time()
             if self.last_hit + 1 < new_hit:
@@ -51,7 +67,12 @@ class Hero(ShooterEntity):
                 self.mixer.play_hero_hit()
 
     def is_hit(self, dangerous):
-        its_hit = pg.sprite.spritecollideany(self, dangerous, collided=collide_mask)
+        """
+        Checks if its hit by a platform and takes damage and play effects if so
+
+        :param dangerous: list[Platform]
+        """
+        its_hit = pg.sprite.spritecollideany(self, dangerous)
         if its_hit:
             new_hit = time.time()
             if self.last_hit + 1 < new_hit:
@@ -62,17 +83,27 @@ class Hero(ShooterEntity):
                 self.mixer.play_hero_hit()
 
     def add_life(self):
+        """
+        Recovers a life point
+        """
         self.last_hit = time.time()
         self.life.increase()
         self.mixer.play_one_up()
 
     def add_point(self):
+        """
+        Sums up a kitten point
+        """
         self.points.increase()
         self.mixer.play_point()
 
     def activate_maniac(self):
+        """
+        Activates maniac shoot mode
+        """
         self.maniac = True
         self.maniac_init = time.time()
+        self.mixer.play_cookie()
 
     def update(self, platforms, _, dt, platforms2=None, gravity=pg.Vector2((0, 3.8))):
         if self.movement:

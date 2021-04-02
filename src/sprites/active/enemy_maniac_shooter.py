@@ -7,7 +7,12 @@ import pygame as pg
 
 
 class Maniac(EnemyTurretShooter):
+    """
+    Class implementing the shooting enemies
 
+    :param container: Application container
+    :param entity: Enemy map DTO
+    """
     def __init__(self, container, entity, *groups):
         super().__init__(container, entity, *groups)
         self.maniac = True
@@ -19,8 +24,8 @@ class Maniac(EnemyTurretShooter):
 
         return left, right
 
-    def move(self, hero, dt):
-        distance = self.calc_distance(hero)
+    def shoot_hero(self, target, dt):
+        distance = self.calc_distance(target)
         if distance < 300:
             if time.time() - self.maniac_init > 2:
                 self.maniac_init = time.time()
@@ -37,12 +42,13 @@ class Maniac(EnemyTurretShooter):
 
             self.jump()
 
+        # The maniac will keep moving towards target because movement it's not being reset
         if self.life > 0:
             if self.movement:
                 self.walk_loop(dt)
             else:
                 self.idle_loop(dt)
-            self.move(hero, dt)
+            self.shoot_hero(hero, dt)
             self.apply(platforms, dt)
         else:
             self.vel.x = 0

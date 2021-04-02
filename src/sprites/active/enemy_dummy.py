@@ -11,6 +11,12 @@ LEFT = 1
 
 
 class EnemyDummy(ActiveEntity):
+    """
+    Class implementing the rolling enemies
+
+    :param container: Application container
+    :param entity: Enemy map DTO
+    """
     def __init__(self, container, entity, *groups):
         super().__init__(container, entity, *groups)
         self.walk_count = 0
@@ -24,18 +30,18 @@ class EnemyDummy(ActiveEntity):
         self.moving = LEFT
         self.life = 1
 
-    def move(self, dt):
+    def move(self):
+        """
+        Move the sprite towards current direction
+        """
         if self.moving == RIGHT:
             self.move_right()
         elif self.moving == LEFT:
             self.move_left()
 
-    def dead_loop(self, dt):
-        self.image = self.sheet[3].next(dt)
-
     def update(self, hero, zone_events, platforms, dt, gravity=pg.Vector2((0, 3.8))):
         if self.life > 0:
-            self.move(dt)
+            self.move()
             self.walk_loop(dt)
             self.apply(platforms, dt)
         else:
@@ -44,12 +50,20 @@ class EnemyDummy(ActiveEntity):
             self.kill()
 
     def is_hit(self, dangerous):
+        """
+        Checks if its hit by a dangerous platform and make some movement if enough time elapsed from last
+
+        :param dangerous: list[Platform]
+        """
         new_hit = time.time()
         if self.last_hit + 0.5 < new_hit:
             self.damage_effect(dangerous[0])
             self.last_hit = new_hit
 
     def is_shoot(self, bullet):
+        """
+        Play get shoot effects
+        """
         self.life -= 1
         if self.life == 0:
             self.damage_effect(bullet)
@@ -59,6 +73,14 @@ class EnemyDummy(ActiveEntity):
             self.mixer.play_enemy_hit()
 
     def collide_ground(self, xvel, yvel, platforms, _):
+        """
+        Checks the collision with platforms, it makes the sprite to
+        keep moving in the opposite direction when it hits a wall
+
+        :param xvel: x speed
+        :param yvel: y speed
+        :param platforms: Platform list
+        """
         collide_l = pg.sprite.spritecollide(self, platforms, False)
         bot_left_collided = 0
         bot_right_collided = 0

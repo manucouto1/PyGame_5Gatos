@@ -57,29 +57,13 @@ class Menu:
         for level in game.levels:
             self.director.stack_scene(LevelBuilder(container, level))
 
-    def execute_level_1(self):
+    def execute_level(self, level):
         container = self.director.container
         self.mixer.play_button_click()
 
         game = self.director.game
 
-        self.director.stack_scene(LevelBuilder(container, game.levels[2]))
-
-    def execute_level_2(self):
-        container = self.director.container
-        self.mixer.play_button_click()
-
-        game = self.director.game
-
-        self.director.stack_scene(LevelBuilder(container, game.levels[1]))
-
-    def execute_level_3(self):
-        container = self.director.container
-        self.mixer.play_button_click()
-
-        game = self.director.game
-
-        self.director.stack_scene(LevelBuilder(container, game.levels[0]))
+        self.director.stack_scene(LevelBuilder(container, game.levels[level]))
 
     def show_initial_screen(self):
         self.current_screen = 0
