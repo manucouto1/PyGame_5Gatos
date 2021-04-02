@@ -1,58 +1,131 @@
 import pygame as pg
-
-from game.director import Director
-from src.menu.screen import ScreenGUIInitial
-from src.sprites.pasive.cursor import Cursor
-from src.levels.level_2d_scroller import Scroller2D
+from src.levels.level import LevelBuilder
+from src.menu.screen import ScreenGUIInitial, ScreenGUIGameOver
+from src.menu.screen import ScreenGUIControls
+from src.menu.screen import ScreenGUIOptions
+from src.menu.screen import ScreenGUILevels
 
 
 class Menu:
 
     def __init__(self, director):
-        pg.mouse.set_visible(True)
-
+        self.current_screen = -1
         self.director = director
+        self.mixer = director.container.get_object('mixer')
         self.scenes_list = []
-        self.scenes_list.append(ScreenGUIInitial(self, "background2.png"))
-        self.cursor = Cursor(pg.mouse.get_pos())
-        self.show_initial_scene()
+        self.scenes_list.append(ScreenGUIInitial(self, "menu/menu_background.png"))
+        self.scenes_list.append(ScreenGUIControls(self, "menu/menu_background.png"))
+        self.scenes_list.append(ScreenGUIOptions(self, "menu/menu_background.png"))
+        self.scenes_list.append(ScreenGUILevels(self, "menu/menu_background.png"))
+        self.show_initial_screen()
 
     # static menu
     def update(self, *args):
         return
 
     def events(self, events):
+        if not pg.mouse.get_visible():
+            pg.mouse.set_visible(True)
+
         for event in events:
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     self.exit_program()
             elif event.type == pg.QUIT:
                 self.director.exit_program()
-        self.scenes_list[self.initial_scene].events(events)
+        self.scenes_list[self.current_screen].events(events)
 
-    def init_level(self, player):
-        self.show_initial_scene()
+    def build(self, _):
+        game = self.director.container.get_object('game')
+        self.director.container.get_object('mixer').load_music(game.music["menu"])
+        self.director.container.get_object('mixer').load_new_profile(game.sounds["menu"])
+        self.show_initial_screen()
+        return self
 
     def draw(self):
-        self.scenes_list[self.initial_scene].draw()
+        self.scenes_list[self.current_screen].draw()
 
     def exit_program(self):
         self.director.exit_program()
 
     def execute_game(self):
-        self.director.change_scene(Scroller2D("level1"))
+        container = self.director.container
+        self.mixer.play_button_click()
 
-    def show_initial_scene(self):
-        self.initial_scene = 0
+        game = self.director.game
+
+        for level in game.levels:
+            self.director.stack_scene(LevelBuilder(container, level))
+
+    def execute_level(self, level):
+        container = self.director.container
+        self.mixer.play_button_click()
+
+        game = self.director.game
+
+        self.director.stack_scene(LevelBuilder(container, game.levels[level]))
+
+    def show_initial_screen(self):
+        self.current_screen = 0
+
+    def show_controls_screen(self):
+        self.current_screen = 1
+
+    def show_options_screen(self):
+        self.current_screen = 2
+
+    def show_levels_screen(self):
+        self.current_screen = 3
+
+    def music_louder(self):
+        self.mixer.music_louder()
+
+    def music_lower(self):
+        self.mixer.music_lower()
+
+    def sound_louder(self):
+        self.mixer.sound_louder()
+
+    def sound_lower(self):
+        self.mixer.sound_lower()
 
 
-class Pause(Menu):
-    def __init__(self, curr):
-        super().__init__(Director())
-        self.curr = curr
+class GameOverMenu:
+    def __init__(self, director):
+        self.director = director
+        self.mixer = director.container.get_object('mixer')
+        self.screen = ScreenGUIGameOver(self, "menu/menu_background.png")
+
+    def draw(self):
+        self.screen.draw()
+
+    def exit_program(self):
+        self.director.exit_program()
 
     def execute_game(self):
-        self.director.stack_scene()(self.curr)
+        container = self.director.container
+        self.mixer.play_button_click()
+        game = self.director.game
+        for level in game.levels:
+            self.director.stack_scene(LevelBuilder(container, level))
 
-    # def show_configuration_scene(self):
-    #    self.configuration_scene = 1
+    def build(self, _):
+        game = self.director.container.get_object('game')
+        self.director.container.get_object('mixer').load_music(game.music["game_over"])
+        self.director.container.get_object('mixer').load_new_profile(game.sounds["game_over"])
+        return self
+
+    def events(self, events):
+        if not pg.mouse.get_visible():
+            pg.mouse.set_visible(True)
+
+        for event in events:
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:
+                    self.exit_program()
+            elif event.type == pg.QUIT:
+                self.director.exit_program()
+        self.screen.events(events)
+
+    def update(self, *args):
+        return
