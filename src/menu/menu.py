@@ -34,7 +34,7 @@ class Menu:
                 self.director.exit_program()
         self.scenes_list[self.current_screen].events(events)
 
-    def build(self, _):
+    def build(self):
         game = self.director.container.get_object('game')
         self.director.container.get_object('mixer').load_music(game.music["menu"])
         self.director.container.get_object('mixer').load_new_profile(game.sounds["menu"])
@@ -59,8 +59,6 @@ class Menu:
     def execute_level(self, level):
         container = self.director.container
         self.mixer.play_button_click()
-
-        game = self.director.game
 
         self.director.stack_scene(container.get_object('levels')[level])
 
@@ -107,7 +105,7 @@ class GameOverMenu:
         for level in container.get_object('levels'):
             self.director.stack_scene(level)
 
-    def build(self, _):
+    def build(self):
         game = self.director.container.get_object('game')
         self.director.container.get_object('mixer').load_music(game.music["game_over"])
         self.director.container.get_object('mixer').load_new_profile(game.sounds["game_over"])
@@ -158,7 +156,7 @@ class PauseMenu:
                 self.director.exit_program()
         self.scenes_list[self.current_screen].events(events)
 
-    def build(self, _):
+    def build(self):
         game = self.director.container.get_object('game')
         self.director.container.get_object('mixer').load_music(game.music["menu"])
         self.director.container.get_object('mixer').load_new_profile(game.sounds["menu"])
@@ -170,7 +168,8 @@ class PauseMenu:
 
     def quit_game(self):
         self.director.exit_program()
-        self.director.stack_scene(Menu(self.director))
+        self.director.player.reset()
+        self.director.stack_scene(Menu(self.director).build())
 
     def resume_game(self):
         self.mixer.play_button_click()
