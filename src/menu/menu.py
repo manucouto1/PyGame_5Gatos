@@ -165,7 +165,7 @@ class GameOverMenu(Menu):
 
     def quit_game(self):
         """
-        Button that finish game execution and changes to menu scene
+        Function that finish game execution and changes to menu scene
         """
         self.director.exit_program()
         self.director.player.reset()
