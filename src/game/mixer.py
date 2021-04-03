@@ -19,6 +19,7 @@ class Mixer:
         self.point_sound = None
         self.one_up_sound = None
         self.cookie_sound = None
+        self.die_sound = None
 
         self.music = None
         self.current_music_volume = MAX_MUSIC_VOLUME
@@ -44,6 +45,7 @@ class Mixer:
         self.point_sound = self.load_sound(sound_dto.point)
         self.one_up_sound = self.load_sound(sound_dto.one_up)
         self.cookie_sound = self.load_sound(sound_dto.cookie)
+        self.die_sound = self.load_sound(sound_dto.die)
 
         self.change_profile_volume(self.current_sound_volume)
 
@@ -88,6 +90,10 @@ class Mixer:
     def play_cookie(self):
         self.cookie_sound.play()
 
+    def play_die(self):
+        mixer.music.stop()
+        self.die_sound.play()
+
     def music_louder(self):
         if self.current_music_volume < MAX_MUSIC_VOLUME:
             self.current_music_volume += 0.1
@@ -116,6 +122,7 @@ class Mixer:
         self.change_volume(self.point_sound, volume)
         self.change_volume(self.one_up_sound, volume)
         self.change_volume(self.cookie_sound, volume)
+        self.change_volume(self.die_sound, volume)
 
     def sound_louder(self):
         if self.current_sound_volume < MAX_SOUND_VOLUME:

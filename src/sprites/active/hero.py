@@ -1,6 +1,7 @@
 import pygame as pg
 
 from pygame.sprite import collide_mask
+
 from src.sprites.active.shooter_entity import ShooterEntity
 from src.sprites.passive.hud.life import Life
 import time
@@ -125,3 +126,10 @@ class Hero(ShooterEntity):
 
         self.life.update()
         self.points.update(dt)
+
+        if self.life.player.life == 0:
+            self.mixer.play_die()
+            director = self.container.get_object('director')
+            self.life.player.life = 6
+            from src.menu.menu import GameOverMenu
+            director.change_scene(GameOverMenu(director))
