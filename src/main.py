@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
 from src.game.director import Director
-from src.menu.menu import Menu
+from src.menu.menu import InitialMenu
 
 
 def main():
     game = Director()
-    game.stack_scene(Menu(game).build())
+    game.stack_scene(InitialMenu(game).build())
     game.run()
 
 

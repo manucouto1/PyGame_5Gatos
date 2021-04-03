@@ -1,6 +1,7 @@
 import pygame as pg
 import src.utils.assets as assets
-from src.menu.button import ButtonPlay, ButtonControls, ButtonOptions, ButtonLevels, ButtonExit, ButtonBack, ButtonQuit
+from src.menu.button import ButtonPlay, ButtonControls, ButtonOptions, ButtonLevels, ButtonExit, ButtonBack, ButtonQuit, \
+    ButtonLevel1, ButtonLevel2, ButtonLevel3, ButtonLevel4
 from src.menu.button import ButtonMusicLouder, ButtonMusicLower, ButtonSoundLouder, ButtonSoundLower, ButtonResume
 from src.menu.text import TextPlay, TextReplay, TextControls, TextOptions, TextLevels, TextExit, TextBack, TextQuit
 from src.menu.text import TextLevel1, TextLevel2, TextLevel3, TextLevel4, TextResume
@@ -10,7 +11,12 @@ SCREEN_HEIGHT = 800
 
 
 class ScreenGUI:
+    """
+    Class to create screen objects
 
+    :param menu: scene menu
+    :param image: image of the background (png file)
+    """
     def __init__(self, menu, image):
         self.menu = menu
         self.element_click = None
@@ -21,12 +27,18 @@ class ScreenGUI:
         self.elementGUI = []
 
     def draw(self):
+        """
+        Call draw method of each elementGUI on the screen
+        """
         self.screen.blit(self.bg, (0, 0))
         for element in self.elementGUI:
             element.draw(self.screen)
 
     def events(self, event_list):
-        # to know what elementGUI has been clicked, we ask all of them
+        """
+        To know what elementGUI has been clicked, we ask all of them
+        and call action method of the clicked one
+        """
         for event in event_list:
             if event.type == pg.MOUSEBUTTONDOWN:
                 self.element_click = None
@@ -41,19 +53,21 @@ class ScreenGUI:
 
 
 class ScreenGUIInitial(ScreenGUI):
-
+    """
+    Initial menu screen
+    """
     def __init__(self, menu, image):
         ScreenGUI.__init__(self, menu, image)
-        self.elementGUI.append(ButtonPlay(self))
-        self.elementGUI.append(ButtonExit(self))
-        self.elementGUI.append(ButtonControls(self))
-        self.elementGUI.append(ButtonOptions(self))
-        self.elementGUI.append(ButtonLevels(self))
-        self.elementGUI.append(TextPlay(self))
-        self.elementGUI.append(TextExit(self))
-        self.elementGUI.append(TextOptions(self))
-        self.elementGUI.append(TextControls(self))
-        self.elementGUI.append(TextLevels(self))
+        self.elementGUI.append(ButtonPlay(self, (305, 270)))
+        self.elementGUI.append(ButtonExit(self, (305, 670)))
+        self.elementGUI.append(ButtonControls(self, (305, 370)))
+        self.elementGUI.append(ButtonOptions(self, (305, 470)))
+        self.elementGUI.append(ButtonLevels(self, (305, 570)))
+        self.elementGUI.append(TextPlay(self, (380, 270)))
+        self.elementGUI.append(TextExit(self, (380, 670)))
+        self.elementGUI.append(TextOptions(self, (355, 470)))
+        self.elementGUI.append(TextControls(self, (340, 370)))
+        self.elementGUI.append(TextLevels(self, (355, 570)))
 
     def draw(self):
         ScreenGUI.draw(self)
@@ -63,11 +77,13 @@ class ScreenGUIInitial(ScreenGUI):
 
 
 class ScreenGUIControls(ScreenGUI):
-
+    """
+    Controls screen
+    """
     def __init__(self, menu, image):
         ScreenGUI.__init__(self, menu, image)
-        self.elementGUI.append(ButtonBack(self))
-        self.elementGUI.append(TextBack(self))
+        self.elementGUI.append(ButtonBack(self, (500, 670)))
+        self.elementGUI.append(TextBack(self, (570, 670)))
 
     def draw(self):
         ScreenGUI.draw(self)
@@ -85,15 +101,17 @@ class ScreenGUIControls(ScreenGUI):
 
 
 class ScreenGUIOptions(ScreenGUI):
-
+    """
+    Options screen
+    """
     def __init__(self, menu, image):
         ScreenGUI.__init__(self, menu, image)
-        self.elementGUI.append(ButtonBack(self))
-        self.elementGUI.append(TextBack(self))
-        self.elementGUI.append(ButtonMusicLower(self))
-        self.elementGUI.append(ButtonMusicLouder(self))
-        self.elementGUI.append(ButtonSoundLower(self))
-        self.elementGUI.append(ButtonSoundLouder(self))
+        self.elementGUI.append(ButtonBack(self, (500, 670)))
+        self.elementGUI.append(TextBack(self, (570, 670)))
+        self.elementGUI.append(ButtonMusicLower(self, (370, 140)))
+        self.elementGUI.append(ButtonMusicLouder(self, (490, 140)))
+        self.elementGUI.append(ButtonSoundLower(self, (370, 240)))
+        self.elementGUI.append(ButtonSoundLouder(self, (490, 240)))
 
     def draw(self):
         ScreenGUI.draw(self)
@@ -108,36 +126,52 @@ class ScreenGUIOptions(ScreenGUI):
 
 
 class ScreenGUILevels(ScreenGUI):
-
+    """
+    Levels screen
+    """
     def __init__(self, menu, image):
         ScreenGUI.__init__(self, menu, image)
-        self.elementGUI.append(ButtonBack(self))
-        self.elementGUI.append(TextBack(self))
-        self.elementGUI.append(TextLevel1(self))
-        self.elementGUI.append(TextLevel2(self))
-        self.elementGUI.append(TextLevel3(self))
-        self.elementGUI.append(TextLevel4(self))
+        self.elementGUI.append(ButtonLevel1(self, (305, 150)))
+        self.elementGUI.append(ButtonLevel2(self, (305, 250)))
+        self.elementGUI.append(ButtonLevel3(self, (305, 350)))
+        self.elementGUI.append(ButtonLevel4(self, (305, 450)))
+        self.elementGUI.append(ButtonBack(self, (500, 670)))
+        self.elementGUI.append(TextBack(self, (570, 670)))
+        self.elementGUI.append(TextLevel1(self, (350, 150)))
+        self.elementGUI.append(TextLevel2(self, (350, 250)))
+        self.elementGUI.append(TextLevel3(self, (350, 350)))
+        self.elementGUI.append(TextLevel4(self, (350, 450)))
 
 
 class ScreenGUIGameOver(ScreenGUI):
-
+    """
+    Game Over screen
+    """
     def __init__(self, menu, image):
         ScreenGUI.__init__(self, menu, image)
-        self.elementGUI.append(ButtonPlay(self))
-        self.elementGUI.append(ButtonExit(self))
-        self.elementGUI.append(TextReplay(self))
-        self.elementGUI.append(TextExit(self))
+        self.elementGUI.append(ButtonPlay(self, (305, 300)))
+        self.elementGUI.append(ButtonQuit(self, (305, 400)))
+        self.elementGUI.append(TextReplay(self, (330, 300)))
+        self.elementGUI.append(TextQuit(self, (370, 400)))
+
+    def draw(self):
+        ScreenGUI.draw(self)
+        font = pg.font.Font('../assets/fonts/yukari.ttf', 78)
+        title = font.render('Game Over :(', True, (255, 255, 255))
+        self.screen.blit(title, (215, 80))
 
 
 class ScreenGUIPause(ScreenGUI):
-
+    """
+    Pause Menu screen
+    """
     def __init__(self, menu, image):
         ScreenGUI.__init__(self, menu, image)
-        self.elementGUI.append(ButtonResume(self))
-        self.elementGUI.append(ButtonQuit(self))
-        self.elementGUI.append(ButtonControls(self))
-        self.elementGUI.append(ButtonOptions(self))
-        self.elementGUI.append(TextResume(self))
-        self.elementGUI.append(TextQuit(self))
-        self.elementGUI.append(TextOptions(self))
-        self.elementGUI.append(TextControls(self))
+        self.elementGUI.append(ButtonResume(self, (305, 270)))
+        self.elementGUI.append(ButtonQuit(self, (305, 570)))
+        self.elementGUI.append(ButtonControls(self, (305, 370)))
+        self.elementGUI.append(ButtonOptions(self, (305, 470)))
+        self.elementGUI.append(TextResume(self, (360, 270)))
+        self.elementGUI.append(TextQuit(self, (370, 570)))
+        self.elementGUI.append(TextOptions(self, (355, 470)))
+        self.elementGUI.append(TextControls(self, (340, 370)))

@@ -3,7 +3,14 @@ from src.menu.element import ElementGUI
 
 
 class TextGUI(ElementGUI):
+    """
+    Class to create texts on screen
 
+    :param screen: reference to the screen that the element belongs to
+    :param color: color of the text
+    :param text: content of the text
+    :param position: position of the element (x, y)
+    """
     def __init__(self, screen, color, text, position):
         font = pg.font.Font('../assets/fonts/Purisa Bold.ttf', 26)
         self.image = font.render(text, True, color)
@@ -14,119 +21,149 @@ class TextGUI(ElementGUI):
         screen.blit(self.image, self.rect)
 
 
-# Child classes that implement action() method
-class TextPlay(TextGUI):
+"""
+Child classes that implement action() method
+"""
 
-    def __init__(self, screen):
-        TextGUI.__init__(self, screen, (0, 0, 0), 'Play', (380, 270))
+
+class TextPlay(TextGUI):
+    """
+    Text that calls for execute_game menu method
+    """
+    def __init__(self, screen, position):
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Play', position)
 
     def action(self):
         self.screen.menu.execute_game()
 
 
 class TextReplay(TextGUI):
-
-    def __init__(self, screen):
-        TextGUI.__init__(self, screen, (0, 0, 0), 'Play again', (330, 270))
+    """
+    Text that calls for execute_game menu method (different text param than the above one)
+    """
+    def __init__(self, screen, position):
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Play again', position)
 
     def action(self):
         self.screen.menu.execute_game()
 
 
 class TextControls(TextGUI):
-
-    def __init__(self, screen):
-        TextGUI.__init__(self, screen, (0, 0, 0), 'Controls', (340, 370))
+    """
+    Text that calls for the show_controls_screen menu method
+    """
+    def __init__(self, screen, position):
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Controls', position)
 
     def action(self):
         self.screen.menu.show_controls_screen()
 
 
 class TextOptions(TextGUI):
-
-    def __init__(self, screen):
-        TextGUI.__init__(self, screen, (0, 0, 0), 'Options', (355, 470))
+    """
+    Text that calls for the show_options_screen menu method
+    """
+    def __init__(self, screen, position):
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Options', position)
 
     def action(self):
         self.screen.menu.show_options_screen()
 
 
 class TextLevels(TextGUI):
-
-    def __init__(self, screen):
-        TextGUI.__init__(self, screen, (0, 0, 0), 'Levels', (355, 570))
+    """
+    Text that calls for the show_levels_screen menu method
+    """
+    def __init__(self, screen, position):
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Levels', position)
 
     def action(self):
         self.screen.menu.show_levels_screen()
 
 
 class TextExit(TextGUI):
-
-    def __init__(self, screen):
-        TextGUI.__init__(self, screen, (0, 0, 0), 'Exit', (380, 670))
+    """
+    Button that calls for exit_program menu method
+    """
+    def __init__(self, screen, position):
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Exit', position)
 
     def action(self):
         self.screen.menu.exit_program()
 
 
 class TextBack(TextGUI):
-
-    def __init__(self, screen):
-        TextGUI.__init__(self, screen, (0, 0, 0), 'Back', (570, 670))
+    """
+    Text that calls for the show_initial_screen menu method
+    """
+    def __init__(self, screen, position):
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Back', position)
 
     def action(self):
         self.screen.menu.show_initial_screen()
 
 
 class TextLevel1(TextGUI):
-
-    def __init__(self, screen):
-        TextGUI.__init__(self, screen, (0, 0, 0), 'Level 1', (80, 100))
-
-    def action(self):
-        self.screen.menu.execute_level(3)
-
-
-class TextLevel2(TextGUI):
-
-    def __init__(self, screen):
-        TextGUI.__init__(self, screen, (0, 0, 0), 'Level 2', (80, 200))
-
-    def action(self):
-        self.screen.menu.execute_level(2)
-
-
-class TextLevel3(TextGUI):
-
-    def __init__(self, screen):
-        TextGUI.__init__(self, screen, (0, 0, 0), 'Level 3', (80, 300))
-
-    def action(self):
-        self.screen.menu.execute_level(1)
-
-
-class TextLevel4(TextGUI):
-
-    def __init__(self, screen):
-        TextGUI.__init__(self, screen, (0, 0, 0), 'Level 4', (80, 400))
+    """
+    Text that calls for execute_level menu method for level 1
+    """
+    def __init__(self, screen, position):
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Level 1', position)
 
     def action(self):
         self.screen.menu.execute_level(0)
 
 
-class TextResume(TextGUI):
+class TextLevel2(TextGUI):
+    """
+    Text that calls for execute_level menu method for level 2
+    """
+    def __init__(self, screen, position):
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Level 2', position)
 
-    def __init__(self, screen):
-        TextGUI.__init__(self, screen, (0, 0, 0), 'Resume', (360, 270))
+    def action(self):
+        self.screen.menu.execute_level(1)
+
+
+class TextLevel3(TextGUI):
+    """
+    Text that calls for execute_level menu method for level 3
+    """
+    def __init__(self, screen, position):
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Level 3', position)
+
+    def action(self):
+        self.screen.menu.execute_level(2)
+
+
+class TextLevel4(TextGUI):
+    """
+    Text that calls for execute_level menu method for level 4
+    """
+    def __init__(self, screen, position):
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Level 4', position)
+
+    def action(self):
+        self.screen.menu.execute_level(3)
+
+
+class TextResume(TextGUI):
+    """
+    Text that calls for the resume_game menu method
+    """
+    def __init__(self, screen, position):
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Resume', position)
 
     def action(self):
         self.screen.menu.resume_game()
 
 
 class TextQuit(TextGUI):
-
-    def __init__(self, screen):
-        TextGUI.__init__(self, screen, (0, 0, 0), 'Quit', (370, 570))
+    """
+    Text that calls for the quit_game menu method
+    """
+    def __init__(self, screen, position):
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Quit', position)
 
     def action(self):
         self.screen.menu.quit_game()
