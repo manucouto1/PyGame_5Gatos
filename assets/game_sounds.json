@@ -9,7 +9,8 @@
       "button_click": "button_click.ogg",
       "point": "point.ogg",
       "one_up": "one_up.ogg",
-      "cookie": "cookie.ogg"
+      "cookie": "cookie.ogg",
+      "die": "die.ogg"
     },
     "menu": {
       "jump": null,
@@ -20,7 +21,8 @@
       "button_click": "button_click.ogg",
       "point": null,
       "one_up": null,
-      "cookie": null
+      "cookie": null,
+      "die": null
     },
     "game_over": {
       "jump": null,
@@ -31,14 +33,15 @@
       "button_click": "button_click.ogg",
       "point": null,
       "one_up": null,
-      "cookie": null
+      "cookie": null,
+      "die": null
     }
   },
   "music": {
     "menu": "menu.ogg",
     "game": "game.ogg",
     "final_level": "final_level.ogg",
-    "game_over": "menu.ogg",
+    "game_over": "credits.ogg",
     "credits": "credits.ogg"
   }
 }
