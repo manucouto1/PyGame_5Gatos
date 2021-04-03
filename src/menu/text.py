@@ -35,7 +35,7 @@ class TextPlay(TextGUI):
 class TextReplay(TextGUI):
 
     def __init__(self, screen):
-        TextGUI.__init__(self, screen, (0, 0, 0), 'Play again', (380, 270))
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Play again', (330, 270))
 
     def action(self):
         self.screen.menu.execute_game()

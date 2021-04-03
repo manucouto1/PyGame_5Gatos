@@ -10,3 +10,4 @@ class SoundDTO:
         self.point = sound['point']
         self.one_up = sound['one_up']
         self.cookie = sound['cookie']
+        self.die = sound['die']
