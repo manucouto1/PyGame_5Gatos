@@ -143,8 +143,13 @@ class FallingCamera(Camera):
                             elif gap["center"] == "y" and not self.falling:
                                 y = -(gap["y_init"] + gap['y_end']) / 2 + self.screen_size.height / 2
                             elif gap["center"] == "xy" and not self.falling:
-                                x = -(gap["x_init"] + gap['x_end']) / 2 + self.screen_size.width / 2
-                                y = -(gap["y_init"] + gap['y_end']) / 2 + self.screen_size.height / 2
+                                if 'x_center' in gap and 'y_center' in gap:
+                                    print("Center > ", gap['x_center'])
+                                    x = -gap['x_center'] + self.screen_size.width / 2
+                                    y = -gap['y_center'] + self.screen_size.height / 2
+                                else:
+                                    x = -(gap["x_init"] + gap['x_end']) / 2 + self.screen_size.width / 2
+                                    y = -(gap["y_init"] + gap['y_end']) / 2 + self.screen_size.height / 2
                         break
                 elif 'x_init' in gap and 'y_init' not in gap:
                     if gap["x_init"] < self.target.rect.center[0] < gap["x_end"]:

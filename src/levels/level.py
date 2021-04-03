@@ -26,8 +26,7 @@ class LevelBuilder:
         self.hero_builder = HeroBuilder(container, self.level_dto)
         self.camera_builder = CameraBuilder(container, self.level_dto, self.screen_size)
         self.zone_events_builder = EventsBuilder(container, self.level_dto)
-        self.h_bullets, self.enemies, self.e_bullets, self.camera, self.dangerous = None, None, None, None, None
-        self.hero, self.layers, self.zone_events, self.platforms, self.falling_platforms = None, None, None, None, None
+        self.h_bullets, self.e_bullets, self.camera, self.hero = None, None, None, None
         self.level_sounds = self.game_dto.sounds[level_dto.sounds]
         self.level_music = self.game_dto.music[level_dto.music]
 
@@ -39,11 +38,6 @@ class LevelBuilder:
         self.container.set_object('e_bullets', self.e_bullets)
         self.container.set_object('h_bullets', self.h_bullets)
         self.container.set_object('hero', self.hero)
-        self.enemies = self.enemies_builder.build(self.camera.scroll)
-        self.layers = self.layers_builder.build(self.camera.scroll)
-        self.platforms = Platforms(self.game_dto, self.layers.get_ground())
-        self.dangerous = Platforms(self.game_dto, self.layers.get_dangerous())
-        self.falling_platforms = Platforms(self.game_dto, self.layers.get_falling())
         return self.container.object_from_name(self.level_dto.path, self)
 
 
@@ -62,13 +56,13 @@ class Level:
             self.bg = None
             self.dto = builder.level_dto
             self.limit = self.dto.map_height * self.dto.tile_size
-            self.layers = builder.layers
-            self.enemies = builder.enemies
             self.hero = builder.hero
             self.camera = builder.camera
-            self.platforms = builder.platforms
-            self.dangerous = builder.dangerous
-            self.falling_platforms = builder.falling_platforms
+            self.layers = builder.layers_builder.build(self.camera.scroll)
+            self.enemies = builder.enemies_builder.build(self.camera.scroll)
+            self.platforms = Platforms(builder.game_dto, self.layers.get_ground())
+            self.dangerous = Platforms(builder.game_dto, self.layers.get_dangerous())
+            self.falling_platforms = Platforms(builder.game_dto, self.layers.get_falling())
             self.h_bullets = builder.h_bullets
             self.e_bullets = builder.e_bullets
 
@@ -111,7 +105,8 @@ class Level:
 
         self.h_bullets.update(dt)
         self.e_bullets.update(dt)
-        self.enemies.update(self.hero, self.zone_events, self.platforms.get_actives()+self.falling_platforms.get_actives(), dt)
+        active_platforms = Platforms.get_sprites(self.platforms.get_actives(), self.falling_platforms.get_actives())
+        self.enemies.update(self.hero, self.zone_events, active_platforms, dt)
         self.camera.update(self.platforms.get_actives(), self.dangerous.get_actives(), dt, self.falling_platforms.get_actives())
 
         self.platforms.update(self.camera)

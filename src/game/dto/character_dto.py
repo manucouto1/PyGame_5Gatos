@@ -1,6 +1,7 @@
 
 class CharacterDTO:
     def __init__(self, character):
+        self.layer = character['layer']
         self.name = character['name']
         self.width = character['width']
         self.height = character['height']

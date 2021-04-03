@@ -25,7 +25,7 @@ class ActiveEntity(pg.sprite.Sprite):
         sheet = container.image_from_path(sheet_path)
         sheet = SpriteStripAnim(sheet, (0, 0, character.height, character.width), character.rows,
                                 rows=4, scale=(character.rescale_x, character.rescale_y))
-
+        self.layer = character.layer
         self.scroll = pg.Vector2(0, 0)
         self.sheet = sheet
         self.image = self.sheet.images[0][0]
