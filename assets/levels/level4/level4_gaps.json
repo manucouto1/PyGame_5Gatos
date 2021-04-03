@@ -28,7 +28,9 @@
       "x_init": 25,
       "x_end": 50,
       "y_init": 166,
-      "y_end": 194
+      "y_end": 194,
+      "y_center": 183,
+      "x_center": 38
     }
   ]
 }
