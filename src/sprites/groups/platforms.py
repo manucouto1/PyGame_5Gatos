@@ -1,4 +1,5 @@
 import numpy as np
+import pygame as pg
 
 
 class Platforms:
@@ -13,8 +14,12 @@ class Platforms:
         self.center_y = game.screen_height/2
         self.max_distance = np.sqrt(self.center_x ** 2 + self.center_y ** 2)
         self.sprites = dict()
-        self.sprites['actives'] = platforms
-        self.sprites['freezes'] = []
+        self.sprites['actives'] = pg.sprite.Group(platforms)
+        self.sprites['freezes'] = pg.sprite.Group()
+
+    @staticmethod
+    def get_sprites(group1, group2):
+        return group1.sprites() + group2.sprites()
 
     def get_actives(self):
         """
@@ -47,10 +52,10 @@ class Platforms:
             distance = self._calc_distance(sprite, target.camera_rect)
             if distance >= self.max_distance:
                 self.sprites['actives'].remove(sprite)
-                self.sprites['freezes'].append(sprite)
+                self.sprites['freezes'].add(sprite)
 
         for sprite in freezes:
             distance = self._calc_distance(sprite, target.camera_rect)
             if distance < self.max_distance:
-                self.sprites['actives'].append(sprite)
+                self.sprites['actives'].add(sprite)
                 self.sprites['freezes'].remove(sprite)

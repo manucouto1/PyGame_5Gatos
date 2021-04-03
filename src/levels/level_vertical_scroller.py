@@ -13,6 +13,8 @@ class VerticalScroller(Level):
         self.last_scroll_x = 0
         self.last_scroll_y = 0
         self.falling = False
+        self.final_boos = self.enemies.get_final_boss()
+
 
     def load_background(self, n=6):
         self.bg = px.ParallaxSurface(
@@ -31,6 +33,17 @@ class VerticalScroller(Level):
         self.hero.shutdown_gravity(2.5)
         self.camera.falling_mode()
         self.falling = True
+
+    def enemy_limit(self, enemy):
+        (x, y, h, w) = self.screen.get_rect()
+        y += 32
+        x += 32
+        h -= 32
+        w -= 32
+        (cam_x, cam_y) = self.camera.camera_rect
+        y -= cam_y
+        x -= cam_x
+        enemy.rect.clamp_ip((x, y, h, w))
 
     def events(self, events):
         for event in events:
@@ -75,10 +88,10 @@ class VerticalScroller(Level):
         elif self.last_scroll_y < scroll_y:
             self.bg.scroll(10, 'vertical')
 
-            if self.last_scroll_x > scroll_x:
-                self.bg.scroll(1.5, 'horizontal')
-            elif self.last_scroll_x < scroll_x:
-                self.bg.scroll(-1.5, 'horizontal')
+        if self.last_scroll_x > scroll_x:
+            self.bg.scroll(1.5, 'horizontal')
+        elif self.last_scroll_x < scroll_x:
+            self.bg.scroll(-1.5, 'horizontal')
 
         self.last_scroll_x = scroll_x
         self.last_scroll_y = scroll_y

@@ -1,3 +1,4 @@
+import numpy as np
 from pygame.sprite import Sprite
 from src.sprites.passive.hud.hearts import Heart
 from src.utils import assets
@@ -28,6 +29,7 @@ class EndLevel(Event):
 
 
 class ExtraLife(Event):
+
     def __init__(self, hero, pos, *groups):
         super().__init__(hero, *groups)
         self.event = "Extra life"
@@ -36,9 +38,25 @@ class ExtraLife(Event):
         self.rect = self.image.get_rect()
         self.rect.bottomleft = pos
 
+    def _calc_distance(self, sprite, target):
+        a = (sprite.rect.x - abs(target[0])) ** 2
+        b = (sprite.rect.y - abs(target[1])) ** 2
+        return np.sqrt(a + b)
+
+    def follow(self, hero):
+        y = hero.rect.center[1] - self.rect.center[1]
+        x = hero.rect.center[0] - self.rect.center[0]
+        self.rect.y += y * 0.1
+        self.rect.x += x * 0.1
+
     def kill(self):
         self.observer.add_life()
         Sprite.kill(self)
+
+    def update(self, dt):
+        distance = self._calc_distance(self, self.observer.rect)
+        if distance < 128:
+            self.follow(self.observer)
 
 
 class KittyPoint(Event):

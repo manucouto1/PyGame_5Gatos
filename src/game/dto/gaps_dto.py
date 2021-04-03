@@ -18,4 +18,8 @@ class GapsDTO:
                 gap_dict['y_init'] = gap['y_init'] * gaps['scale']
                 gap_dict['y_end'] = gap['y_end'] * gaps['scale']
 
+            if 'x_center' in gap:
+                gap_dict['x_center'] = gap['x_center'] * gaps['scale']
+                gap_dict['y_center'] = gap['y_center'] * gaps['scale']
+
             self.gaps.append(gap_dict)

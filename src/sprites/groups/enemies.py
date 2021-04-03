@@ -30,6 +30,9 @@ class Enemies(ScrollAdjustedLayeredGroup):
             character = game.characters[entity.name]
             self.add(builder.container.object_from_name(character.path, builder.container, entity, character))
 
+    def get_final_boss(self):
+        return self.get_sprites_from_layer(1)[0]
+
     def _calc_distance(self, sprite, target):
         a = (sprite.rect.x - abs(target[0]) - self.center_x) ** 2
         b = (sprite.rect.y - abs(target[1]) - self.center_y) ** 2
