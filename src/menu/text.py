@@ -1,9 +1,6 @@
 import pygame as pg
 from src.menu.element import ElementGUI
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 800
-
 
 class TextGUI(ElementGUI):
 
@@ -17,12 +14,7 @@ class TextGUI(ElementGUI):
         screen.blit(self.image, self.rect)
 
 
-class TextTitle(TextGUI):
-
-    def __init__(self, screen):
-        TextGUI.__init__(self, screen, (255, 255, 255), '5Gatos', (SCREEN_WIDTH / 2 - 120, 150))
-
-
+# Child classes that implement action() method
 class TextPlay(TextGUI):
 
     def __init__(self, screen):
@@ -35,7 +27,7 @@ class TextPlay(TextGUI):
 class TextReplay(TextGUI):
 
     def __init__(self, screen):
-        TextGUI.__init__(self, screen, (0, 0, 0), 'Play again', (330, 270))
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Play again', (380, 270))
 
     def action(self):
         self.screen.menu.execute_game()
@@ -120,3 +112,21 @@ class TextLevel4(TextGUI):
 
     def action(self):
         self.screen.menu.execute_level(0)
+
+
+class TextResume(TextGUI):
+
+    def __init__(self, screen):
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Resume', (360, 270))
+
+    def action(self):
+        self.screen.menu.resume_game()
+
+
+class TextQuit(TextGUI):
+
+    def __init__(self, screen):
+        TextGUI.__init__(self, screen, (0, 0, 0), 'Quit', (370, 570))
+
+    def action(self):
+        self.screen.menu.quit_game()

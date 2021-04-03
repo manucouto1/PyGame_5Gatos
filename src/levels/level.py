@@ -2,6 +2,7 @@ import pygame as pg
 
 from pygame.sprite import collide_mask
 
+from src.menu.button import ButtonPause
 from src.sprites.groups.events import EventsBuilder
 from src.sprites.groups.platforms import Platforms
 from src.sprites.groups.layers import LayersBuilder
@@ -57,6 +58,7 @@ class Level:
         self.cursor = Cursor(self.container, pg.mouse.get_pos())
         pg.mouse.set_visible(False)
         self.screen.set_alpha(None)
+        self.pause = ButtonPause(self)
 
         try:
             self.bg = None
@@ -134,6 +136,7 @@ class Level:
         self.layers.draw(self.screen)
         self.enemies.draw(self.screen)
         self.camera.draw(self.screen)
+        self.pause.draw(self.screen)
         self.cursor.draw(self.screen)
         self.h_bullets.draw(self.screen)
         self.e_bullets.draw(self.screen)
