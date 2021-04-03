@@ -2,6 +2,8 @@ from src.levels.level import Level
 import pygame as pg
 import sys
 import parallax as px
+
+from src.menu.menu import PauseMenu
 from src.utils import assets
 
 
@@ -11,6 +13,7 @@ class Scroller2D(Level):
         super().__init__(builder)
         self.load_background()
         self.fullscreen = False
+        self.element_click = None
         self.last_scroll_x = 0
         self.last_scroll_y = 0
 
@@ -35,9 +38,17 @@ class Scroller2D(Level):
                     pg.quit()
                     sys.exit()
             if event.type == pg.MOUSEBUTTONDOWN:
+                self.element_click = None
                 if len(self.h_bullets) < 5:
                     x, y = pg.mouse.get_pos()
                     self.hero.shoot((x - self.hero.rect.width / 2, y - self.hero.rect.height / 2))
+                if self.pause.position_elem(event.pos):
+                    self.element_click = self.pause
+            if event.type == pg.MOUSEBUTTONUP:
+                if self.pause.position_elem(event.pos):
+                    if self.pause == self.element_click:
+                        director = self.container.get_object('director')
+                        director.stack_scene(PauseMenu(director))
 
         pressed = pg.key.get_pressed()
 

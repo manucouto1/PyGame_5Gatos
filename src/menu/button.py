@@ -2,9 +2,6 @@ import pygame as pg
 from src.menu.element import ElementGUI
 import src.utils.assets as assets
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 800
-
 
 class Button(ElementGUI):
 
@@ -15,9 +12,11 @@ class Button(ElementGUI):
         self.set_position(position)
 
     def draw(self, screen):
+
         screen.blit(self.image, self.rect)
 
 
+# Child classes that implement action() method
 class ButtonPlay(Button):
     def __init__(self, screen):
         Button.__init__(self, screen, 'menu/button1.png', (305, 270), 200, 50)
@@ -105,3 +104,30 @@ class ButtonSoundLower(Button):
 
     def action(self):
         self.screen.menu.sound_lower()
+
+
+class ButtonResume(Button):
+
+    def __init__(self, screen):
+        Button.__init__(self, screen, 'menu/button1.png', (305, 270), 200, 50)
+
+    def action(self):
+        self.screen.menu.resume_game()
+
+
+class ButtonQuit(Button):
+
+    def __init__(self, screen):
+        Button.__init__(self, screen, 'menu/button1.png', (305, 570), 200, 50)
+
+    def action(self):
+        self.screen.menu.quit_game()
+
+
+class ButtonPause(Button):
+
+    def __init__(self, screen):
+        Button.__init__(self, screen, 'menu/pause.png', (600, 80), 50, 50)
+
+    def action(self):
+        print("pause")
