@@ -3,7 +3,7 @@ import pygame as pg
 from pygame.sprite import collide_mask
 
 from src.menu.button import ButtonPause
-from menu.menu import GameOverMenu
+from src.menu.menu import GameOverMenu
 from src.sprites.groups.events import EventsBuilder
 from src.sprites.groups.platforms import Platforms
 from src.sprites.groups.layers import LayersBuilder
@@ -53,7 +53,7 @@ class Level:
         self.cursor = Cursor(self.container, pg.mouse.get_pos())
         pg.mouse.set_visible(False)
         self.screen.set_alpha(None)
-        self.pause = ButtonPause(self)
+        self.pause = ButtonPause(self, (600, 80))
 
         try:
             self.bg = None
