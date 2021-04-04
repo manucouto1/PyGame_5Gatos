@@ -1,5 +1,5 @@
-import pygame as pg
 from src.sprites.groups.scroll_adjusted import ScrollAdjustedGroup
+import pygame as pg
 
 
 class CameraBuilder:

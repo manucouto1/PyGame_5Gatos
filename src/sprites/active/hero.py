@@ -1,9 +1,9 @@
-import pygame as pg
-
+from src.sprites.passive.hud.kittenscore import KittenScore
 from src.sprites.active.shooter_entity import ShooterEntity
 from src.sprites.passive.hud.life import Life
+
+import pygame as pg
 import time
-from src.sprites.passive.hud.kittenscore import KittenScore
 
 
 class HeroBuilder:

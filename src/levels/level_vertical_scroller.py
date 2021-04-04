@@ -1,10 +1,12 @@
+import time
+
 from src.levels.level import Level
+from src.extern import parallax as px
+from src.menu.menu import PauseMenu, GameOverMenu
+from src.utils import assets
+
 import pygame as pg
 import sys
-from extern import parallax as px
-
-from src.menu.menu import PauseMenu
-from src.utils import assets
 
 
 class VerticalScroller(Level):
@@ -32,10 +34,19 @@ class VerticalScroller(Level):
         self.falling = False
 
     def falling_mode(self):
-        self.enemies.shutdown_gravity(1.5)
-        self.hero.shutdown_gravity(2.5)
-        self.camera.falling_mode()
-        self.falling = True
+        if self.final_boos.life <= 0:
+            self.enemies.shutdown_gravity(1.5)
+            self.hero.shutdown_gravity(2.5)
+            self.camera.falling_mode()
+            self.falling = True
+        else:
+            self.camera.active_id = 1
+            self.hero.choose_mov(True, False)
+            self.hero.choose_mov(True, False)
+            self.hero.getting_damage = True
+            self.hero.jump()
+            self.hero.num_jumps = 0
+
 
     def enemy_limit(self, enemy):
         (x, y, h, w) = self.screen.get_rect()
