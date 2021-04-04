@@ -8,7 +8,6 @@ class Container:
         self.DTOs = {}
         self.images = {}
         self.sound = {}
-        #TODO coidado con los objectos que deben ser eliminados
         self.objects = {}
 
     def set_object(self, name, obj):
