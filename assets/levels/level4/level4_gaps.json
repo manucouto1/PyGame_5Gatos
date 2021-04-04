@@ -27,7 +27,7 @@
       "id": 3,
       "action": "normal_mode",
       "center": "xy",
-      "x_init": 25,
+      "x_init": 24,
       "x_end": 50,
       "y_init": 166,
       "y_end": 194,
