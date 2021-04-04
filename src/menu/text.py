@@ -1,5 +1,6 @@
 import pygame as pg
 from src.menu.element import ElementGUI
+from src.utils import assets
 
 
 class TextGUI(ElementGUI):
@@ -12,7 +13,7 @@ class TextGUI(ElementGUI):
     :param position: position of the element (x, y)
     """
     def __init__(self, screen, color, text, position):
-        font = pg.font.Font('../assets/fonts/Purisa Bold.ttf', 26)
+        font = pg.font.Font(assets.path_to('fonts','Purisa Bold.ttf'), 26)
         self.image = font.render(text, True, color)
         ElementGUI.__init__(self, screen, self.image.get_rect())
         self.set_position(position)
