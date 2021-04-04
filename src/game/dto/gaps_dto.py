@@ -20,6 +20,7 @@ class GapsDTO:
 
             if 'x_center' in gap:
                 gap_dict['x_center'] = gap['x_center'] * gaps['scale']
+            if 'y_center' in gap:
                 gap_dict['y_center'] = gap['y_center'] * gaps['scale']
 
             self.gaps.append(gap_dict)

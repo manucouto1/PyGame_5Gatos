@@ -52,6 +52,7 @@ class Camera(ScrollAdjustedGroup):
 class CameraVerticalGap(Camera):
     def __init__(self, target, builder: CameraBuilder):
         super().__init__(target, builder)
+        self.container = builder.container
         self.gaps = builder.gaps.gaps
         print("Cargamos VerticalGap camera")
 
@@ -63,7 +64,13 @@ class CameraVerticalGap(Camera):
 
             for gap in self.gaps:
                 if gap["y_init"] < self.target.rect.center[1] < gap["y_end"]:
-                    y = -(gap["y_init"]+gap['y_end'])/2 + self.screen_size.height / 2
+                    if "action" in gap:
+                        o = self.container.get_object('level')
+                        getattr(o, gap["action"])()
+                    if 'y_center' in gap:
+                        y = -gap['y_center'] + self.screen_size.height / 2
+                    else:
+                        y = -(gap["y_init"] + gap['y_end']) / 2 + self.screen_size.height / 2
                     self._do_scroll(x, y, 0.05, 0.05)
                     return
 
@@ -94,7 +101,10 @@ class CameraHorizontalGap(Camera):
                     if "action" in gap:
                         o = self.container.get_object('level')
                         getattr(o, gap["action"])()
-                    x = -(gap["x_init"]+gap['x_end'])/2 + self.screen_size.width / 2
+                    if 'x_center' in gap:
+                        x = -gap['x_center'] + self.screen_size.width / 2
+                    else:
+                        x = -(gap["x_init"] + gap['x_end']) / 2 + self.screen_size.width / 2
                     self._do_scroll(x, y, 0.1, 0.1)
                     return
 
@@ -139,9 +149,15 @@ class FallingCamera(Camera):
                             getattr(o, gap["action"])()
                         if "center" in gap:
                             if gap["center"] == "x":
-                                x = -(gap["x_init"]+gap['x_end'])/2 + self.screen_size.width / 2
+                                if 'x_center' in gap:
+                                    x = -gap['x_center'] + self.screen_size.width / 2
+                                else:
+                                    x = -(gap["x_init"]+gap['x_end'])/2 + self.screen_size.width / 2
                             elif gap["center"] == "y" and not self.falling:
-                                y = -(gap["y_init"] + gap['y_end']) / 2 + self.screen_size.height / 2
+                                if 'y_center' in gap:
+                                    y = -gap['y_center'] + self.screen_size.height / 2
+                                else:
+                                    y = -(gap["y_init"] + gap['y_end']) / 2 + self.screen_size.height / 2
                             elif gap["center"] == "xy" and not self.falling:
                                 if 'x_center' in gap and 'y_center' in gap:
                                     print("Center > ", gap['x_center'])

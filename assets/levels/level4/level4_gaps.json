@@ -16,10 +16,11 @@
       "id": 2,
       "action": "falling_mode",
       "center": "x",
-      "x_init": 25,
+      "x_init": 24,
       "x_end": 50,
       "y_init": 0,
-      "y_end": 166
+      "y_end": 166,
+      "x_center": 38
     },
     {
       "id": 3,
