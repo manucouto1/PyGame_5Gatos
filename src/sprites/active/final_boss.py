@@ -96,6 +96,7 @@ class FinalBoss(EnemyTurretShooter):
                 self.move(hero, dt)
                 self.apply(platforms, dt)
             else:
+                self.level.time_to_fall = True
                 self.getting_damage = False
                 self.walk_loop(dt)
                 self.move_right()
@@ -110,9 +111,6 @@ class FinalBoss(EnemyTurretShooter):
                 self.move(hero, dt)
                 self.follow(hero)
                 self.apply(platforms, dt)
-
-
-
             else:
                 self.jump_strength = 28
                 self.falling_mode = False

@@ -18,6 +18,8 @@ class VerticalScroller(Level):
         self.last_scroll_x = 0
         self.last_scroll_y = 0
         self.falling = False
+        self.block_right = False
+        self.time_to_fall = False
         self.final_boos = self.enemies.get_final_boss()
 
 
@@ -33,19 +35,25 @@ class VerticalScroller(Level):
         self.camera.normal_mode()
         self.falling = False
 
+    def clear_mode(self):
+        self.block_right = False
+        self.camera.normal_mode()
+
     def falling_mode(self):
-        if self.final_boos.life <= 0:
+        if self.time_to_fall:
             self.enemies.shutdown_gravity(1.5)
             self.hero.shutdown_gravity(2.5)
             self.camera.falling_mode()
             self.falling = True
+            self.block_right = False
         else:
-            self.camera.active_id = 1
-            self.hero.choose_mov(True, False)
+            self.camera.active_id = -1
             self.hero.choose_mov(True, False)
             self.hero.getting_damage = True
             self.hero.jump()
             self.hero.num_jumps = 0
+            self.block_right = True
+
 
 
     def enemy_limit(self, enemy):
@@ -94,7 +102,7 @@ class VerticalScroller(Level):
         if pressed[pg.K_LEFT] or pressed[pg.K_a]:
             self.hero.move_left()
 
-        if pressed[pg.K_RIGHT] or pressed[pg.K_d]:
+        if (pressed[pg.K_RIGHT] or pressed[pg.K_d]) and not self.block_right:
             self.hero.move_right()
 
         if self.falling:

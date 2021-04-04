@@ -4,6 +4,7 @@
   "gaps": [
     {
       "id": 1,
+      "action": "clear_mode",
       "center": "xy",
       "x_init": 0,
       "x_end": 24,
