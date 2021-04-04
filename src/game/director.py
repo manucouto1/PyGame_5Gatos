@@ -1,11 +1,10 @@
 import pygame as pg
 
-from levels.level import LevelBuilder
+from src.levels.level import LevelBuilder
 from src.game.dto.game_dto import GameDTO
 from src.game.mixer import Mixer
 from src.game.player import Player
 from src.game.container import Container
-from src.menu.menu import GameOverMenu
 
 FPS = 30
 

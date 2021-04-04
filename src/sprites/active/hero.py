@@ -1,7 +1,5 @@
 import pygame as pg
 
-from pygame.sprite import collide_mask
-
 from src.sprites.active.shooter_entity import ShooterEntity
 from src.sprites.passive.hud.life import Life
 import time
@@ -102,6 +100,7 @@ class Hero(ShooterEntity):
         """
         Activates maniac shoot mode
         """
+        self.life.player.cookies += 1
         self.maniac = True
         self.maniac_init = time.time()
         self.mixer.play_cookie()

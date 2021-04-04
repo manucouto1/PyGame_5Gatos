@@ -59,6 +59,7 @@ class Life(pg.sprite.Group):
             self.player.life -= 1
 
     def increase(self):
+        self.player.hearts += 1
         if self.player.life < 6:
             self.player.life += 1
             self.hearts[ceil(self.player.life / 2) - 1].increase()

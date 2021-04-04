@@ -25,5 +25,4 @@ class KittenScore(Group):
         """
         self.icon.run_animation()
         self.scorer.increase()
-
         self.player.punctuation += 1

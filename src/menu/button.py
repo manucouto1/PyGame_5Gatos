@@ -208,4 +208,4 @@ class ButtonQuit(Button):
 class ButtonPause(Button):
 
     def __init__(self, screen, position):
-        Button.__init__(self, screen, 'menu/pause.png', (600, 80), 50, 50)
+        Button.__init__(self, screen, 'menu/pause.png', position, 50, 50)
