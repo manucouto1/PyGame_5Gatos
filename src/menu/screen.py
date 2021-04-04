@@ -22,7 +22,7 @@ class ScreenGUI:
         self.menu = menu
         self.element_click = None
         self.bg = assets.load_image(image)
-        self.font = pg.font.Font('../assets/fonts/Purisa Bold.ttf', 26)
+        self.font = pg.font.Font(assets.path_to('fonts','Purisa Bold.ttf'), 26)
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         # list of elementGUI
         self.elementGUI = []
@@ -72,7 +72,7 @@ class ScreenGUIInitial(ScreenGUI):
 
     def draw(self):
         ScreenGUI.draw(self)
-        font = pg.font.Font('../assets/fonts/yukari.ttf', 78)
+        font = pg.font.Font(assets.path_to('fonts','yukari.ttf'), 78)
         title = font.render('5Gatos', True, (255, 255, 255))
         self.screen.blit(title, (280, 60))
 
@@ -157,7 +157,7 @@ class ScreenGUIGameOver(ScreenGUI):
 
     def draw(self):
         ScreenGUI.draw(self)
-        font = pg.font.Font('../assets/fonts/yukari.ttf', 78)
+        font = pg.font.Font(assets.path_to('fonts','yukari.ttf'), 78)
         title = font.render('Game Over :(', True, (255, 255, 255))
         self.screen.blit(title, (215, 80))
 
@@ -189,9 +189,9 @@ class ScreenGUIVictory(ScreenGUI):
 
     def draw(self):
         ScreenGUI.draw(self)
-        font = pg.font.Font('../assets/fonts/yukari.ttf', 78)
+        font = pg.font.Font(assets.path_to('fonts', 'yukari.ttf'), 78)
         title = font.render('VICTORY!!', True, (255, 255, 255))
-        font = pg.font.Font('../assets/fonts/Purisa Bold.ttf', 40)
+        font = pg.font.Font(assets.path_to('fonts', 'Purisa Bold.ttf'), 40)
         subtitle = font.render('Anything is paw-sible for you', True, (255, 255, 255))
 
         image_points = self.get_points_sprite("characters", "enemy", "enemy_full.png")
