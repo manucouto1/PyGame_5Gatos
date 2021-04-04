@@ -53,7 +53,9 @@ class Level:
         self.cursor = Cursor(self.container, pg.mouse.get_pos())
         pg.mouse.set_visible(False)
         self.screen.set_alpha(None)
-        self.pause = ButtonPause(self, (800, 80))
+        game = self.container.get_object('game')
+        width = game.screen_width
+        self.pause = ButtonPause(self, (width - 55, 80))
 
         try:
             self.bg = None
@@ -119,6 +121,13 @@ class Level:
         self.layers.update()
         self.cursor.update(pg.mouse.get_pos())
 
+        director = self.container.get_object('director')
+        if director.player.life == 0:
+            mixer = self.container.get_object('mixer')
+            mixer.play_die()
+            director.player.reset()
+            director.change_scene(GameOverMenu(director).build())
+
     def map_limit(self):
         (x, y, h, w) = self.screen.get_rect()
         (cam_x, cam_y) = self.camera.camera_rect
@@ -140,7 +149,3 @@ class Level:
         self.hero.points.draw(self.screen)
         self.zone_events.draw(self.screen)
 
-        director = self.container.get_object('director')
-        if director.player.life == 0:
-            director.player.reset()
-            director.change_scene(GameOverMenu(director).build(None))

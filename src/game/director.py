@@ -30,6 +30,7 @@ class Director:
         self.levels = [LevelBuilder(self.container, self.game.levels[x])
                        for x in range(len(self.game.levels))]
         self.container.set_object('levels', self.levels)
+        self.scene = None
 
     def __new__(cls):
         if Director._instance is None:
@@ -59,20 +60,23 @@ class Director:
             scene = self.scenes[len(self.scenes) - 1]
             self.loop(scene)
 
-    def loop(self, scene):
+    def loop(self, scene_builder):
         self.exit = False
         pg.event.clear()
 
-        if isinstance(scene, LevelBuilder):
-            scene = scene.build(self.player)
+        if isinstance(scene_builder, LevelBuilder):
+            self.scene = scene_builder
+            scene_level = scene_builder.build(self.player)
             self.scenes.pop()
-            self.scenes.append(scene)
+            self.scenes.append(scene_level)
+        else:
+            scene_level = scene_builder
 
         while not self.exit:
             dt = self.clock.tick(self.game.fps)
-            scene.events(pg.event.get())
-            scene.update(dt)
+            scene_level.events(pg.event.get())
+            scene_level.update(dt)
             self.mixer.check_busy()
-            scene.draw()
+            scene_level.draw()
 
             pg.display.flip()

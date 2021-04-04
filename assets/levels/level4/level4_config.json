@@ -2,8 +2,8 @@
   "path": "src.levels.level_vertical_scroller.VerticalScroller",
   "background": "background",
   "tiles": {
-    "image":  "level4_raw_plat.png",
-    "config": "level4_plat.json",
+    "image":  "level4.png",
+    "config": "level4.json",
     "layers_id": {
       "falling": 3,
       "ground": 1,

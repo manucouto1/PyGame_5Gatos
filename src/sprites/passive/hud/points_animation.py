@@ -21,7 +21,7 @@ class PointAnim(pg.sprite.Sprite):
         self.image = pg.transform.scale(self.image, (64, 64))
         self.rect = self.image.get_rect()
         game = container.get_object('game')
-        self.rect.x = game.screen_width - 64 - 4
+        self.rect.x = game.screen_width - 2* 64 - 4
         self.rect.y = point_y
         self.running = False
         self.begin = False

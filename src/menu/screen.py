@@ -1,7 +1,7 @@
 import pygame as pg
 import src.utils.assets as assets
 from src.menu.button import ButtonPlay, ButtonControls, ButtonOptions, ButtonLevels, ButtonExit, ButtonBack, ButtonQuit, \
-    ButtonLevel1, ButtonLevel2, ButtonLevel3, ButtonLevel4
+    ButtonLevel1, ButtonLevel2, ButtonLevel3, ButtonLevel4, ButtonPlayAgain
 from src.menu.button import ButtonMusicLouder, ButtonMusicLower, ButtonSoundLouder, ButtonSoundLower, ButtonResume
 from src.menu.text import TextPlay, TextReplay, TextControls, TextOptions, TextLevels, TextExit, TextBack, TextQuit
 from src.menu.text import TextLevel1, TextLevel2, TextLevel3, TextLevel4, TextResume
@@ -149,7 +149,7 @@ class ScreenGUIGameOver(ScreenGUI):
     """
     def __init__(self, menu, image):
         ScreenGUI.__init__(self, menu, image)
-        self.elementGUI.append(ButtonPlay(self, (305, 300)))
+        self.elementGUI.append(ButtonPlayAgain(self, (305, 300)))
         self.elementGUI.append(ButtonQuit(self, (305, 400)))
         self.elementGUI.append(TextReplay(self, (330, 300)))
         self.elementGUI.append(TextQuit(self, (370, 400)))

@@ -154,14 +154,12 @@ class GameOverMenu(Menu):
         self.scenes_list.append(ScreenGUIGameOver(self, "menu/game_over_background.png"))
         self.show_initial_screen()
 
-    def execute_game(self):
+    def reset_scene(self):
         """
         Method that executes the game
         """
-        container = self.director.container
-        self.mixer.play_button_click()
-        for level in container.get_object('levels'):
-            self.director.stack_scene(level)
+        print("gameover")
+        self.director.stack_scene(self.director.scene)
 
     def quit_game(self):
         """
