@@ -1,5 +1,5 @@
 import pygame as pg
-from src.menu.screen import ScreenGUIInitial, ScreenGUIGameOver, ScreenGUIPause
+from src.menu.screen import ScreenGUIInitial, ScreenGUIGameOver, ScreenGUIPause, ScreenGUIVictory
 from src.menu.screen import ScreenGUIControls
 from src.menu.screen import ScreenGUIOptions
 from src.menu.screen import ScreenGUILevels
@@ -11,6 +11,7 @@ class Menu:
 
     :param director: Application director
     """
+
     def __init__(self, director):
         self.current_screen = -1
         self.director = director
@@ -71,6 +72,7 @@ class InitialMenu(Menu):
     """
     Initial menu scene
     """
+
     def __init__(self, director):
         Menu.__init__(self, director)
         self.scenes_list.append(ScreenGUIInitial(self, "menu/menu_background.png"))
@@ -149,6 +151,7 @@ class GameOverMenu(Menu):
     """
     Game Over menu scene
     """
+
     def __init__(self, director):
         Menu.__init__(self, director)
         self.scenes_list.append(ScreenGUIGameOver(self, "menu/game_over_background.png"))
@@ -174,6 +177,7 @@ class PauseMenu(Menu):
     """
     Pause menu scene
     """
+
     def __init__(self, director):
         Menu.__init__(self, director)
         self.scenes_list.append(ScreenGUIPause(self, "menu/menu_background.png"))
@@ -232,3 +236,22 @@ class PauseMenu(Menu):
         Method that reduces the volume of the sounds
         """
         self.mixer.sound_lower()
+
+
+class VictoryMenu(Menu):
+    """
+    Victory menu scene
+    """
+
+    def __init__(self, director):
+        Menu.__init__(self, director)
+        self.scenes_list.append(ScreenGUIVictory(self, "menu/menu_background.png"))
+        self.show_initial_screen()
+
+    def quit_game(self):
+        """
+        Function that finish game execution and changes to menu scene
+        """
+        self.director.exit_program()
+        self.director.player.reset()
+        self.director.stack_scene(InitialMenu(self.director).build())
