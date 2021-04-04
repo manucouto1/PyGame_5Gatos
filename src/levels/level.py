@@ -53,7 +53,7 @@ class Level:
         self.cursor = Cursor(self.container, pg.mouse.get_pos())
         pg.mouse.set_visible(False)
         self.screen.set_alpha(None)
-        self.pause = ButtonPause(self, (600, 80))
+        self.pause = ButtonPause(self, (800, 80))
 
         try:
             self.bg = None

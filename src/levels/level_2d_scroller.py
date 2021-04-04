@@ -1,8 +1,8 @@
 from src.levels.level import Level
 import pygame as pg
 import sys
-from extern import parallax as px
 
+from src.extern import parallax as px
 from src.menu.menu import PauseMenu
 from src.utils import assets
 
