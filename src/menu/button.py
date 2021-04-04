@@ -50,7 +50,6 @@ class ButtonPlayAgain(Button):
         Button.__init__(self, screen, 'menu/button_green.png', position, 200, 50)
 
     def action(self):
-        print("button")
         self.screen.menu.reset_scene()
 
 
@@ -99,7 +98,7 @@ class ButtonLevel1(Button):
         Button.__init__(self, screen, 'menu/button_lilac.png', position, 200, 50)
 
     def action(self):
-        self.screen.menu.execute_level(0)
+        self.screen.menu.execute_level(3)
 
 
 class ButtonLevel2(Button):
@@ -111,7 +110,7 @@ class ButtonLevel2(Button):
         Button.__init__(self, screen, 'menu/button_pink.png', position, 200, 50)
 
     def action(self):
-        self.screen.menu.execute_level(1)
+        self.screen.menu.execute_level(2)
 
 
 class ButtonLevel3(Button):
@@ -123,7 +122,7 @@ class ButtonLevel3(Button):
         Button.__init__(self, screen, 'menu/button_green.png', position, 200, 50)
 
     def action(self):
-        self.screen.menu.execute_level(2)
+        self.screen.menu.execute_level(1)
 
 
 class ButtonLevel4(Button):
@@ -135,7 +134,7 @@ class ButtonLevel4(Button):
         Button.__init__(self, screen, 'menu/button_yellow.png', position, 200, 50)
 
     def action(self):
-        self.screen.menu.execute_level(3)
+        self.screen.menu.execute_level(0)
 
 
 class ButtonExit(Button):

@@ -5,6 +5,7 @@ from src.game.dto.game_dto import GameDTO
 from src.game.mixer import Mixer
 from src.game.player import Player
 from src.game.container import Container
+from src.menu.menu import VictoryMenu
 
 FPS = 30
 
@@ -69,6 +70,8 @@ class Director:
             scene_level = scene_builder.build(self.player)
             self.scenes.pop()
             self.scenes.append(scene_level)
+        elif isinstance(scene_builder, VictoryMenu):
+            scene_level = scene_builder.build()
         else:
             scene_level = scene_builder
 

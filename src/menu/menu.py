@@ -90,6 +90,8 @@ class InitialMenu(Menu):
 
         game = self.director.game
 
+        self.director.stack_scene(VictoryMenu(self.director))
+
         for level in range(len(game.levels)):
             self.director.stack_scene(container.get_object('levels')[level])
 
@@ -102,6 +104,7 @@ class InitialMenu(Menu):
         container = self.director.container
         self.mixer.play_button_click()
 
+        self.director.stack_scene(VictoryMenu(self.director))
         self.director.stack_scene(container.get_object('levels')[level])
 
     def show_controls_screen(self):
@@ -161,7 +164,7 @@ class GameOverMenu(Menu):
         """
         Method that executes the game
         """
-        print("gameover")
+        self.director.scenes.pop()
         self.director.stack_scene(self.director.scene)
 
     def quit_game(self):
@@ -186,6 +189,9 @@ class PauseMenu(Menu):
         self.scenes_list.append(ScreenGUILevels(self, "menu/menu_background.png"))
         self.show_initial_screen()
 
+    def build(self):
+        return self
+
     def quit_game(self):
         """
         Method that finish game execution and changes to menu scene
@@ -198,7 +204,6 @@ class PauseMenu(Menu):
         """
         Method that exits from current scene
         """
-        self.mixer.play_button_click()
         self.director.exit_scene()
 
     def show_controls_screen(self):
@@ -252,6 +257,17 @@ class VictoryMenu(Menu):
         """
         Function that finish game execution and changes to menu scene
         """
+        self.mixer.play_button_click()
         self.director.exit_program()
         self.director.player.reset()
         self.director.stack_scene(InitialMenu(self.director).build())
+
+    def build(self):
+        """
+        Build scene
+        """
+        game = self.director.container.get_object('game')
+        self.director.container.get_object('mixer').load_music(game.music["credits"])
+        self.director.container.get_object('mixer').load_new_profile(game.sounds["menu"])
+        self.show_initial_screen()
+        return self

@@ -112,7 +112,7 @@ class TextLevel1(TextGUI):
         TextGUI.__init__(self, screen, (0, 0, 0), 'Level 1', position)
 
     def action(self):
-        self.screen.menu.execute_level(0)
+        self.screen.menu.execute_level(3)
 
 
 class TextLevel2(TextGUI):
@@ -123,7 +123,7 @@ class TextLevel2(TextGUI):
         TextGUI.__init__(self, screen, (0, 0, 0), 'Level 2', position)
 
     def action(self):
-        self.screen.menu.execute_level(1)
+        self.screen.menu.execute_level(2)
 
 
 class TextLevel3(TextGUI):
@@ -134,7 +134,7 @@ class TextLevel3(TextGUI):
         TextGUI.__init__(self, screen, (0, 0, 0), 'Level 3', position)
 
     def action(self):
-        self.screen.menu.execute_level(2)
+        self.screen.menu.execute_level(1)
 
 
 class TextLevel4(TextGUI):
@@ -145,7 +145,7 @@ class TextLevel4(TextGUI):
         TextGUI.__init__(self, screen, (0, 0, 0), 'Level 4', position)
 
     def action(self):
-        self.screen.menu.execute_level(3)
+        self.screen.menu.execute_level(0)
 
 
 class TextResume(TextGUI):
