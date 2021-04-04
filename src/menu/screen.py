@@ -5,6 +5,7 @@ from src.menu.button import ButtonPlay, ButtonControls, ButtonOptions, ButtonLev
 from src.menu.button import ButtonMusicLouder, ButtonMusicLower, ButtonSoundLouder, ButtonSoundLower, ButtonResume
 from src.menu.text import TextPlay, TextReplay, TextControls, TextOptions, TextLevels, TextExit, TextBack, TextQuit
 from src.menu.text import TextLevel1, TextLevel2, TextLevel3, TextLevel4, TextResume
+from src.sprites.spritesheet import SpriteStripAnim, SpriteSheet
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
@@ -175,3 +176,65 @@ class ScreenGUIPause(ScreenGUI):
         self.elementGUI.append(TextQuit(self, (370, 570)))
         self.elementGUI.append(TextOptions(self, (355, 470)))
         self.elementGUI.append(TextControls(self, (340, 370)))
+
+
+class ScreenGUIVictory(ScreenGUI):
+    """
+    Victory Screen
+    """
+    def __init__(self, menu, image):
+        ScreenGUI.__init__(self, menu, image)
+        self.elementGUI.append(ButtonQuit(self, (500, 750)))
+        self.elementGUI.append(TextQuit(self, (570, 750)))
+
+    def draw(self):
+        ScreenGUI.draw(self)
+        font = pg.font.Font('../assets/fonts/yukari.ttf', 78)
+        title = font.render('VICTORY!!', True, (255, 255, 255))
+        font = pg.font.Font('../assets/fonts/Purisa Bold.ttf', 40)
+        subtitle = font.render('Anything is paw-sible for you', True, (255, 255, 255))
+
+        image_points = self.get_points_sprite("characters", "enemy", "enemy_full.png")
+        image_hearts = self.get_heart_sprite("player", "Corazon-Sheet.png")
+
+        image_cookie = assets.load_image("treat.png")
+        image_cookie = pg.transform.scale(image_cookie, (48, 48))
+
+        player = self.menu.director.player
+        punctuation = player.punctuation
+        n_hearts = player.hearts
+        n_cookies = player.cookies
+        text_points = font.render(str(punctuation), True, (0, 0, 0))
+        text_hearts = font.render(str(n_hearts), True, (0, 0, 0))
+        text_cookies = font.render(str(n_cookies), True, (0, 0, 0))
+
+        self.screen.blit(title, (270, 80))
+        self.screen.blit(subtitle, (50, 200))
+        self.screen.blit(text_points, (470, 300))
+        self.screen.blit(text_hearts, (470, 400))
+        self.screen.blit(text_cookies, (470, 500))
+
+        self.screen.blit(image_points, (290, 300))
+        self.screen.blit(image_hearts, (300, 400))
+        self.screen.blit(image_cookie, (300, 500))
+
+    def get_points_sprite(self, *parts):
+
+        container = self.menu.director.container
+
+        path = assets.path_to(*parts)
+        sheet = container.image_from_path(path)
+        sheet = SpriteStripAnim(sheet, (0, 0, 32, 32), 8, rows=4)
+        sheet[3].set_frames_skip(2)
+        image = sheet[3].next(0)
+        return pg.transform.scale(image, (64, 64))
+
+    def get_heart_sprite(self, *parts):
+
+        container = self.menu.director.container
+
+        path = assets.path_to(*parts)
+        sheet = container.image_from_path(path)
+        sheet = pg.transform.scale(sheet, (50 * 21, 50))
+        sheet = SpriteSheet(sheet)
+        return sheet.image_at((0, 0, 50, 50))
