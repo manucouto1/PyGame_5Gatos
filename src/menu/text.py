@@ -45,7 +45,6 @@ class TextReplay(TextGUI):
         TextGUI.__init__(self, screen, (0, 0, 0), 'Play again', position)
 
     def action(self):
-        print("cosa de texto")
         self.screen.menu.reset_scene()
 
 
