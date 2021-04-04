@@ -13,6 +13,7 @@ class Button(ElementGUI):
     :param width: width of the button
     :param height: height of the button
     """
+
     def __init__(self, screen, image, position, width, height):
         self.image = pg.image.load(assets.path_to(image))
         self.image = pg.transform.scale(self.image, (width, height))
@@ -20,7 +21,6 @@ class Button(ElementGUI):
         self.set_position(position)
 
     def draw(self, screen):
-
         screen.blit(self.image, self.rect)
 
 
@@ -33,6 +33,7 @@ class ButtonPlay(Button):
     """
     Button that calls for execute_game menu method
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/button_green.png', position, 200, 50)
 
@@ -40,10 +41,24 @@ class ButtonPlay(Button):
         self.screen.menu.execute_game()
 
 
+class ButtonPlayAgain(Button):
+    """
+    Button that calls for execute_game menu method
+    """
+
+    def __init__(self, screen, position):
+        Button.__init__(self, screen, 'menu/button_green.png', position, 200, 50)
+
+    def action(self):
+        print("button")
+        self.screen.menu.reset_scene()
+
+
 class ButtonControls(Button):
     """
     Button that calls for the show_controls_screen menu method
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/button_yellow.png', position, 200, 50)
 
@@ -55,6 +70,7 @@ class ButtonOptions(Button):
     """
     Button that calls for the show_options_screen menu method
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/button_pink.png', position, 200, 50)
 
@@ -66,6 +82,7 @@ class ButtonLevels(Button):
     """
     Button that calls for the show_levels_screen menu method
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/button_green.png', position, 200, 50)
 
@@ -77,6 +94,7 @@ class ButtonLevel1(Button):
     """
     Button that calls for execute_level menu method for level 1
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/button_lilac.png', position, 200, 50)
 
@@ -88,6 +106,7 @@ class ButtonLevel2(Button):
     """
     Button that calls for execute_level menu method for level 2
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/button_pink.png', position, 200, 50)
 
@@ -99,6 +118,7 @@ class ButtonLevel3(Button):
     """
     Button that calls for execute_level menu method for level 3
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/button_green.png', position, 200, 50)
 
@@ -110,6 +130,7 @@ class ButtonLevel4(Button):
     """
     Button that calls for execute_level menu method for level 4
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/button_yellow.png', position, 200, 50)
 
@@ -121,6 +142,7 @@ class ButtonExit(Button):
     """
     Button that calls for exit_program menu method
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/button_lilac.png', position, 200, 50)
 
@@ -132,6 +154,7 @@ class ButtonBack(Button):
     """
     Button that calls for the show_initial_screen menu method
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/button_orange.png', position, 200, 50)
 
@@ -143,6 +166,7 @@ class ButtonMusicLouder(Button):
     """
     Button that calls for the music louder menu method
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/volume-up.png', position, 50, 50)
 
@@ -154,6 +178,7 @@ class ButtonMusicLower(Button):
     """
     Button that calls for the music_lower menu method
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/volume-down.png', position, 50, 50)
 
@@ -165,6 +190,7 @@ class ButtonSoundLouder(Button):
     """
     Button that calls for the sound_louder menu method
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/volume-up.png', position, 50, 50)
 
@@ -176,6 +202,7 @@ class ButtonSoundLower(Button):
     """
     Button that calls for the sound_lower menu method
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/volume-down.png', position, 50, 50)
 
@@ -187,6 +214,7 @@ class ButtonResume(Button):
     """
     Button that calls for the resume_game menu method
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/button_green.png', position, 200, 50)
 
@@ -198,6 +226,7 @@ class ButtonQuit(Button):
     """
     Button that calls for the quit_game menu method
     """
+
     def __init__(self, screen, position):
         Button.__init__(self, screen, 'menu/button_lilac.png', position, 200, 50)
 

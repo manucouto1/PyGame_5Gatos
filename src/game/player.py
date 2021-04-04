@@ -10,3 +10,5 @@ class Player:
     def reset(self):
         self.life = 6
         self.punctuation = 0
+        self.hearts = 0
+        self.cookies = 0

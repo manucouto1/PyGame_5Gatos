@@ -17,7 +17,7 @@ class PointText(pg.sprite.Sprite):
         self.image = self.font.render(f'x{player.punctuation}', True, (0, 0, 0))
         self.rect = self.image.get_rect()
         game = container.get_object('game')
-        self.base_offset = game.screen_width - 2 * 64
+        self.base_offset = game.screen_width - 3 * 64
         self.rect.x = self.base_offset - 24 * (math.log10(max(1, self.player.punctuation)))
         self.rect.y = point_y + 8
         self.increasing = False
