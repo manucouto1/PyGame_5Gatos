@@ -1,10 +1,10 @@
 from src.levels.level import Level
-import pygame as pg
-import sys
-
 from src.extern import parallax as px
 from src.menu.menu import PauseMenu
 from src.utils import assets
+
+import pygame as pg
+import sys
 
 
 class Scroller2D(Level):
